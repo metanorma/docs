@@ -1,0 +1,957 @@
+= MN 110: Metanorma Markdown syntax
+:docnumber: 110
+:edition: 1
+:revdate: 2024-10-27
+:copyright-year: 2024
+:language: en
+:title: Metanorma Markdown syntax specification
+:doctype: standard
+:status: draft
+:mn-document-class: ribose
+:mn-output-extensions: xml,html,pdf,rxl
+:local-cache-only:
+
+.Foreword
+This document is part of the Metanorma specifications series that defines requirements for document authoring.
+
+== Introduction
+
+This document specifies the Markdown syntax for use with Metanorma document processing. It defines both the base CommonMark syntax support and Metanorma-specific extensions necessary for standards document authoring.
+
+=== Purpose and scope
+
+This specification:
+
+* Defines the Markdown syntax subset based on CommonMark that Metanorma supports
+* Specifies Metanorma-specific extensions to Markdown
+* Provides migration guidance from Metanorma AsciiDoc to Metanorma Markdown
+* Establishes compatibility requirements between Markdown and existing Metanorma features
+
+=== Conformance
+
+A conforming Metanorma Markdown processor SHALL:
+
+* Implement all CommonMark syntax features as specified
+* Support all Metanorma extension blocks
+* Process document metadata as specified
+* Generate identical output to equivalent AsciiDoc input
+* Support all specified bibliography features
+* Process all specified math expressions
+* Handle all cross-reference mechanisms
+
+== Normative references
+
+* CommonMark Specification Version 0.30
+* GitHub Flavored Markdown Specification
+* Pandoc Markdown Specification
+* RMarkdown Specification
+* ISO/IEC 2382:2015 Information technology -- Vocabulary
+* Metanorma Standard Document Format
+
+== Terms and definitions
+
+=== Markdown
+lightweight markup language using plain text formatting syntax
+
+=== CommonMark
+strict specification of Markdown syntax with unambiguous parsing rules
+
+=== Metanorma Markdown
+extension of CommonMark syntax that supports Metanorma document authoring features
+
+=== Frontmatter
+metadata section at the beginning of a document using YAML syntax
+
+== Core document structure
+
+=== Document metadata
+
+==== Purpose
+
+Document metadata provides essential information about the document including its identity, status, and administrative details.
+
+==== Syntax
+
+.Basic document metadata
+[example]
+====
+The following example shows the minimal required metadata for a Metanorma document.
+
+[source,yaml]
+----
+---
+docnumber: "110"
+title: "Metanorma Markdown Syntax"
+edition: 1
+revdate: 2024-10-27
+--- <1>
+----
+<1> Triple hyphens delimit the YAML frontmatter block
+====
+
+.Extended document metadata
+[example]
+====
+This example demonstrates additional metadata fields for document classification and management.
+
+[source,yaml]
+----
+---
+docnumber: "110"
+title: "Metanorma Markdown Syntax"
+edition: 1
+revdate: 2024-10-27
+language: en
+doctype: standard
+status: draft
+committee: Technical
+technical-committee: "Syntax and Document Formats"
+keywords:
+  - markdown
+  - syntax
+  - metanorma  <1>
+---
+----
+<1> Arrays in YAML are denoted with hyphens
+====
+
+.Complex metadata with nested structures
+[example]
+====
+This example shows how to represent complex metadata relationships and contributor information.
+
+[source,yaml]
+----
+---
+docnumber: "110"
+title: "Metanorma Markdown Syntax"
+edition: 1
+revdate: 2024-10-27
+contributors:
+  - role: author
+    name: Jane Smith
+    organization: Standards Organization <1>
+  - role: editor
+    name: John Doe
+    organization: Technical Committee
+relationships:
+  obsoletes: MN-109 <2>
+  related:
+    - MN-108
+    - MN-107
+---
+----
+<1> Nested structures use indentation to indicate hierarchy
+<2> Single values and arrays can be mixed in the same document
+====
+
+==== Implementation notes
+
+1. All metadata fields SHALL support UTF-8 encoding
+2. Date fields SHALL follow ISO 8601 format
+3. Multiple values SHALL be represented as YAML arrays
+4. Nested structures SHALL be preserved in processing
+5. Unknown metadata fields SHALL be ignored by the processor
+
+=== Document title
+
+==== Purpose
+
+The document title identifies the document and appears as the main heading in the rendered output.
+
+==== Syntax
+
+.Title in frontmatter
+[example]
+====
+The title can be specified in the document's frontmatter.
+
+[source,yaml]
+----
+---
+title: "Document Title"
+--- <1>
+----
+<1> Title in frontmatter takes precedence over other title declarations
+====
+
+.Title as level-1 heading
+[example]
+====
+Alternatively, the title can be specified as a level-1 heading in the document body.
+
+[source,markdown]
+----
+# Document Title <1>
+
+## First Section
+----
+<1> The hash symbol followed by a space denotes a level-1 heading
+====
+
+.Title with subtitle
+[example]
+====
+Documents can include both a title and subtitle.
+
+[source,yaml]
+----
+---
+title: "Document Title"
+subtitle: "A comprehensive guide" <1>
+---
+----
+<1> The subtitle field is optional and can contain formatting
+====
+
+==== Implementation notes
+
+1. When both frontmatter title and level-1 heading exist, frontmatter SHALL take precedence
+2. Title SHALL be encoded in UTF-8
+3. Title SHALL be treated as plain text with formatting markers ignored
+
+=== Basic text formatting
+
+==== Purpose
+
+Basic text formatting provides emphasis, strong emphasis, and combinations for inline text styling.
+
+==== Syntax
+
+.Basic emphasis and strong emphasis
+[example]
+====
+This example shows the fundamental text formatting syntax.
+
+[source,markdown]
+----
+This is *emphasized* and this is **strong**. <1>
+This is _also emphasized_ and this is __also strong__. <2>
+----
+<1> Asterisks can be used for emphasis and strong emphasis
+<2> Underscores can be used as an alternative to asterisks
+====
+
+.Combined emphasis
+[example]
+====
+Text can be both emphasized and strong simultaneously.
+
+[source,markdown]
+----
+This is ***strong and emphasized***. <1>
+This is ___also strong and emphasized___. <2>
+----
+<1> Triple asterisks combine strong and emphasis
+<2> Triple underscores provide an alternative syntax
+====
+
+.Complex formatting
+[example]
+====
+Formatting can be nested and combined within text.
+
+[source,markdown]
+----
+This **strong text contains *emphasis* within it**. <1>
+This paragraph has both *emphasized* and **strong** elements. <2>
+----
+<1> Nested emphasis is processed inside-out
+<2> Different formatting styles can be mixed in the same paragraph
+====
+
+==== Implementation notes
+
+1. Emphasis markers SHALL NOT span multiple paragraphs
+2. Nested emphasis SHALL be processed inside-out
+3. Emphasis markers within words SHALL be treated as literal characters
+
+=== Code spans
+
+==== Purpose
+
+Code spans mark text as computer code, technical terms, or other literal content.
+
+==== Syntax
+
+.Basic code spans
+[example]
+====
+Code spans are used for inline code references.
+
+[source,markdown]
+----
+Use the `print()` function. <1>
+----
+<1> Single backticks denote inline code
+====
+
+.Code spans with backticks
+[example]
+====
+When the code itself contains backticks, double backticks can be used as delimiters.
+
+[source,markdown]
+----
+``Use `backticks` within code`` <1>
+----
+<1> Double backticks allow inclusion of single backticks
+====
+
+.Code spans with attributes
+[example]
+====
+Code spans can include language and other attributes.
+
+[source,markdown]
+----
+`{language=ruby} puts "Hello"` <1>
+----
+<1> Attributes in curly braces affect processing and display
+====
+
+==== Implementation notes
+
+1. Code spans SHALL preserve whitespace
+2. Markdown syntax within code spans SHALL be treated as literal text
+3. Language attributes SHALL be preserved for syntax highlighting
+
+=== Links and cross-references
+
+==== Purpose
+
+Links and cross-references connect document sections and external resources.
+
+==== Syntax
+
+.External links
+[example]
+====
+External links connect to resources outside the document.
+
+[source,markdown]
+----
+Visit [Metanorma](https://www.metanorma.org "Metanorma Homepage"). <1>
+See <https://www.metanorma.org> for more information. <2>
+----
+<1> Links can include optional titles in quotes
+<2> URLs can be automatically linked using angle brackets
+====
+
+.Internal cross-references
+[example]
+====
+Internal cross-references link to sections within the document.
+
+[source,markdown]
+----
+See [Section 3.2](#section-3-2) for details. <1>
+Refer to [Terms and definitions](#terms-and-definitions). <2>
+----
+<1> Section references use the section's ID
+<2> IDs are automatically generated from heading text
+====
+
+.Reference-style links
+[example]
+====
+Reference-style links separate the link text from the URL definition.
+
+[source,markdown]
+----
+This specification uses [CommonMark][cm] syntax.
+See the [Metanorma documentation][mn] for more.
+
+[cm]: https://commonmark.org "CommonMark Spec" <1>
+[mn]: https://www.metanorma.org/docs/ "Documentation" <2>
+----
+<1> Link references can be defined anywhere in the document
+<2> References support optional titles
+====
+
+==== Implementation notes
+
+1. Internal cross-references SHALL be validated during processing
+2. External links SHALL be checked for well-formed URLs
+3. Reference-style link definitions SHALL be collected and processed globally
+
+=== Mathematics
+
+==== Purpose
+
+Mathematical expressions in both inline and display modes.
+
+==== Syntax
+
+.Inline mathematics
+[example]
+====
+Inline math expressions are embedded within text.
+
+[source,markdown]
+----
+The equation $E = mc^2$ shows the relationship. <1>
+----
+<1> Single dollar signs denote inline math mode
+====
+
+.Display mathematics
+[example]
+====
+Display math appears as separate blocks.
+
+[source,markdown]
+----
+$$
+\frac{-b \pm \sqrt{b^2 - 4ac}}{2a} <1>
+$$
+----
+<1> Double dollar signs create display math blocks
+====
+
+.Numbered equations
+[example]
+====
+Equations can be numbered and referenced.
+
+[source,markdown]
+----
+$$
+\begin{equation}
+  \label{eq:1} <1>
+  F = ma
+\end{equation}
+$$
+----
+<1> Labels enable equation referencing
+====
+
+==== Implementation notes
+
+1. LaTeX math syntax SHALL be supported
+2. Equation numbers SHALL be automatically generated if not specified
+3. Cross-references SHALL be supported
+
+=== Block elements
+
+==== Purpose
+
+Block elements structure document content into distinct sections.
+
+==== Syntax
+
+.Basic blocks
+[example]
+====
+Paragraphs are separated by blank lines.
+
+[source,markdown]
+----
+This is the first paragraph.
+
+This is the second paragraph. <1>
+----
+<1> Blank lines separate paragraphs
+====
+
+.Blocks with attributes
+[example]
+====
+Blocks can have attributes that affect their processing.
+
+[source,markdown]
+----
+{.note} <1>
+This is a note block.
+
+{#custom-id .warning} <2>
+This is a warning block.
+----
+<1> Class attributes affect block styling
+<2> IDs enable block referencing
+====
+
+.Complex blocks
+[example]
+====
+Blocks can contain other blocks and inline elements.
+
+[source,markdown]
+----
+{.requirement #req-1}
+This requirement block contains:
+
+1. Ordered list
+2. With *emphasized* text
+3. And `code spans` <1>
+----
+<1> Blocks can contain mixed content types
+====
+
+==== Implementation notes
+
+1. Block attributes SHALL be parsed before block content
+2. Nested blocks SHALL maintain proper hierarchy
+3. Block types SHALL determine valid attribute sets
+
+=== Lists
+
+==== Purpose
+
+Lists organize content in ordered, unordered, and definition formats.
+
+==== Syntax
+
+.Basic list types
+[example]
+====
+Lists can be ordered or unordered with nested structures.
+
+[source,markdown]
+----
+* Unordered item 1
+* Unordered item 2 <1>
+  * Nested item 2.1 <2>
+  * Nested item 2.2
+* Unordered item 3
+
+1. Ordered item 1 <3>
+2. Ordered item 2
+   1. Nested item 2.1
+   2. Nested item 2.2
+3. Ordered item 3
+----
+<1> Asterisks denote unordered list items
+<2> Two spaces indent creates nested lists
+<3> Numbers with periods create ordered lists
+====
+
+.Definition lists
+[example]
+====
+Definition lists associate terms with their definitions.
+
+[source,markdown]
+----
+Term 1
+: Definition 1 <1>
+: Another definition 1 <2>
+
+Term 2
+: Definition 2
+----
+<1> Colon indicates a definition
+<2> Terms can have multiple definitions
+====
+
+.Lists with attributes
+[example]
+====
+Lists can have attributes affecting their appearance and behavior.
+
+[source,markdown]
+----
+{.checklist} <1>
+* [ ] Task 1 <2>
+* [x] Task 2
+  1. Subtask 2.1
+  2. Subtask 2.2
+* [ ] Task 3
+----
+<1> Class attributes modify list behavior
+<2> Checkbox syntax for task lists
+====
+
+==== Implementation notes
+
+1. List markers SHALL be consistent within the same level
+2. Indentation SHALL be preserved for nested lists
+3. Definition lists SHALL support multiple definitions per term
+
+=== Code blocks
+
+==== Purpose
+
+Code blocks present source code, technical content, or other preformatted text.
+
+==== Syntax
+
+.Fenced code blocks
+[example]
+====
+Fenced code blocks use triple backticks with optional language specification.
+
+[source,markdown]
+----
+```ruby <1>
+def hello_world
+  puts "Hello, world!"
+end
+``` <2>
+----
+<1> Language identifier enables syntax highlighting
+<2> Triple backticks delimit the code block
+====
+
+.Code blocks with attributes
+[example]
+====
+Code blocks can have additional attributes for processing and display.
+
+[source,markdown]
+----
+```{.ruby #example-1 .numbered} <1>
+def hello_world
+  puts "Hello, world!"
+end
+```
+----
+<1> Attributes in curly braces affect block processing
+====
+
+.Indented code blocks
+[example]
+====
+Code blocks can also be created by indentation.
+
+[source,markdown]
+----
+    def hello_world <1>
+      puts "Hello, world!"
+    end
+----
+<1> Four spaces indent creates a code block
+====
+
+==== Implementation notes
+
+1. Both fenced and indented code blocks SHALL be supported
+2. Language identifiers SHALL be preserved for syntax highlighting
+3. Line numbers SHALL be added when specified
+4. Custom attributes SHALL be preserved
+
+=== Tables
+
+==== Purpose
+
+Tables organize data in rows and columns with optional formatting.
+
+==== Syntax
+
+.Basic tables
+[example]
+====
+Simple tables use pipe characters to separate columns.
+
+[source,markdown]
+----
+| Header 1 | Header 2 | <1>
+|----------|----------| <2>
+| Cell 1   | Cell 2   |
+| Cell 3   | Cell 4   |
+----
+<1> Header row is separated by pipes
+<2> Delimiter row indicates column alignment
+====
+
+.Aligned columns
+[example]
+====
+Column alignment is specified in the delimiter row.
+
+[source,markdown]
+----
+| Left | Center | Right | <1>
+|:-----|:------:|------:| <2>
+| 1    | 2      | 3     |
+| 4    | 5      | 6     |
+----
+<1> Headers establish column count
+<2> Colons in delimiter row specify alignment
+====
+
+.Complex tables with attributes
+[example]
+====
+Tables can have attributes and contain formatted content.
+
+[source,markdown]
+----
+{.bordered #table-1 title="Sample Table"} <1>
+| Function | Description | Example |
+|----------|-------------|---------|
+| `sum()`  | Adds numbers | `sum(1, 2)` |
+| `avg()`  | Calculates average | `avg([1, 2])` |
+----
+<1> Table attributes affect presentation and processing
+====
+
+==== Implementation notes
+
+1. Table alignments SHALL be preserved
+2. Header rows SHALL be distinguished in output
+3. Tables SHALL support block-level elements in cells
+4. Table captions and attributes SHALL be preserved
+
+== Metanorma extensions
+
+=== Requirement blocks
+
+==== Purpose
+
+Requirement blocks specify normative requirements, recommendations, and permissions.
+
+==== Syntax
+
+.Basic requirement
+[example]
+====
+Simple requirement blocks state single requirements.
+
+[source,markdown]
+----
+::: requirement <1>
+This system SHALL support UTF-8 encoding. <2>
+:::
+----
+<1> Triple colons denote extension blocks
+<2> Requirements use normative language
+====
+
+.Requirement with attributes
+[example]
+====
+Requirements can have identifiers and specific obligation levels.
+
+[source,markdown]
+----
+::: requirement{#req-1 level="shall"} <1>
+The processor SHALL implement all CommonMark features. <2>
+:::
+----
+<1> Attributes specify requirement properties
+<2> Content states the normative requirement
+====
+
+.Complex requirement
+[example]
+====
+Requirements can include structured content and metadata.
+
+[source,markdown]
+----
+::: requirement{#req-2}
+level:: shall <1>
+inherit:: req-1 <2>
+classification:: technical <3>
+---
+The system SHALL:
+
+1. Parse all valid inputs
+2. Report errors clearly
+3. Maintain backward compatibility
+:::
+----
+<1> Requirement level specified as metadata
+<2> Inheritance indicates requirement dependencies
+<3> Classification aids in requirement management
+====
+
+==== Implementation notes
+
+1. Requirements SHALL support nested content
+2. Requirement IDs SHALL be unique
+3. Inheritance SHALL be validated
+4. Classification SHALL affect rendering
+
+=== Admonitions
+
+==== Purpose
+
+Admonitions highlight important information with specific semantic meaning.
+
+==== Syntax
+
+.Basic admonitions
+[example]
+====
+Simple admonitions use the triple exclamation mark syntax.
+
+[source,markdown]
+----
+!!! note <1>
+    This is a note. <2>
+
+!!! warning
+    This is a warning.
+----
+<1> Admonition type follows the markers
+<2> Content is indented by 4 spaces
+====
+
+.Admonitions with titles
+[example]
+====
+Admonitions can have custom titles.
+
+[source,markdown]
+----
+!!! important "Critical Information" <1>
+    This must be considered.
+----
+<1> Custom title in quotes after type
+====
+
+.Complex admonitions
+[example]
+====
+Admonitions can contain structured content and attributes.
+
+[source,markdown]
+----
+!!! note{#note-1 .special} <1>
+    This note contains:
+
+    * Important points
+    * Critical information
+    * Key considerations
+----
+<1> Attributes customize admonition behavior
+====
+
+==== Implementation notes
+
+1. Standard admonition types SHALL be supported
+2. Custom admonition types MAY be defined
+3. Nested content SHALL be supported
+4. Attributes SHALL be preserved
+
+=== Bibliography
+
+==== Purpose
+
+Bibliography entries provide structured reference information.
+
+==== Syntax
+
+.Basic citation
+[example]
+====
+Citations reference bibliography entries.
+
+[source,markdown]
+----
+[@reference-key] <1>
+----
+<1> Citation key in square brackets with @ prefix
+====
+
+.Citation with prefix and locator
+[example]
+====
+Citations can include additional context.
+
+[source,markdown]
+----
+[see @smith2024, p. 23-45] <1>
+----
+<1> Prefixes and page numbers add citation context
+====
+
+.Bibliography entry
+[example]
+====
+Bibliography data is defined in YAML format.
+
+[source,yaml]
+----
+---
+references:
+- id: smith2024 <1>
+  type: book
+  author:
+    - family: Smith
+      given: John
+  title: Example Book
+  publisher: Publisher Name
+  year: 2024
+---
+----
+<1> Entry ID matches citation keys
+====
+
+==== Implementation notes
+
+1. Multiple citation styles SHALL be supported
+2. Bibliography data SHALL be validated
+3. Citations SHALL be linked to entries
+4. Custom CSL styles SHALL be supported
+
+[appendix,number=A]
+== Complete example document
+
+.Full document example
+[example]
+====
+This example demonstrates a complete Metanorma Markdown document.
+
+[source,markdown]
+----
+---
+title: "Sample Metanorma Document"
+docnumber: "MN-SAMPLE-1"
+date: 2024-10-28
+type: standard
+status: draft
+---
+
+# Sample Metanorma document
+
+## Introduction
+
+This document demonstrates the Metanorma Markdown syntax.
+
+### Purpose
+
+The purpose is to show syntax examples.
+
+## Technical requirements
+
+::: requirement{#req-1}
+level:: shall
+The system SHALL support all specified features.
+:::
+
+### Mathematical expressions
+
+The formula $E = mc^2$ shows mass-energy equivalence.
+
+$$
+F = ma
+$$
+
+## References
+
+See [@smith2024] for background.
+
+---
+references:
+- id: smith2024
+  type: article
+  author:
+    - family: Smith
+      given: J.
+  title: Sample Article
+  journal: Journal Name
+  year: 2024
+---
+----
+====
+
+[bibliography]
+== Bibliography
+
+* [[[commonmark,1]]] CommonMark Specification 0.30
+* [[[pandoc,2]]] Pandoc User's Guide
+* [[[gfm,3]]] GitHub Flavored Markdown Specification
+
