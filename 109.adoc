@@ -1,0 +1,235 @@
+= MN 109: Vertical layout rendering
+:docnumber: 109
+:edition: 1
+:revdate: 2024-10-25
+:copyright-year: 2024
+:language: en
+:title-main-en: Vertical layout rendering
+:doctype: standard
+:status: draft
+:mn-document-class: ribose
+:mn-output-extensions: xml,html,pdf,rxl
+:local-cache-only:
+
+.Foreword
+This document is part of the Metanorma specifications series that defines requirements for document rendering.
+
+== Introduction
+East Asian languages, particularly Chinese, Japanese, and Korean (CJK), have a long history of vertical text layout where text flows from top to bottom and columns are arranged from right to left. This traditional layout remains important in modern publishing, especially for literary works, traditional documents, and designs emphasizing cultural aesthetics.
+
+While modern CJK publishing often uses horizontal text layout similar to Western languages, vertical layout continues to be essential for:
+
+* Traditional literary works
+* Classical texts
+* Newspaper layouts
+* Artistic and design applications
+* Cultural and historical documents
+* Religious texts
+* Certificates and formal documents
+
+Metanorma, as a standards document processing system, supports both horizontal and vertical text layouts to meet the needs of international standardization communities. This capability is particularly important for standards organizations in East Asian regions where vertical text layout is frequently required.
+
+== Scope
+This document specifies the requirements for Metanorma content renderers to implement character conversion and transformation when rendering text in vertical layout. It defines:
+
+* Character mappings between horizontal and vertical forms
+* Transformation rules for characters without dedicated vertical forms
+* Implementation requirements for vertical text rendering
+* Conformance criteria for Metanorma vertical layout support
+
+== Normative references
+* UTR #50: Unicode Vertical Text Layout
+* Unicode Standard Version 15.1
+* ISO/IEC 10646: Universal Coded Character Set (UCS)
+
+== Terms and definitions
+
+=== vertical text layout
+text layout where characters are laid out vertically, typically from top to bottom with multiple columns arranged from right to left
+
+=== glyph transformation
+modification of a character's glyph when displayed in vertical text layout
+
+=== vertical presentation form
+dedicated Unicode character representing the vertical form of a horizontal character
+
+=== typographic transformation
+modification of a character's appearance without using a dedicated vertical form character
+
+== Technical background
+
+=== Vertical text layout in CJK publishing
+Vertical text layout has been the traditional format for East Asian documents for over two millennia. Modern digital publishing systems must support both vertical and horizontal layouts to maintain cultural continuity while embracing contemporary publishing needs.
+
+=== Metanorma vertical layout support
+Metanorma implements vertical layout support through:
+
+* Automatic detection of document language and script
+* Application of appropriate layout rules based on document type and context
+* Character transformation according to Unicode standards
+* Support for mixed horizontal and vertical content
+
+== Implementation requirements
+
+=== General principles
+A conforming Metanorma renderer shall:
+
+. Support automatic conversion between horizontal and vertical forms of characters
+. Implement correct character transformations as specified in this document
+. Maintain proper text flow and alignment in vertical layout
+. Handle mixed-direction text appropriately
+. Support vertical forms of punctuation marks and symbols
+
+=== Character transformation categories
+
+
+==== Characters with dedicated vertical forms
+
+[[table1]]
+.Brackets and parentheses transformation
+[cols="1,1,1,1"]
+|===
+|Horizontal Half-width |Horizontal Full-width |Vertical Form |Implementation Instructions
+
+|U+0028 LEFT PARENTHESIS (() |U+FF08 FULLWIDTH LEFT PARENTHESIS (（) |U+FE35 PRESENTATION FORM FOR VERTICAL LEFT PARENTHESIS (︵) |-
+|U+0029 RIGHT PARENTHESIS ()) |U+FF09 FULLWIDTH RIGHT PARENTHESIS (）) |U+FE36 PRESENTATION FORM FOR VERTICAL RIGHT PARENTHESIS (︶) |-
+|U+007B LEFT CURLY BRACKET ({) |U+FF5B FULLWIDTH LEFT CURLY BRACKET (｛) |U+FE37 PRESENTATION FORM FOR VERTICAL LEFT CURLY BRACKET (︷) |-
+|U+007D RIGHT CURLY BRACKET (}) |U+FF5D FULLWIDTH RIGHT CURLY BRACKET (｝) |U+FE38 PRESENTATION FORM FOR VERTICAL RIGHT CURLY BRACKET (︸) |-
+|- |U+3014 LEFT TORTOISE SHELL BRACKET (〔) |U+FE39 PRESENTATION FORM FOR VERTICAL LEFT TORTOISE SHELL BRACKET (︹) |-
+|- |U+3015 RIGHT TORTOISE SHELL BRACKET (〕) |U+FE3A PRESENTATION FORM FOR VERTICAL RIGHT TORTOISE SHELL BRACKET (︺) |-
+|- |U+3010 LEFT BLACK LENTICULAR BRACKET (【) |U+FE3B PRESENTATION FORM FOR VERTICAL LEFT BLACK LENTICULAR BRACKET (︻) |-
+|- |U+3011 RIGHT BLACK LENTICULAR BRACKET (】) |U+FE3C PRESENTATION FORM FOR VERTICAL RIGHT BLACK LENTICULAR BRACKET (︼) |-
+|- |U+300A LEFT DOUBLE ANGLE BRACKET (《) |U+FE3D PRESENTATION FORM FOR VERTICAL LEFT DOUBLE ANGLE BRACKET (︽) |-
+|- |U+300B RIGHT DOUBLE ANGLE BRACKET (》) |U+FE3E PRESENTATION FORM FOR VERTICAL RIGHT DOUBLE ANGLE BRACKET (︾) |-
+|U+FF62 HALFWIDTH LEFT CORNER BRACKET (｢) |U+300C LEFT CORNER BRACKET (「) |U+FE41 PRESENTATION FORM FOR VERTICAL LEFT CORNER BRACKET (﹁) |-
+|U+FF63 HALFWIDTH RIGHT CORNER BRACKET (｣) |U+300D RIGHT CORNER BRACKET (」) |U+FE42 PRESENTATION FORM FOR VERTICAL RIGHT CORNER BRACKET (﹂) |-
+|- |U+300E LEFT WHITE CORNER BRACKET (『) |U+FE43 PRESENTATION FORM FOR VERTICAL LEFT WHITE CORNER BRACKET (﹃) |-
+|- |U+300F RIGHT WHITE CORNER BRACKET (』) |U+FE44 PRESENTATION FORM FOR VERTICAL RIGHT WHITE CORNER BRACKET (﹄) |-
+|U+005B LEFT SQUARE BRACKET ([) |U+FF3B FULLWIDTH LEFT SQUARE BRACKET (［) |U+FE47 PRESENTATION FORM FOR VERTICAL LEFT SQUARE BRACKET (﹇) |-
+|U+005D RIGHT SQUARE BRACKET (]) |U+FF3D FULLWIDTH RIGHT SQUARE BRACKET (］) |U+FE48 PRESENTATION FORM FOR VERTICAL RIGHT SQUARE BRACKET (﹈) |-
+|- |U+3008 LEFT ANGLE BRACKET (〈) |U+FE3F PRESENTATION FORM FOR VERTICAL LEFT ANGLE BRACKET (︿) |-
+|- |U+3009 RIGHT ANGLE BRACKET (〉) |U+FE40 PRESENTATION FORM FOR VERTICAL RIGHT ANGLE BRACKET (﹀) |-
+|- |U+3016 LEFT WHITE LENTICULAR BRACKET (〖) |U+FE17 PRESENTATION FORM FOR VERTICAL LEFT WHITE LENTICULAR BRACKET (︗) |-
+|- |U+3017 RIGHT WHITE LENTICULAR BRACKET (〗) |U+FE18 PRESENTATION FORM FOR VERTICAL RIGHT WHITE LENTICULAR BRACKET (︘) |-
+|- |U+301A LEFT WHITE SQUARE BRACKET (〚) |- |Rotate 90° clockwise
+|- |U+301B RIGHT WHITE SQUARE BRACKET (〛) |- |Rotate 90° clockwise
+|===
+
+==== Special marks and symbols for vertical layout
+
+[[table2]]
+.Special marks and symbols transformation
+[cols="1,1,1,1"]
+|===
+|Horizontal Half-width |Horizontal Full-width |Vertical Form |Implementation Instructions
+
+|- |U+3003 DITTO MARK (〃) |- |No rotation needed
+|- |U+301C WAVE DASH (〜) |- |Rotate 90° clockwise
+|- |U+301D REVERSED DOUBLE PRIME QUOTATION MARK (〝) |- |Special positioning (see UTR #50)
+|- |U+301E DOUBLE PRIME QUOTATION MARK (〞) |- |Special positioning (see UTR #50)
+|- |U+301F LOW DOUBLE PRIME QUOTATION MARK (〟) |- |Special positioning (see UTR #50)
+|U+FF65 HALFWIDTH KATAKANA MIDDLE DOT (･) |U+30FB KATAKANA MIDDLE DOT (・) |- |No rotation needed
+|- |U+30FC KATAKANA-HIRAGANA PROLONGED SOUND MARK (ー) |- |Rotate 90° clockwise
+|- |U+309B KATAKANA-HIRAGANA VOICED SOUND MARK (゛) |- |Special positioning (see UTR #50)
+|- |U+309C KATAKANA-HIRAGANA SEMI-VOICED SOUND MARK (゜) |- |Rotate 180°
+|===
+
+
+==== Additional transformed characters
+
+[[table3]]
+.Additional characters requiring transformation
+[cols="1,1,1,1"]
+|===
+|Horizontal Half-width |Horizontal Full-width |Vertical Form |Implementation Instructions
+
+|- |U+2329 LEFT-POINTING ANGLE BRACKET (〈) |- |Rotate 90° clockwise
+|- |U+232A RIGHT-POINTING ANGLE BRACKET (〉) |- |Rotate 90° clockwise
+|- |U+3018 LEFT WHITE TORTOISE SHELL BRACKET (〘) |- |Rotate 90° clockwise
+|- |U+3019 RIGHT WHITE TORTOISE SHELL BRACKET (〙) |- |Rotate 90° clockwise
+|- |U+30A0 KATAKANA-HIRAGANA DOUBLE HYPHEN (゠) |- |Rotate 90° clockwise
+|- |U+FE59 SMALL LEFT PARENTHESIS (﹙) |- |Rotate 90° clockwise
+|- |U+FE5A SMALL RIGHT PARENTHESIS (﹚) |- |Rotate 90° clockwise
+|- |U+FE5B SMALL LEFT CURLY BRACKET (﹛) |- |Rotate 90° clockwise
+|- |U+FE5C SMALL RIGHT CURLY BRACKET (﹜) |- |Rotate 90° clockwise
+|- |U+FE5D SMALL LEFT TORTOISE SHELL BRACKET (﹝) |- |Rotate 90° clockwise
+|- |U+FE5E SMALL RIGHT TORTOISE SHELL BRACKET (﹞) |- |Rotate 90° clockwise
+|- |U+FF5C FULLWIDTH VERTICAL LINE (｜) |- |Rotate 90° clockwise
+|- |U+FF5F FULLWIDTH LEFT WHITE PARENTHESIS (｟) |- |Rotate 90° clockwise
+|- |U+FF60 FULLWIDTH RIGHT WHITE PARENTHESIS (｠) |- |Rotate 90° clockwise
+|- |U+FFE3 FULLWIDTH MACRON (￣) |- |Rotate 90° clockwise
+|===
+
+=== Rendering requirements
+
+==== Character conversion
+The renderer shall:
+
+. Use dedicated vertical presentation forms when available
+. Apply appropriate rotations for characters without vertical forms
+. Implement special positioning rules for specific characters
+. Maintain correct spacing and alignment in vertical layout
+
+==== Text flow
+The renderer shall:
+
+. Arrange text in top-to-bottom columns
+. Order columns from right to left
+. Handle mixed horizontal and vertical content appropriately
+. Maintain proper line breaks and justification
+
+==== Special cases
+
+===== Mixed-direction text
+For text containing both horizontal and vertical elements, the renderer shall:
+
+. Maintain proper orientation for each text segment
+. Ensure correct alignment and spacing between different directions
+. Handle embedded horizontal elements within vertical text appropriately
+
+===== Numerical content
+For numerical content in vertical text, the renderer shall:
+
+. Keep multi-digit numbers in horizontal orientation
+. Maintain proper alignment with surrounding vertical text
+. Handle mixed alphanumeric content appropriately
+
+== Conformance criteria
+
+=== Basic conformance
+A conforming implementation shall:
+
+. Support all character transformations specified in this document
+. Implement correct text flow for vertical layout
+. Handle mixed-direction text appropriately
+
+=== Extended conformance
+A conforming implementation should:
+
+. Support advanced typography features
+. Handle complex layout scenarios
+. Provide fallback mechanisms for unsupported characters
+
+== Testing and verification
+
+=== Character transformation testing
+Implementations shall be tested against:
+
+. Correct mapping of characters to vertical forms
+. Proper rotation of transformed characters
+. Accurate positioning of special characters
+
+=== Layout testing
+Implementations shall be verified for:
+
+. Correct column ordering and flow
+. Proper handling of mixed-direction text
+. Accurate spacing and alignment
+
+[bibliography]
+== Bibliography
+
+* [[[UTR50,UTR #50]]] Unicode Technical Report #50: Unicode Vertical Text Layout
+* [[[unicode,Unicode]]] The Unicode Standard, Version 15.1
+* [[[iso10646,ISO/IEC 10646]]] Universal Coded Character Set (UCS)
+
