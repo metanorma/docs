@@ -69,6 +69,8 @@ Metanorma implements vertical layout support through:
 * Character transformation according to Unicode standards
 * Support for mixed horizontal and vertical content
 
+NOTE: the default type of layout applied depends on the flavor and document type.
+
 == Implementation requirements
 
 === General principles
