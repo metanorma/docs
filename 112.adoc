@@ -1,0 +1,1515 @@
+= MN 112: Auto-numbering Definition Language (ANDL) Specification
+:docnumber: 112
+:edition: 1
+:revdate: 2025-02-28
+:copyright-year: 2025
+:language: en
+:title-main-en: Auto-numbering Definition Language (ANDL) Specification
+:doctype: standard
+:status: draft
+:mn-document-class: ribose
+:mn-output-extensions: xml,html,pdf,rxl
+:local-cache-only:
+
+[[introduction]]
+== Introduction
+
+This specification defines the Auto-numbering Definition Language (ANDL), a
+declarative modeling language for defining automatic numbering requirements
+across technical documentation and publishing systems.
+
+Auto-numbering is a critical component of structured documentation, enabling
+consistent referencing and organization of content elements throughout a
+document.
+
+However, implementing auto-numbering consistently across multiple output formats
+(HTML, PDF, Word) presents significant challenges in maintaining both visual
+consistency and semantic meaning.
+
+ANDL addresses these challenges by providing:
+
+. A platform-independent numbering model that works consistently across rendering
+engines
+. Built-in support for international numbering systems (including CJK)
+. Hierarchical numbering with contextual awareness and reset policies
+. Clear separation between semantic structure and presentation formatting
+. Support for transformations to CSS, Word Styles, and XSLT counters
+. String pattern interpolation for flexible label construction
+
+ANDL enables document architects and standards developers to define once and apply
+everywhere, ensuring that numbering schemes work predictably across all outputs
+while preserving both semantic structure and visual presentation requirements.
+
+[[scope]]
+== Scope
+
+This document establishes requirements for defining auto-numbering schemes for:
+
+* Ordered and unordered list items with multiple nesting levels
+* Document structural elements (clauses, annexes, appendices)
+* Figures, tables, examples, and notes
+* Source code blocks and requirement statements
+* CJK and other international numbering systems
+* Hierarchical numbering relationships
+* Advanced string pattern interpolation
+* Counter reset policies based on document context
+
+This specification defines both the conceptual models for auto-numbering and their
+transformation to implementation formats including CSS counters, Word Styles,
+and XSLT counter variables.
+
+[[terms-and-definitions]]
+== Terms and definitions
+
+=== counter
+
+numeric or alphanumeric variable that tracks sequence position within a document context.
+
+=== numbering format
+
+rules for representing a counter value in a particular alphanumeric system
+
+[example]
+====
+Arabic numerals, Roman numerals, alphabetic characters.
+====
+
+=== numbering pattern
+
+template combining counter values and literal characters to form complete labels
+
+[example]
+"Figure %n" is a pattern that generates labels like "Figure 1", "Figure 2", etc.
+
+=== hierarchical numbering
+
+numbering system where elements inherit context from parent elements
+
+[example]
+In a numbering system, "1.1.2" can represent the locality of "section 1,
+subsection 1, clause 2".
+
+=== reset policy
+
+rules determining when a counter should restart from its initial value based on document context
+
+=== string interpolation
+
+process of substituting variable placeholders in a pattern with actual values to construct a label
+
+=== counter traversal
+
+rules for managing access and iteration through counters across different sections of a document
+
+
+[[requirements]]
+== Requirements
+
+=== Problem statement
+
+Information management systems must produce consistent, predictable
+auto-numbering across multiple output formats while:
+
+* Preserving semantic relationships between numbered elements
+* Adapting to different display requirements by format
+* Supporting internationalization requirements
+* Allowing for hierarchical numbering schemes
+* Enabling flexible formatting of labels
+* Managing counter resets across document boundaries
+
+=== Usage in Metanorma
+
+Metanorma XML uses ANDL to define auto-numbering for elements that require sequence tracking.
+These definitions are interpreted by end-format renderers to generate appropriate numbering in
+the target format. The model must provide:
+
+* Common patterns applicable across formats
+* Format-specific transformation instructions
+* Separation of semantic numbering (what something is) from presentation (how it appears)
+* Support for complex numbering schemes required by standards organizations
+
+[[principles]]
+== Principles
+
+=== Separation of concerns
+
+ANDL follows these fundamental design principles:
+
+. *Separation of semantics and presentation*: Numbers represent both position in a sequence and
+  visual labeling. These concerns must be separable for proper processing.
+
+. *Context awareness*: Numbering systems must understand their position within document hierarchies.
+
+. *Independence from format*: The model must define numbering in a way that can be consistently
+  applied across HTML, PDF, Word, and other formats.
+
+. *Transformation clarity*: Format-specific renderings must be clearly derivable from the base model.
+
+. *Internationalization support*: Non-Latin numbering systems must be fully supported.
+
+=== Model architecture
+
+The ANDL model architecture consists of:
+
+* Core models defining counters, sequences, and formats
+* Element-specific extensions for particular document components
+* Transformation templates for output formats
+* Hierarchical context management
+* Reset policy framework
+* Pattern interpolation system
+
+[[core-models]]
+== Core models
+
+=== Counter model
+
+The Counter model defines the fundamental mechanism for tracking sequence position within a document.
+
+[source,lml]
+----
+class Counter {
+  attribute id, String {
+    definition "Unique identifier for the counter"
+  }
+  attribute initial_value, Integer {
+    definition "Starting value for the counter"
+    default: 1
+  }
+  attribute current_value, Integer {
+    definition "Current value of the counter"
+  }
+  attribute step, Integer {
+    definition "Value to increment counter by"
+    default: 1
+  }
+  attribute format, NumberingFormat {
+    definition "Format used to represent counter values"
+  }
+  attribute scope, CounterScope {
+    definition "Scope of counter applicability"
+  }
+}
+
+class CounterScope {
+  attribute context_element, String {
+    definition "Element defining the counter's scope"
+  }
+  attribute scope_type, String {
+    values { "document", "section", "container" }
+    definition "Type of scoping to apply"
+  }
+}
+
+enum NumberingFormat {
+  value "arabic" {
+    definition "Standard decimal numbers (1, 2, 3...)"
+  }
+  value "roman_upper" {
+    definition "Uppercase Roman numerals (I, II, III...)"
+  }
+  value "roman_lower" {
+    definition "Lowercase Roman numerals (i, ii, iii...)"
+  }
+  value "alpha_upper" {
+    definition "Uppercase letters (A, B, C...)"
+  }
+  value "alpha_lower" {
+    definition "Lowercase letters (a, b, c...)"
+  }
+  value "chinese" {
+    definition "Chinese numerals (一, 二, 三...)"
+  }
+  value "japanese" {
+    definition "Japanese numerals (一, 二, 三...)"
+  }
+  value "korean" {
+    definition "Korean numerals (일, 이, 삼...)"
+  }
+  value "custom" {
+    definition "Custom numbering format defined by a pattern"
+  }
+}
+----
+
+=== String interpolation model
+
+The String Interpolation model defines how counter values are combined with fixed text to create labels.
+
+[source,lml]
+----
+class NumberingPattern {
+  attribute pattern, String {
+    definition "Template string with placeholders for counter values"
+  }
+  attribute counter_references, Array {
+    definition "List of counters referenced in the pattern"
+    cardinality 0..n
+  }
+  attribute conditional_fragments, Array {
+    definition "Conditional fragments based on context"
+    cardinality 0..n
+  }
+}
+
+class PatternReference {
+  attribute placeholder, String {
+    definition "Identifier in the pattern to be replaced"
+  }
+  attribute counter, String {
+    definition "Reference to a counter"
+  }
+  attribute format_override, NumberingFormat {
+    definition "Optional override for the counter's format"
+  }
+  attribute prefix, String {
+    definition "Text to appear before the counter value"
+  }
+  attribute suffix, String {
+    definition "Text to appear after the counter value"
+  }
+}
+
+class ConditionalFragment {
+  attribute condition, String {
+    definition "Expression determining when to apply this fragment"
+  }
+  attribute pattern, String {
+    definition "Pattern to use when condition is true"
+  }
+}
+----
+
+=== Reset policy model
+
+The Reset Policy model defines when counters should reset to their initial values.
+
+[source,lml]
+----
+class ResetPolicy {
+  attribute counter_id, String {
+    definition "ID of counter this policy applies to"
+  }
+  attribute reset_trigger, ResetTrigger {
+    definition "What triggers this counter reset"
+  }
+  attribute dependencies, Array {
+    definition "Other counters that trigger a reset when they change"
+    cardinality 0..n
+  }
+}
+
+class ResetTrigger {
+  attribute element_type, String {
+    definition "Type of element that triggers a reset"
+  }
+  attribute attribute_change, String {
+    definition "Attribute whose change triggers a reset"
+  }
+  attribute xpath_expression, String {
+    definition "XPath expression triggering a reset when matched"
+  }
+}
+----
+
+=== Hierarchical structure model
+
+The Hierarchical Structure model defines relationships between counters in nested structures.
+
+[source,lml]
+----
+class HierarchicalCounter {
+  attribute base_counter, String {
+    definition "Reference to the base Counter object"
+  }
+  attribute parent_counter, String {
+    definition "Reference to parent counter in hierarchy"
+  }
+  attribute level, Integer {
+    definition "Level in the hierarchy (1 = top level)"
+  }
+  attribute include_parent_value, Boolean {
+    definition "Whether to include parent value in display"
+    default: true
+  }
+  attribute separator, String {
+    definition "Character(s) separating hierarchy levels"
+    default: "."
+  }
+}
+----
+
+=== Presentation and semantics model
+
+The Presentation and Semantics model separates meaning from display.
+
+[source,lml]
+----
+class NumberedElement {
+  attribute element_type, String {
+    definition "Type of document element being numbered"
+  }
+  attribute semantic_info, SemanticInfo {
+    definition "Semantic information about the numbered element"
+  }
+  attribute presentation_info, PresentationInfo {
+    definition "Information about how the element should be presented"
+  }
+}
+
+class SemanticInfo {
+  attribute counters, Array {
+    definition "Counters used to track this element"
+    cardinality 1..n
+  }
+  attribute structure_level, Integer {
+    definition "Level in document structure hierarchy"
+  }
+  attribute context_path, String {
+    definition "XPath-like path to locate element in document structure"
+  }
+}
+
+class PresentationInfo {
+  attribute label_pattern, NumberingPattern {
+    definition "Pattern for generating the visible label"
+  }
+  attribute format_overrides, Hash {
+    definition "Format-specific overrides"
+  }
+  attribute style_properties, Hash {
+    definition "CSS and other style properties"
+  }
+}
+----
+
+=== Transformation model
+
+The Transformation model defines how ANDL definitions transform to specific output formats.
+
+[source,lml]
+----
+class FormatTransformation {
+  attribute target_format, String {
+    values { "css", "word", "xslt" }
+    definition "Target format for this transformation"
+  }
+  attribute template, String {
+    definition "Liquid template for the transformation"
+  }
+  attribute format_specific_properties, Hash {
+    definition "Format-specific properties"
+  }
+}
+
+class CssTransformation {
+  attribute counter_declaration, String {
+    definition "CSS counter declaration"
+  }
+  attribute counter_reset, String {
+    definition "CSS counter-reset rule"
+  }
+  attribute counter_increment, String {
+    definition "CSS counter-increment rule"
+  }
+  attribute content_property, String {
+    definition "CSS content property for displaying counter"
+  }
+}
+
+class WordTransformation {
+  attribute style_name, String {
+    definition "Word style name to apply"
+  }
+  attribute numbering_definition_id, String {
+    definition "Word numbering definition ID"
+  }
+  attribute level_override, Integer {
+    definition "Override for the style level"
+  }
+}
+
+class XsltTransformation {
+  attribute variable_name, String {
+    definition "XSLT variable name"
+  }
+  attribute template_match, String {
+    definition "XPath pattern to match elements"
+  }
+  attribute counter_initialization, String {
+    definition "XSLT for initializing the counter"
+  }
+  attribute counter_increment, String {
+    definition "XSLT for incrementing the counter"
+  }
+}
+----
+
+[[auto-numbered-items]]
+== Auto-numbered items
+
+=== List numbering
+
+Lists are among the most commonly numbered elements in documents, with both ordered and unordered variants.
+
+==== Ordered lists
+
+Ordered lists use sequential counters with various numbering formats and nested hierarchies.
+
+[source,lml]
+----
+class OrderedListNumbering {
+  attribute counter, Counter {
+    definition "Counter tracking list item position"
+  }
+  attribute hierarchical, Boolean {
+    definition "Whether list supports hierarchical numbering"
+    default: true
+  }
+  attribute pattern, NumberingPattern {
+    definition "Pattern for list item labels"
+  }
+  attribute level_formats, Array {
+    definition "Formats to use at different nesting levels"
+    cardinality 0..n
+  }
+}
+
+class OrderedListLevelFormat {
+  attribute level, Integer {
+    definition "Nesting level (1 = top level)"
+  }
+  attribute format, NumberingFormat {
+    definition "Numbering format for this level"
+  }
+  attribute pattern, String {
+    definition "Label pattern for this level"
+  }
+}
+----
+
+**Examples**
+
+*Example 1: Basic ordered list*
+
+Configuration:
+[source,lml]
+----
+instance OrderedListNumbering {
+  counter = instance Counter {
+    id = "ordered_list_items"
+    initial_value = 1
+    format = "arabic"
+  }
+  pattern = instance NumberingPattern {
+    pattern = "%n. "
+  }
+}
+----
+
+In Metanorma AsciiDoc:
+```asciidoc
+. First item
+. Second item
+. Third item
+```
+
+CSS Transformation:
+```css
+ol {
+  counter-reset: ordered_list_items;
+}
+ol > li {
+  counter-increment: ordered_list_items;
+}
+ol > li::before {
+  content: counter(ordered_list_items) ". ";
+}
+```
+
+Word Style Transformation:
+```xml
+<w:abstractNum w:abstractNumId="1">
+  <w:lvl w:ilvl="0">
+    <w:start w:val="1"/>
+    <w:numFmt w:val="decimal"/>
+    <w:lvlText w:val="%1. "/>
+    <w:lvlJc w:val="left"/>
+    <w:pPr>
+      <w:ind w:left="720" w:hanging="360"/>
+    </w:pPr>
+  </w:lvl>
+</w:abstractNum>
+```
+
+XSLT Transformation:
+```xslt
+<xsl:template match="ol">
+  <xsl:variable name="list-counter" select="1"/>
+  <ol>
+    <xsl:apply-templates/>
+  </ol>
+</xsl:template>
+
+<xsl:template match="ol/li">
+  <li>
+    <xsl:number format="1. "/>
+    <xsl:apply-templates/>
+  </li>
+</xsl:template>
+```
+
+*Example 2: Nested ordered list with different formats*
+
+Configuration:
+[source,lml]
+----
+instance OrderedListNumbering {
+  counter = instance Counter {
+    id = "ordered_list_items"
+    initial_value = 1
+    format = "arabic"
+  }
+  hierarchical = true
+  level_formats = [
+    instance OrderedListLevelFormat {
+      level = 1
+      format = "arabic"
+      pattern = "%n. "
+    },
+    instance OrderedListLevelFormat {
+      level = 2
+      format = "alpha_lower"
+      pattern = "%n) "
+    },
+    instance OrderedListLevelFormat {
+      level = 3
+      format = "roman_lower"
+      pattern = "(%n) "
+    }
+  ]
+}
+----
+
+In Metanorma AsciiDoc:
+```asciidoc
+. First level item
+.. Second level item a
+.. Second level item b
+... Third level item i
+... Third level item ii
+. First level item again
+```
+
+CSS Transformation:
+```css
+ol {
+  counter-reset: level1;
+}
+ol > li {
+  counter-increment: level1;
+}
+ol > li::before {
+  content: counter(level1) ". ";
+}
+ol > li > ol {
+  counter-reset: level2;
+}
+ol > li > ol > li {
+  counter-increment: level2;
+}
+ol > li > ol > li::before {
+  content: counter(level2, lower-alpha) ") ";
+}
+ol > li > ol > li > ol {
+  counter-reset: level3;
+}
+ol > li > ol > li > ol > li {
+  counter-increment: level3;
+}
+ol > li > ol > li > ol > li::before {
+  content: "(" counter(level3, lower-roman) ") ";
+}
+```
+
+==== Unordered lists
+
+Unordered lists use non-sequential markers for visual distinction.
+
+[source,lml]
+----
+class UnorderedListMarkers {
+  attribute level_markers, Array {
+    definition "Markers to use at different nesting levels"
+    cardinality 1..n
+  }
+}
+
+class UnorderedListLevelMarker {
+  attribute level, Integer {
+    definition "Nesting level (1 = top level)"
+  }
+  attribute marker, String {
+    definition "Symbol to use for this level"
+  }
+}
+----
+
+**Examples**
+
+*Example: Unordered list with custom markers*
+
+Configuration:
+[source,lml]
+----
+instance UnorderedListMarkers {
+  level_markers = [
+    instance UnorderedListLevelMarker {
+      level = 1
+      marker = "•"
+    },
+    instance UnorderedListLevelMarker {
+      level = 2
+      marker = "◦"
+    },
+    instance UnorderedListLevelMarker {
+      level = 3
+      marker = "▪"
+    }
+  ]
+}
+----
+
+In Metanorma AsciiDoc:
+```asciidoc
+* First bullet
+** Second level bullet
+*** Third level bullet
+* Another first level bullet
+```
+
+CSS Transformation:
+```css
+ul { list-style-type: none; }
+ul > li::before { content: "• "; }
+ul > li > ul > li::before { content: "◦ "; }
+ul > li > ul > li > ul > li::before { content: "▪ "; }
+```
+
+=== Clause numbering
+
+Clauses form the primary structural elements of technical documents and use hierarchical numbering.
+
+[source,lml]
+----
+class ClauseNumbering {
+  attribute hierarchical_counter, HierarchicalCounter {
+    definition "Hierarchical counter for tracking clause position"
+  }
+  attribute pattern, NumberingPattern {
+    definition "Pattern for clause labels"
+  }
+  attribute max_depth, Integer {
+    definition "Maximum depth to display in numbering"
+    default: 6
+  }
+  attribute labeled_title, Boolean {
+    definition "Whether to include label in title"
+    default: true
+  }
+  attribute unlabeled_depth, Integer {
+    definition "Depth at which to stop displaying labels"
+  }
+}
+----
+
+**Examples**
+
+*Example: Clause numbering with hierarchical structure*
+
+Configuration:
+[source,lml]
+----
+instance ClauseNumbering {
+  hierarchical_counter = instance HierarchicalCounter {
+    base_counter = "clause_counter"
+    parent_counter = "parent_clause_counter"
+    level = 1
+    include_parent_value = true
+    separator = "."
+  }
+  pattern = instance NumberingPattern {
+    pattern = "%n"
+  }
+  max_depth = 3
+  labeled_title = true
+}
+----
+
+In Metanorma AsciiDoc:
+```asciidoc
+== First clause
+=== First subclause
+==== First sub-subclause
+=== Second subclause
+== Second clause
+```
+
+CSS Transformation:
+```css
+:root {
+  counter-reset: clause_counter;
+}
+h2 {
+  counter-increment: clause_counter;
+  counter-reset: subclause_counter;
+}
+h2::before {
+  content: counter(clause_counter) " ";
+}
+h3 {
+  counter-increment: subclause_counter;
+  counter-reset: subsubclause_counter;
+}
+h3::before {
+  content: counter(clause_counter) "." counter(subclause_counter) " ";
+}
+h4 {
+  counter-increment: subsubclause_counter;
+}
+h4::before {
+  content: counter(clause_counter) "." counter(subclause_counter) "."
+           counter(subsubclause_counter) " ";
+}
+```
+
+Word Style Transformation:
+```xml
+<w:abstractNum w:abstractNumId="2">
+  <w:lvl w:ilvl="0">
+    <w:start w:val="1"/>
+    <w:numFmt w:val="decimal"/>
+    <w:lvlText w:val="%1"/>
+    <w:lvlJc w:val="left"/>
+    <w:pStyle w:val="Heading1"/>
+  </w:lvl>
+  <w:lvl w:ilvl="1">
+    <w:start w:val="1"/>
+    <w:numFmt w:val="decimal"/>
+    <w:lvlText w:val="%1.%2"/>
+    <w:lvlJc w:val="left"/>
+    <w:pStyle w:val="Heading2"/>
+  </w:lvl>
+  <w:lvl w:ilvl="2">
+    <w:start w:val="1"/>
+    <w:numFmt w:val="decimal"/>
+    <w:lvlText w:val="%1.%2.%3"/>
+    <w:lvlJc w:val="left"/>
+    <w:pStyle w:val="Heading3"/>
+  </w:lvl>
+</w:abstractNum>
+```
+
+=== Annex and appendix numbering
+
+Annexes and appendices typically use different numbering schemes than the main document.
+
+[source,lml]
+----
+class AnnexNumbering {
+  attribute counter, Counter {
+    definition "Counter for tracking annex position"
+  }
+  attribute pattern, NumberingPattern {
+    definition "Pattern for annex labels"
+  }
+  attribute prefix, String {
+    definition "Text to prefix annex number with"
+    default: "Annex "
+  }
+  attribute normative, Boolean {
+    definition "Whether annex is normative"
+  }
+  attribute annex_of_annex, Boolean {
+    definition "Whether this is an appendix (annex of annex)"
+    default: false
+  }
+}
+----
+
+**Examples**
+
+*Example: Annex numbering*
+
+Configuration:
+[source,lml]
+----
+instance AnnexNumbering {
+  counter = instance Counter {
+    id = "annex_counter"
+    initial_value = 1
+    format = "alpha_upper"
+  }
+  pattern = instance NumberingPattern {
+    pattern = "Annex %n"
+  }
+  normative = true
+}
+----
+
+In Metanorma AsciiDoc:
+```asciidoc
+[appendix]
+== First annex
+
+[appendix]
+== Second annex
+```
+
+CSS Transformation:
+```css
+:root {
+  counter-reset: annex_counter;
+}
+.annex h2 {
+  counter-increment: annex_counter;
+}
+.annex h2::before {
+  content: "Annex " counter(annex_counter, upper-alpha) "\A";
+  display: block;
+}
+```
+
+*Example: Appendix (annex of annex) numbering*
+
+Configuration:
+[source,lml]
+----
+instance AnnexNumbering {
+  counter = instance Counter {
+    id = "appendix_counter"
+    initial_value = 1
+    format = "arabic"
+  }
+  pattern = instance NumberingPattern {
+    pattern = "Appendix %n"
+  }
+  annex_of_annex = true
+}
+----
+
+=== Figure numbering
+
+Figures typically use a combination of sequential and hierarchical numbering.
+
+[source,lml]
+----
+class FigureNumbering {
+  attribute counter, Counter {
+    definition "Counter for tracking figure position"
+  }
+  attribute hierarchical, Boolean {
+    definition "Whether to use hierarchical numbering"
+    default: false
+  }
+  attribute context_scope, String {
+    definition "Document scope that resets figure numbering"
+    values { "document", "clause", "section" }
+    default: "document"
+  }
+  attribute pattern, NumberingPattern {
+    definition "Pattern for figure labels"
+  }
+  attribute caption_location, String {
+    definition "Where to place the caption"
+    values { "before", "after" }
+    default: "after"
+  }
+}
+----
+
+**Examples**
+
+*Example: Document-wide sequential figure numbering*
+
+Configuration:
+[source,lml]
+----
+instance FigureNumbering {
+  counter = instance Counter {
+    id = "figure_counter"
+    initial_value = 1
+    format = "arabic"
+  }
+  hierarchical = false
+  context_scope = "document"
+  pattern = instance NumberingPattern {
+    pattern = "Figure %n —"
+  }
+  caption_location = "after"
+}
+----
+
+In Metanorma AsciiDoc:
+```asciidoc
+.Caption for figure 1
+image::figure1.png[]
+
+.Caption for figure 2
+image::figure2.png[]
+```
+
+CSS Transformation:
+```css
+:root {
+  counter-reset: figure_counter;
+}
+figure {
+  counter-increment: figure_counter;
+}
+figure figcaption::before {
+  content: "Figure " counter(figure_counter) " — ";
+  font-weight: bold;
+}
+```
+
+*Example: Hierarchical figure numbering by clause*
+
+Configuration:
+[source,lml]
+----
+instance FigureNumbering {
+  counter = instance Counter {
+    id = "figure_counter"
+    initial_value = 1
+    format = "arabic"
+  }
+  hierarchical = true
+  context_scope = "clause"
+  pattern = instance NumberingPattern {
+    pattern = "Figure %parent.%n —"
+  }
+  caption_location = "after"
+}
+----
+
+CSS Transformation:
+```css
+h2 {
+  counter-increment: clause_counter;
+  counter-reset: figure_counter;
+}
+figure {
+  counter-increment: figure_counter;
+}
+figure figcaption::before {
+  content: "Figure " counter(clause_counter) "." counter(figure_counter) " — ";
+  font-weight: bold;
+}
+```
+
+=== Table numbering
+
+Tables use numbering schemes similar to figures but often with different presentation.
+
+[source,lml]
+----
+class TableNumbering {
+  attribute counter, Counter {
+    definition "Counter for tracking table position"
+  }
+  attribute hierarchical, Boolean {
+    definition "Whether to use hierarchical numbering"
+    default: false
+  }
+  attribute context_scope, String {
+    definition "Document scope that resets table numbering"
+    values { "document", "clause", "section" }
+    default: "document"
+  }
+  attribute pattern, NumberingPattern {
+    definition "Pattern for table labels"
+  }
+  attribute caption_location, String {
+    definition "Where to place the caption"
+    values { "before", "after" }
+    default: "before"
+  }
+}
+----
+
+**Examples**
+
+*Example: Document-wide sequential table numbering*
+
+Configuration:
+[source,lml]
+----
+instance TableNumbering {
+  counter = instance Counter {
+    id = "table_counter"
+    initial_value = 1
+    format = "arabic"
+  }
+  hierarchical = false
+  context_scope = "document"
+  pattern = instance NumberingPattern {
+    pattern = "Table %n —"
+  }
+  caption_location = "before"
+}
+----
+
+In Metanorma AsciiDoc:
+```asciidoc
+.Caption for table 1
+|===
+| Column 1 | Column 2
+| Data 1 | Data 2
+|===
+
+.Caption for table 2
+|===
+| Column 1 | Column 2
+| Data 1 | Data 2
+|===
+```
+
+CSS Transformation:
+```css
+:root {
+  counter-reset: table_counter;
+}
+table {
+  counter-increment: table_counter;
+}
+table caption::before {
+  content: "Table " counter(table_counter) " — ";
+  font-weight: bold;
+}
+```
+
+=== Note numbering
+
+Notes may appear throughout a document and are typically numbered within their context.
+
+[source,lml]
+----
+class NoteNumbering {
+  attribute counter, Counter {
+    definition "Counter for tracking note position"
+  }
+  attribute reset_scope, String {
+    definition "Context that resets note numbering"
+    values { "document", "clause", "container", "section" }
+    default: "clause"
+  }
+  attribute pattern, NumberingPattern {
+    definition "Pattern for note labels"
+  }
+  attribute note_type, String {
+    definition "Type of note"
+    values { "note", "warning", "tip", "important", "caution" }
+    default: "note"
+  }
+}
+----
+
+**Examples**
+
+*Example: Notes numbered per clause*
+
+Configuration:
+[source,lml]
+----
+instance NoteNumbering {
+  counter = instance Counter {
+    id = "note_counter"
+    initial_value = 1
+    format = "arabic"
+  }
+  reset_scope = "clause"
+  pattern = instance NumberingPattern {
+    pattern = "NOTE %n:"
+  }
+  note_type = "note"
+}
+----
+
+In Metanorma AsciiDoc:
+```asciidoc
+== Clause 1
+
+NOTE: This is the first note in clause 1.
+
+NOTE: This is the second note in clause 1.
+
+== Clause 2
+
+NOTE: This is the first note in clause 2.
+```
+
+CSS Transformation:
+```css
+h2 {
+  counter-reset: note_counter;
+}
+.note {
+  counter-increment: note_counter;
+}
+.note::before {
+  content: "NOTE " counter(note_counter) ": ";
+  font-weight: bold;
+}
+```
+
+=== Example numbering
+
+Examples often follow similar numbering patterns to notes.
+
+[source,lml]
+----
+class ExampleNumbering {
+  attribute counter, Counter {
+    definition "Counter for tracking example position"
+  }
+  attribute reset_scope, String {
+    definition "Context that resets example numbering"
+    values { "document", "clause", "container", "section" }
+    default: "clause"
+  }
+  attribute pattern, NumberingPattern {
+    definition "Pattern for example labels"
+  }
+}
+----
+
+**Examples**
+
+*Example: Examples numbered per document*
+
+Configuration:
+[source,lml]
+----
+instance ExampleNumbering {
+  counter = instance Counter {
+    id = "example_counter"
+    initial_value = 1
+    format = "arabic"
+  }
+  reset_scope = "document"
+  pattern = instance NumberingPattern {
+    pattern = "EXAMPLE %n:"
+  }
+}
+----
+
+In Metanorma AsciiDoc:
+```asciidoc
+[example]
+This is the first example in the document.
+
+[example]
+This is the second example in the document.
+```
+
+CSS Transformation:
+```css
+:root {
+  counter-reset: example_counter;
+}
+.example {
+  counter-increment: example_counter;
+}
+.example::before {
+  content: "EXAMPLE " counter(example_counter) ": ";
+  font-weight: bold;
+}
+```
+
+=== Source code numbering
+
+Source code blocks may be numbered for reference.
+
+[source,lml]
+----
+class SourceCodeNumbering {
+  attribute counter, Counter {
+    definition "Counter for tracking source code block position"
+  }
+  attribute reset_scope, String {
+    definition "Context that resets source code numbering"
+    values { "document", "clause", "container", "section" }
+    default: "document"
+  }
+  attribute pattern, NumberingPattern {
+    definition "Pattern for source code labels"
+  }
+  attribute caption_location, String {
+    definition "Where to place the caption"
+    values { "before", "after" }
+    default: "before"
+  }
+  attribute line_numbers, Boolean {
+    definition "Whether to include line numbers"
+    default: false
+  }
+}
+----
+
+**Examples**
+
+*Example: Source code blocks with captions*
+
+Configuration:
+[source,lml]
+----
+instance SourceCodeNumbering {
+  counter = instance Counter {
+    id = "sourcecode_counter"
+    initial_value = 1
+    format = "arabic"
+  }
+  reset_scope = "document"
+  pattern = instance NumberingPattern {
+    pattern = "Listing %n —"
+  }
+  caption_location = "before"
+  line_numbers = true
+}
+----
+
+In Metanorma AsciiDoc:
+```asciidoc
+.Example function
+[source,javascript]
+----
+function example() {
+  return "This is an example";
+}
+----
+```
+
+CSS Transformation:
+```css
+:root {
+  counter-reset: sourcecode_counter;
+}
+pre.source {
+  counter-increment: sourcecode_counter;
+}
+pre.source::before {
+  content: "Listing " counter(sourcecode_counter) " — " attr(data-caption);
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+```
+
+=== Requirement numbering
+
+Requirements often need special numbering for traceability.
+
+[source,lml]
+----
+class RequirementNumbering {
+  attribute counter, Counter {
+    definition "Counter for tracking requirement position"
+  }
+  attribute prefix, String {
+    definition "Prefix for requirement ID"
+    default: "REQ-"
+  }
+  attribute hierarchical, Boolean {
+    definition "Whether to use hierarchical IDs"
+    default: true
+  }
+  attribute pattern, NumberingPattern {
+    definition "Pattern for requirement labels"
+  }
+  attribute reset_scope, String {
+    definition "Context that resets requirement numbering"
+    values { "document", "clause", "section" }
+    default: "document"
+  }
+}
+----
+
+**Examples**
+
+*Example: Hierarchical requirement numbering*
+
+Configuration:
+[source,lml]
+----
+instance RequirementNumbering {
+  counter = instance Counter {
+    id = "requirement_counter"
+    initial_value = 1
+    format = "arabic"
+  }
+  prefix = "REQ-"
+  hierarchical = true
+  pattern = instance NumberingPattern {
+    pattern = "%prefix%section.%n"
+  }
+  reset_scope = "section"
+}
+----
+
+In Metanorma AsciiDoc:
+```asciidoc
+== Section 1
+
+[requirement]
+This system shall provide user authentication.
+
+[requirement]
+This system shall encrypt all data in transit.
+
+== Section 2
+
+[requirement]
+This system shall log all access attempts.
+```
+
+CSS Transformation:
+```css
+h2 {
+  counter-increment: section_counter;
+  counter-reset: requirement_counter;
+}
+.requirement {
+  counter-increment: requirement_counter;
+}
+.requirement::before {
+  content: "REQ-" counter(section_counter) "." counter(requirement_counter) ": ";
+  font-weight: bold;
+}
+```
+
+=== CJK numbering support
+
+The CJK numbering model provides support for Chinese, Japanese, and Korean numbering systems.
+
+[source,lml]
+----
+class CJKNumbering {
+  attribute language, String {
+    values { "zh", "ja", "ko" }
+    definition "Language code determining the numbering system"
+  }
+  attribute format_type, String {
+    values { "financial", "formal", "informal", "simplified" }
+    definition "Style of CJK numerals to use"
+    default: "formal"
+  }
+  attribute counter_reference, String {
+    definition "Reference to the base counter to convert"
+  }
+}
+----
+
+**Examples**
+
+*Example: Chinese formal numbering*
+
+Configuration:
+[source,lml]
+----
+instance CJKNumbering {
+  language = "zh"
+  format_type = "formal"
+  counter_reference = "section_counter"
+}
+----
+
+CSS Transformation:
+```css
+h2::before {
+  content: "第" counter(section_counter, cjk-ideographic) "章 ";
+}
+```
+
+*Example: Japanese financial numbering*
+
+Configuration:
+[source,lml]
+----
+instance CJKNumbering {
+  language = "ja"
+  format_type = "financial"
+  counter_reference = "amount_counter"
+}
+----
+
+[[annex-iso]]
+[appendix]
+== ISO DIR 2 auto-number items
+
+The following table provides a comprehensive reference for auto-numbering elements according to ISO Directives Part 2:
+
+.ISO Directives Part 2 auto-numbering elements
+[cols="1,2,2,2"]
+|===
+|Element type |Numbering scheme |Example |ANDL implementation
+
+|Clauses
+|Arabic numerals, sequential throughout document
+|1, 2, 3
+|`ClauseNumbering` with document scope
+
+|Subclauses
+|Hierarchical Arabic numerals
+|1.1, 1.2, 2.1.1
+|`ClauseNumbering` with hierarchical structure
+
+|Annexes
+|Capital letters, sequential
+|Annex A, Annex B
+|`AnnexNumbering` with alpha_upper format
+
+|Appendices (in annexes)
+|Arabic numerals, sequential within annex
+|Appendix 1, Appendix 2
+|`AnnexNumbering` with annex_of_annex=true
+
+|Ordered lists (first level)
+|Lowercase letters followed by closing parenthesis
+|a), b), c)
+|`OrderedListNumbering` with alpha_lower format
+
+|Ordered lists (second level)
+|Lowercase Roman numerals in parentheses
+|(i), (ii), (iii)
+|`OrderedListNumbering` with roman_lower format
+
+|Ordered lists (third level)
+|Arabic numerals followed by period
+|1., 2., 3.
+|`OrderedListNumbering` with arabic format
+
+|Figures
+|Arabic numerals, sequential throughout document
+|Figure 1, Figure 2
+|`FigureNumbering` with document scope
+
+|Tables
+|Arabic numerals, sequential throughout document
+|Table 1, Table 2
+|`TableNumbering` with document scope
+
+|Notes
+|Arabic numerals, reset within each clause
+|NOTE 1, NOTE 2
+|`NoteNumbering` with clause reset_scope
+
+|Examples
+|Arabic numerals, reset within each clause
+|EXAMPLE 1, EXAMPLE 2
+|`ExampleNumbering` with clause reset_scope
+
+|Formulae/equations
+|Arabic numerals in parentheses, sequential throughout or by clause
+|(1), (2), (3)
+|`FormulaNumbering` with document scope
+|===
