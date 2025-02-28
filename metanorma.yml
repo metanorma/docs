@@ -1,0 +1,10 @@
+---
+metanorma:
+  source:
+    files:
+      - sources/109.adoc
+      - sources/119.adoc
+
+  collection:
+    organization: "Metanorma"
+    name: "Metanorma specifications"
