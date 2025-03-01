@@ -328,9 +328,14 @@ class ContentElement {
   attribute parent, ref:(ContentElement) {
     definition "Parent element to which this element belongs"
   }
+  attribute type, String {
+    definition "Type of the content element"
+  }
 }
 ----
 
+The `type` attribute is used to match whether a Labeller
+can label it.
 
 === Sequence
 
@@ -606,6 +611,10 @@ class Labeller {
     definition "Context to which this labeller is bound"
   }
 
+  attribute type, String {
+    definition "Type of the ContentElement the labeller can label"
+  }
+
   attribute parent, ref:(Labeller) {
     definition "Parent labeller to which this labeller relies upon to generate labels, if any"
   }
@@ -755,9 +764,48 @@ instance FigureLabel {
 
 == Usage of models
 
-// TODO define the usage of the defined models and how they interact in various contexts. Consider including examples for clarity.
+EDITOR: define the usage of the defined models and how they interact in various contexts. Consider including examples for clarity.
+
+Provide the algorithm of how to resolve a parent labeller.
 
 
+=== Prerequsites
+
+Every ContentElement that can either:
+
+* Serve as a label context
+* Be labeled
+
+Must be associated with a Context object.
+
+=== Algorithm for resolving the label for a content element
+
+Given a ContentElement object, we want to get its label.
+
+. From the ContentElement, find its applicable Context object. The applicable Context object is one that has a Labeller that can label the type of the ContentElement.
+
+.. If the Context object is on it, use it.
+
+.. If not, navigate through its `parent`
+attribute subsequently until the closest Context object
+is obtained.
+
+. From the Context object, find the Labeller object that is
+applicable to the ContentElement.
+
+. Ask the Labeller object to generate a label for the ContentElement.
+
+.. The Labeller object will use its LabelTemplate object to generate the label.
+
+... If the LabelTemplate requires a sequence element, it will ask its Sequence object to generate a value for the position of the ContentElement in the Context.
+
+... If the LabelTemplate requires a parent labeller, it will ask its parent Labeller object to generate a label for the ContentElement.
+
+. Done.
+
+=== Conditions
+
+EDITOR: Any conditions that need to be met for the algorithm to work correctly?
 
 
 [[referencing-model]]
