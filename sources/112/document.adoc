@@ -1557,3 +1557,18 @@ The following table provides a comprehensive reference for auto-numbering elemen
 |(1), (2), (3)
 |Counter bound to document or clause scope with "(%n)" pattern
 |===
+
+
+
+NOTE: Anything that contains an "enumerable" item needs to have a counter. The counter needs to be linked to the parent counter if it is to inherit any pattern.
+
+Some references need separate local and global patterns depend on where they are referenced from (such as lists, bound by the contexts).
+
+Each structural element contains multiple counters depending on what it can count.
+
+e.g.
+
+* Document has a ClauseCounter, an AnnexCounter, a FigureCounter, a TableCounter.
+** A Clause 1 has a SubClauseCounter.
+** A Subclause 1 has a SubClauseCounter and also a ListCounter.
+*** A ListCounter has ListItemCounter.

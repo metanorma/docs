@@ -2,8 +2,8 @@
 metanorma:
   source:
     files:
-      - sources/109.adoc
-      - sources/119.adoc
+      - sources/109/document.adoc
+      - sources/110/document.adoc
 
   collection:
     organization: "Metanorma"
