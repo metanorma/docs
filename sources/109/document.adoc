@@ -87,7 +87,6 @@ A conforming Metanorma renderer shall:
 
 ==== Characters with dedicated vertical forms that can't be achieved through rotation the character
 
-[[table2]]
 .Brackets and parentheses transformation
 [cols="1,1,1,1"]
 |===
