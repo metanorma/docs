@@ -6,7 +6,7 @@
 :language: en
 :title: Metanorma Markdown syntax specification
 :doctype: standard
-:status: draft
+:status: published
 :mn-document-class: ribose
 :mn-output-extensions: xml,html,pdf,rxl
 :local-cache-only:

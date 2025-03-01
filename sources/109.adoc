@@ -6,7 +6,7 @@
 :language: en
 :title-main-en: Vertical layout rendering
 :doctype: standard
-:status: draft
+:status: published
 :mn-document-class: ribose
 :mn-output-extensions: xml,html,pdf,rxl
 :local-cache-only:
@@ -188,8 +188,8 @@ The renderer shall:
 
 . Use dedicated vertical presentation forms when available and the vertical forms
 can't be easily achieved through rotation the character +
-NOTE: Using the glyphs that the vertical forms are easily achieved through rotation can preserve the copy-paste text into the 
-text editor in horizontal mode, and the easy searching also. 
+NOTE: Using the glyphs that the vertical forms are easily achieved through rotation can preserve the copy-paste text into the
+text editor in horizontal mode, and the easy searching also.
 
 . Apply appropriate rotations for characters without vertical forms
 . Implement special positioning rules for specific characters
