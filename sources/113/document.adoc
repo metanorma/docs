@@ -1,0 +1,487 @@
+= MN 113: Annotation system in Metanorma XML
+:docnumber: 113
+:edition: 1
+:revdate: 2025-03-01
+:copyright-year: 2025
+:language: en
+:title-main-en: Annotation system in Metanorma XML
+:doctype: standard
+:status: draft
+:mn-document-class: ribose
+:mn-output-extensions: xml,html,pdf,rxl
+:local-cache-only:
+
+.Foreword
+This document is part of the Metanorma specifications series that defines requirements for document processing.
+
+== Introduction
+
+Technical documentation often requires annotations such as comments, footnotes, and editorial notes to provide additional context, explanations, or references. These annotations must be consistently rendered across different output formats while preserving their semantic meaning and maintaining proper associations with the annotated content.
+
+In traditional document processing systems, the responsibility for formatting and numbering annotations often falls on the end-renderers (HTML, PDF, Word). This approach leads to inconsistencies across different output formats and makes it difficult to implement specialized formatting requirements for specific document types or standards organizations.
+
+Metanorma addresses these challenges by implementing an annotation system that moves the responsibility for formatting and numbering from the renderers to the Presentation XML layer. This approach ensures consistent rendering across all output formats while preserving the semantic meaning of annotations.
+
+This document describes the architecture and implementation of the annotation system in Metanorma XML, with a focus on the relationship between Semantic XML and Presentation XML. It explains how annotations are represented, processed, and rendered in Metanorma documents.
+
+== Scope
+
+This document specifies the requirements and implementation details for the annotation system in Metanorma XML. It covers:
+
+* The architecture of the annotation system
+* The relationship between Semantic XML and Presentation XML for annotations
+* The specific XML elements and attributes used for annotations
+* The transformation process from Semantic XML to Presentation XML
+* The rendering requirements for different output formats
+
+This specification applies to all document types processed by Metanorma and is part of a broader refactoring effort to improve the relationship between Semantic XML and Presentation XML as described in Metanorma issue #610.
+
+== Normative references
+
+* XML 1.0 (Fifth Edition)
+* Metanorma Standard Document Format
+* Metanorma Semantic XML Schema
+* Metanorma Presentation XML Schema
+
+== Terms and definitions
+
+=== annotation
+content that provides additional information about or commentary on the primary content of a document
+
+=== reviewer note
+annotation that provides explanatory or interpretive information about the document content, typically from a reviewer or editor
+
+=== footnote
+annotation placed at the bottom of a page or section that provides additional information or references for specific content
+
+=== semantic XML
+XML representation that focuses on the meaning and structure of content rather than its presentation
+
+=== presentation XML
+XML representation that includes formatting and layout information for rendering content
+
+=== `<semx>` element
+element in Presentation XML that preserves the original Semantic XML content while allowing for presentation-specific formatting
+
+=== `<fmt-*>` elements
+family of elements in Presentation XML that provide presentation-specific information without modifying the original semantic content
+
+== Requirements of an annotation system
+
+=== General principles
+
+An effective annotation system for technical documentation must satisfy the following requirements:
+
+. Preserve the semantic meaning of annotations
+. Ensure consistent rendering across different output formats
+. Maintain proper associations between annotations and annotated content
+. Support various annotation types (reviewer notes, footnotes, editorial notes, etc.)
+. Allow for specialized formatting requirements for specific document types
+. Minimize duplication of content and logic
+. Provide clear separation between semantic content and presentation information
+
+=== Specific requirements
+
+The Metanorma annotation system specifically addresses the following requirements:
+
+. *Semantic preservation*: The original semantic content must be preserved in the Presentation XML to allow renderers to access it if needed.
+
+. *Consistent formatting*: Formatting and numbering of annotations must be consistent across all output formats.
+
+. *Specialized formatting*: The system must support specialized formatting requirements for specific document types or standards organizations.
+
+. *Bidirectional linking*: Annotations must maintain bidirectional links between the annotation reference and the annotation body.
+
+. *Reusability*: The system must support reuse of annotation bodies for multiple references.
+
+. *Internationalization*: The system must support internationalization requirements, such as the JIS requirement to insert the word "footnote" before footnote text.
+
+== Architecture of the annotation system
+
+=== Overview
+
+The Metanorma annotation system is based on a clear separation between semantic content and presentation information. Instead of replacing Semantic XML elements with their presentation equivalents, the system adds presentation information as children of the original semantic elements.
+
+This approach ensures that the original semantic content is preserved in the Presentation XML, allowing renderers to access it if needed. It also reduces duplication of content and logic, as the Presentation XML no longer needs to maintain a parallel Semantic XML tree.
+
+The following ASCII diagram illustrates the relationship between Semantic XML, Presentation XML, and renderers:
+
+[source,ascii]
+----
+                  Annotation System Architecture
+                  =============================
+
+  Semantic XML                 Presentation XML                Renderers
+  ------------                 ---------------                 ---------
+
++---------------+           +------------------+           +--------------+
+|               |           |                  |           |              |
+| <annotation>  |           | <annotation>     |           |  HTML        |
+|   <content>   | --------> |   <content>      | --------> |  Renderer    |
+|     ...       | Transform |     ...          | Render    |              |
+|   </content>  |           |   </content>     |           +--------------+
+| </annotation> |           |   <fmt-content>  |
+|               |           |     ...          |           +--------------+
++---------------+           |   </fmt-content> |           |              |
+                            | </annotation>    |           |  PDF         |
+                            |                  | --------> |  Renderer    |
+                            +------------------+           |              |
+                                                           +--------------+
+
+                                                           +--------------+
+                                                           |              |
+                                                           |  Word        |
+                                                           |  Renderer    |
+                                                           |              |
+                                                           +--------------+
+----
+
+=== Transformation process
+
+The transformation from Semantic XML to Presentation XML involves the following steps:
+
+. Identify annotation elements in the Semantic XML
+. Generate unique identifiers (GUIDs) for annotation references and bodies
+. Create bidirectional links between annotation references and bodies
+. Add presentation-specific information using `<fmt-*>` elements
+. Preserve the original semantic content using `<semx>` elements
+
+=== `<semx>` element usage
+
+The `<semx>` element is used in Presentation XML to preserve the original Semantic XML content. It has the following attributes:
+
+* `element`: The name of the original Semantic XML element
+* `source`: A reference to the original Semantic XML element, typically a GUID
+
+The `<semx>` element allows renderers to access the original semantic content if needed, while still providing the presentation-specific information through `<fmt-*>` elements.
+
+=== `<fmt-*>` elements
+
+The `<fmt-*>` elements provide presentation-specific information without modifying the original semantic content. They include:
+
+* `<fmt-footnote-container>`: Container for footnote bodies
+* `<fmt-fn-body>`: Formatted footnote body
+* `<fmt-reviewernote-body>`: Formatted reviewer note body
+* `<fmt-caption-label>`: Label for captions (figures, tables, etc.)
+* `<fmt-caption-delim>`: Delimiter for captions
+* `<fmt-element-name>`: Name of an element (e.g., "Footnote", "Comment")
+* `<fmt-autonum>`: Auto-numbered element
+
+== Elements of the annotation system
+
+=== Reviewer notes
+
+Reviewer notes provide explanatory or interpretive information about the document content. They are represented in Semantic XML using the `<reviewernote>` element and transformed into Presentation XML with additional formatting information.
+
+==== Semantic XML representation
+
+[source,xml]
+----
+<p id="id4">This is a paragraph that has a reviewer note associated with it.</p>
+
+<reviewernote-container>
+  <reviewernote from="id4" to="id4" author="MM" date="2001-01-01">
+    <p>This is a reviewer note about the paragraph.</p>
+  </reviewernote>
+</reviewernote-container>
+----
+
+Note that reviewer notes in Semantic XML are never inline with the content they reference. Instead, they are collected at the bottom of the document in a `<reviewernote-container>` element, with `from` and `to` attributes that reference the element IDs they apply to.
+
+==== Presentation XML representation
+
+[source,xml]
+----
+<p id="id4">This is a paragraph that has a reviewer note associated with it.</p>
+
+<reviewernote-container>
+  <reviewernote from="id4" to="id4" author="MM" date="2001-01-01">
+    <p>This is a reviewer note about the paragraph.</p>
+  </reviewernote>
+  <fmt-reviewernote-body from="C-id5" to="C-id6" id="C-id0" author="MM" date="2001-01-01">
+    <semx element="reviewernote" source="id4">
+      <p>
+        <span class="fmt-reviewernote-label">
+          <span class="fmt-element-name">Comment</span>
+          <semx element="autonum" source="_">1</semx>
+          <span class="fmt-caption-delim">: </span>
+        </span>
+        This is a reviewer note about the paragraph.
+      </p>
+    </semx>
+  </fmt-reviewernote-body>
+</reviewernote-container>
+----
+
+In this example:
+
+* The `<reviewernote>` element is preserved in the Presentation XML
+* The reviewer note is not inline with the content it references
+* The `<fmt-reviewernote-body>` element provides the formatted version of the reviewer note
+* The original semantic content is preserved using the `<semx>` element
+* There is no `fmt-reviewernote-container` element
+
+=== Footnotes
+
+Footnotes provide additional information or references at the bottom of a page or section. They are represented in Semantic XML using the `<fn>` element and transformed into Presentation XML with additional formatting information.
+
+==== Semantic XML representation
+
+[source,xml]
+----
+<p>This is a paragraph with a footnote.<fn reference="1">
+  <p id="_1e228e29-baef-4f38-b048-b05a051747e4">This is a footnote.</p>
+</fn></p>
+----
+
+==== Presentation XML representation
+
+[source,xml]
+----
+<p>This is a paragraph with a footnote.<fn reference="1" original-reference="1" id="GUID1" target="GUID2">
+  <p id="_1e228e29-baef-4f38-b048-b05a051747e4">This is a footnote.</p>
+  <!-- Original content preserved -->
+</fn></p>
+
+<fmt-footnote-container>
+  <fmt-fn-body id="GUID2" target="GUID1">
+    <semx element="fn" source="GUID1">
+      <p id="_1e228e29-baef-4f38-b048-b05a051747e4">
+        <span class="fmt-footnote-label">
+          <sup>
+            <semx element="autonum" source="_">1</semx>
+          </sup>
+          <span class="fmt-caption-delim">
+            <tab/>
+          </span>
+        </span>
+        This is a footnote.
+      </p>
+    </semx>
+  </fmt-fn-body>
+</fmt-footnote-container>
+----
+
+In this example:
+
+* The original `<fn>` element is preserved in the Presentation XML
+* The original reference attribute is moved to `original-reference`
+* A unique identifier (GUID1) is assigned to the footnote reference
+* Another unique identifier (GUID2) is assigned to the footnote body
+* Bidirectional links are established between the footnote reference and body
+* The footnote body is formatted with a label that includes the footnote number
+* The original semantic content is preserved using the `<semx>` element
+
+=== Shared footnotes
+
+Multiple footnote references can point to the same footnote body, allowing for reuse of footnote content.
+
+==== Semantic XML representation
+
+[source,xml]
+----
+<p>This is a paragraph with a footnote.<fn reference="1">
+  <p id="_1e228e29-baef-4f38-b048-b05a051747e4">This is a shared footnote.</p>
+</fn></p>
+<p>This is another paragraph with the same footnote.<fn reference="1">
+  <p id="_1e228e29-baef-4f38-b048-b05a051747e4">This is a shared footnote.</p>
+</fn></p>
+----
+
+==== Presentation XML representation
+
+[source,xml]
+----
+<p>This is a paragraph with a footnote.<fn reference="1" original-reference="1" id="GUID1" target="GUID3">
+  <p id="_1e228e29-baef-4f38-b048-b05a051747e4">This is a shared footnote.</p>
+</fn></p>
+<p>This is another paragraph with the same footnote.<fn reference="1" original-reference="1" id="GUID2" target="GUID3">
+  <p id="_1e228e29-baef-4f38-b048-b05a051747e4">This is a shared footnote.</p>
+</fn></p>
+
+<fmt-footnote-container>
+  <fmt-fn-body id="GUID3" target="GUID1">
+    <semx element="fn" source="GUID1">
+      <p id="_1e228e29-baef-4f38-b048-b05a051747e4">
+        <span class="fmt-footnote-label">
+          <sup>
+            <semx element="autonum" source="_">1</semx>
+          </sup>
+          <span class="fmt-caption-delim">
+            <tab/>
+          </span>
+        </span>
+        This is a shared footnote.
+      </p>
+    </semx>
+  </fmt-fn-body>
+</fmt-footnote-container>
+----
+
+In this example:
+
+* Two footnote references (GUID1 and GUID2) point to the same footnote body (GUID3)
+* The `target` attribute of the footnote body points to the first footnote reference (GUID1)
+* The footnote body is only included once in the document
+
+=== Specialized formatting
+
+The annotation system supports specialized formatting requirements for specific document types or standards organizations. For example, the JIS standard requires the word "footnote" to be inserted before footnote text.
+
+==== JIS-specific footnote formatting
+
+[source,xml]
+----
+<fmt-footnote-container>
+  <fmt-fn-body id="GUID2" target="GUID1">
+    <semx element="fn" source="GUID1">
+      <p id="_1e228e29-baef-4f38-b048-b05a051747e4">
+        <span class="fmt-footnote-label">
+          <sup>
+            <span class="fmt-element-name">Footnote</span>
+            <semx element="autonum" source="_">1</semx>
+          </sup>
+          <span class="fmt-caption-delim">
+            <tab/>
+          </span>
+        </span>
+        This is a footnote.
+      </p>
+    </semx>
+  </fmt-fn-body>
+</fmt-footnote-container>
+----
+
+In this example, the word "Footnote" is included in the footnote label, as required by the JIS standard.
+
+== Implementation guidelines
+
+=== Transformation rules
+
+When transforming Semantic XML to Presentation XML, the following rules should be applied:
+
+. Preserve the original semantic elements in the Presentation XML
+. Generate unique identifiers (GUIDs) for annotation references and bodies
+. Create bidirectional links between annotation references and bodies
+. Add presentation-specific information using `<fmt-*>` elements
+. Preserve the original semantic content using `<semx>` elements
+. Apply specialized formatting requirements based on the document type or standard
+. Keep reviewer notes at the bottom of the document, never inline with the content they reference
+
+=== Rendering guidelines
+
+Renderers should follow these guidelines when processing annotations:
+
+. Render the annotation reference at the point where it appears in the document
+. Render the annotation body at the appropriate location (bottom of page, end of section, etc.)
+. Use the formatting information provided by the `<fmt-*>` elements
+. Ignore the original semantic content unless specifically needed
+. Apply any additional formatting required by the output format
+. For reviewer notes, render them at the bottom of the document or in a separate section
+
+=== Handling special cases
+
+==== Table footnotes
+
+Footnotes within tables should be rendered at the bottom of the table rather than at the bottom of the page or section.
+
+[example]
+====
+Table with footnotes:
+
+[source,xml]
+----
+<table>
+  <tbody>
+    <tr>
+      <td>Cell with footnote<fn reference="a">
+        <p>Table footnote</p>
+      </fn></td>
+    </tr>
+  </tbody>
+</table>
+
+<fmt-footnote-container class="table-footnotes">
+  <fmt-fn-body id="GUID2" target="GUID1">
+    <semx element="fn" source="GUID1">
+      <p>
+        <span class="fmt-footnote-label">
+          <sup>
+            <semx element="autonum" source="_">a</semx>
+          </sup>
+          <span class="fmt-caption-delim">
+            <tab/>
+          </span>
+        </span>
+        Table footnote
+      </p>
+    </semx>
+  </fmt-fn-body>
+</fmt-footnote-container>
+----
+====
+
+==== Figure footnotes
+
+Footnotes within figures should be rendered at the bottom of the figure rather than at the bottom of the page or section.
+
+[example]
+====
+Figure with footnotes:
+
+[source,xml]
+----
+<figure>
+  <image src="image.png"/>
+  <fn reference="*">
+    <p>Figure footnote</p>
+  </fn>
+</figure>
+
+<fmt-footnote-container class="figure-footnotes">
+  <fmt-fn-body id="GUID2" target="GUID1">
+    <semx element="fn" source="GUID1">
+      <p>
+        <span class="fmt-footnote-label">
+          <sup>
+            <semx element="autonum" source="_">*</semx>
+          </sup>
+          <span class="fmt-caption-delim">
+            <tab/>
+          </span>
+        </span>
+        Figure footnote
+      </p>
+    </semx>
+  </fmt-fn-body>
+</fmt-footnote-container>
+----
+====
+
+== Benefits of the annotation system
+
+The Metanorma annotation system provides several benefits over traditional approaches:
+
+. *Consistent rendering*: By moving formatting and numbering to the Presentation XML layer, the system ensures consistent rendering across all output formats.
+
+. *Semantic preservation*: The original semantic content is preserved in the Presentation XML, allowing renderers to access it if needed.
+
+. *Reduced duplication*: The system eliminates the need for a parallel Semantic XML tree in the Presentation XML, reducing duplication of content and logic.
+
+. *Specialized formatting*: The system supports specialized formatting requirements for specific document types or standards organizations.
+
+. *Bidirectional linking*: The system maintains bidirectional links between annotation references and bodies, facilitating navigation and processing.
+
+. *Reusability*: The system supports reuse of annotation bodies for multiple references, reducing redundancy.
+
+. *Internationalization*: The system supports internationalization requirements, such as the JIS requirement to insert the word "footnote" before footnote text.
+
+[bibliography]
+== Bibliography
+
+* [[[xml,XML 1.0]]] Extensible Markup Language (XML) 1.0 (Fifth Edition)
+* [[[metanorma,Metanorma]]] Metanorma: The Standard for Standards
+* [[[isodoc-610,metanorma/isodoc#610]]] GitHub Issue: Do not overwrite Semantic XML content in Presentation XML
+* [[[isodoc-623,metanorma/isodoc#623]]] GitHub Issue: Refactor footnotes to have autonumber markup
+* [[[isodoc-658,metanorma/isodoc#658]]] GitHub Issue: PDF: Refactor footnotes to have autonumber markup
+* [[[isodoc-660,metanorma/isodoc#660]]] GitHub Issue: Refactor comments in Presentation XML
