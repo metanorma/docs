@@ -1,10 +1,10 @@
-= MN 112: Auto-numbering Definition Language (ANDL) specification
+= MN 112: Label Auto-assignment Definition Language (LADL) specification
 :docnumber: 112
 :edition: 1
 :revdate: 2025-02-28
 :copyright-year: 2025
 :language: en
-:title-main-en: Auto-numbering Definition Language (ANDL) specification
+:title-main-en: Label Auto-assignment Definition Language (LADL) specification
 :doctype: standard
 :status: draft
 :mn-document-class: ribose
@@ -14,17 +14,21 @@
 [[introduction]]
 == Introduction
 
-This specification defines the Auto-numbering Definition Language (ANDL), a
-declarative modeling language for defining automatic numbering requirements
+This specification defines the Label Auto-assignment Definition Language (LADL), a
+declarative modeling language for defining automatic label assignment requirements
 across technical documentation and publishing systems.
 
-Auto-numbering is a critical component of structured documentation, enabling
-consistent referencing and organization of content elements throughout a document.
-However, implementing auto-numbering consistently across multiple output formats
-(HTML, PDF, Word) presents significant challenges in maintaining both visual
-consistency and semantic meaning.
+NOTE: "LADL" is pronounced as "ladel".
 
-ANDL addresses these challenges by providing:
+Label auto-assignment is a critical component of structured documentation, enabling
+consistent referencing and organization of content elements throughout a document.
+The act is to automatically create correct Label objects that attach to the content
+element. A Labeller object labels things with machine understandable labels, while
+a LabelRenderer creates a string label from a Label object, depending on the usage
+context (e.g., the same item can be labelled differently in different parts of the
+content hierarchy).
+
+LADL addresses these challenges by providing:
 
 . A platform-independent numbering model that works consistently across rendering engines
 . Built-in support for international numbering systems (including CJK)
@@ -33,7 +37,7 @@ ANDL addresses these challenges by providing:
 . Support for transformations to CSS, Word Styles, and XSLT counters
 . String pattern interpolation for flexible label construction
 
-ANDL enables document architects and standards developers to define once and apply
+LADL enables document architects and standards developers to define once and apply
 everywhere, ensuring that numbering schemes work predictably across all outputs
 while preserving both semantic structure and visual presentation requirements.
 
@@ -100,7 +104,42 @@ document boundary within which a counter operates, defining when the counter res
 
 === string interpolation
 
-process of substituting variable placeholders in a pattern with actual values to construct a label
+process of substituting variable placeholders in a pattern with actual values to construct a rendered label
+
+=== label
+
+machine-readable object that attaches to a content element for consistent and unambiguous reference of information in an information container
+
+[example]
+====
+A label like "1.1.2" indicates it is the "first clause in document, first subclause, second subsubclause", while "Figure A.2" means it is the second image in Annex A.
+====
+
+=== labeller
+
+component that assigns labels to content elements based on their position in the document structure and labeling context
+
+=== label renderer
+
+component that generates a human-readable label in string form from a label object, which may vary depending on the usage context
+
+=== local reference
+
+reference to content within the same context or document section, using labels to provide precise location information
+
+=== global reference
+
+reference to content across different contexts or document sections, using labels to provide unambiguous identification regardless of location
+
+=== citation
+
+formal reference to content using labels, enabling precise identification in both internal and external referencing systems
+
+=== reference
+
+general term for pointing to specific content elements using labels, enabling navigation, identification, and citation
+
+
 
 [[requirements]]
 == Requirements
@@ -119,9 +158,9 @@ auto-numbering across multiple output formats while:
 
 === Usage in Metanorma
 
-Metanorma XML uses ANDL to define auto-numbering for elements that require
+Metanorma XML uses LADL to define label auto-assignment for elements that require
 sequence tracking. These definitions are interpreted by end-format renderers to generate
-appropriate numbering in the target format. The model must provide:
+appropriate labeling in the target format. The model must provide:
 
 * Common patterns applicable across formats
 * Format-specific transformation instructions
@@ -133,7 +172,7 @@ appropriate numbering in the target format. The model must provide:
 
 === Separation of concerns
 
-ANDL follows these fundamental design principles:
+LADL follows these fundamental design principles:
 
 . *Separation of semantics and presentation*: Numbers represent both position in a sequence and
   visual labeling. These concerns must be separable for proper processing.
@@ -149,7 +188,7 @@ ANDL follows these fundamental design principles:
 
 === Model architecture
 
-The ANDL model architecture consists of:
+The LADL model architecture consists of:
 
 * Core models defining counters, sequences, and formats
 * Element-specific extensions for particular document components
@@ -161,9 +200,18 @@ The ANDL model architecture consists of:
 [[core-models]]
 == Core models
 
-=== Counter relationships diagram
+=== Language runtime and relationships
 
-The following diagrams illustrate the key relationships in the ANDL counter model:
+The LADL language runtime is responsible for interpreting and executing label
+auto-assignment definitions. The runtime:
+
+* Processes LADL definitions to create a label assignment model
+* Maintains counter states and sequences throughout document processing
+* Manages context hierarchies and inheritance relationships
+* Executes label generation according to defined patterns
+* Handles format-specific rendering requirements
+
+The following diagrams illustrate the key relationships in the LADL model:
 
 [source,ascii]
 ----
@@ -293,7 +341,7 @@ class NumberSequence < Sequence {
 }
 ----
 
-An ANDL-compliant runtime should provide the following default
+A LADL-compliant runtime should provide the following default
 numbering sequences:
 
 `DecimalNumberSequence`:: Standard decimal numbers (1, 2, 3...)
@@ -737,6 +785,276 @@ instance NumberedElement {
 
 This separates the semantic information (it's the first figure in section 3) from the presentation (it should be labeled as "Figure 1 —").
 ====
+
+[[referencing-model]]
+== Referencing model
+
+=== Purpose of labels
+
+Labels serve as the foundation for consistent and unambiguous reference of information within documents. Their primary purpose is to enable:
+
+* *Precise navigation* through hierarchical document structures
+* *Unambiguous identification* of content elements regardless of their position
+* *Citation systems* that work both internally and externally to the document
+
+Labels provide machine-readable identifiers that can be rendered in human-readable form, allowing both automated systems and human readers to locate and reference specific content with precision.
+
+=== Types of references
+
+Labels support different types of references depending on their scope and usage:
+
+==== Local references
+
+Local references point to content within the same context, such as:
+
+* References to figures within the same clause
+* References to list items within the same list
+* References to subclauses within the same parent clause
+
+Local references may use simplified forms of labels that omit higher-level context information when that context is implied.
+
+[example]
+====
+Within Clause 3, a reference to "Figure 2" might be sufficient rather than "Figure 3.2" because the clause context is understood.
+====
+
+==== Global references
+
+Global references point to content across different contexts within the same document, such as:
+
+* References to clauses from annexes
+* References to figures from different sections
+* References to tables from anywhere in the document
+
+Global references require complete labels that include all necessary context information to ensure unambiguous identification.
+
+[example]
+====
+A reference from Annex A to "Figure 3.2" clearly identifies the second figure in Clause 3, regardless of where the reference appears.
+====
+
+==== Citations
+
+Citations are formal references that may extend beyond the current document, such as:
+
+* References to external standards or publications
+* References to specific elements within other documents
+* References that may be used in bibliographic entries
+
+Citations require standardized label formats that can be consistently interpreted across different documents and systems.
+
+=== Reference resolution
+
+The process of resolving references involves:
+
+1. *Identification*: Determining the target element based on its label
+2. *Context mapping*: Understanding the relationship between the reference context and the target context
+3. *Rendering*: Presenting the reference in an appropriate format for the current context
+
+The LADL model provides the foundation for this resolution process by ensuring that labels are:
+
+* *Unique*: Each label uniquely identifies a specific content element
+* *Structured*: Labels follow a consistent structure that reflects the document hierarchy
+* *Context-aware*: Labels can be interpreted correctly regardless of where they appear
+
+[[labeling-model]]
+== Labeling model
+
+=== General
+
+The labeling model defines how elements in a document are assigned labels based on their context and position in both the document hierarchy and labeling hierarchy.
+
+=== Core concepts
+
+==== Distinction between content hierarchy and labeling context
+
+The labeling model makes a clear distinction between:
+
+* Content hierarchy: The structural organization of elements in the document (e.g., document containing clauses containing subclauses)
+* Labeling context: The context used for determining how an element should be labeled, which may differ from its position in the content hierarchy
+
+[example]
+====
+A list item within a deep subclause may be labeled according to a higher-level context, while still maintaining its position in the document structure.
+====
+
+==== Model definition
+
+The core components of the labeling model are defined using LutaML:
+
+[source,lml]
+----
+class Counter {
+  definition {
+    A counter tracks sequence position within a specific context.
+  }
+
+  attribute id, String {
+    definition "Unique identifier for the counter"
+  }
+  attribute current_value, Integer {
+    definition "Current value of the counter"
+  }
+  attribute sequence, Sequence {
+    definition "Sequence that defines the counter's possible values"
+  }
+  attribute parent_counter, ref:(Counter) {
+    definition "Parent counter to which this counter relates"
+    cardinality 0..1
+  }
+  attribute context, Context {
+    definition "Context to which this counter is bound"
+  }
+}
+
+class Context {
+  definition {
+    Defines the scope and type of context for labeling elements.
+  }
+
+  attribute type, String {
+    definition "Type of context element that defines this counter's scope"
+    values { "document", "section", "container", "clause", "annex" }
+  }
+  attribute counters, ref:(Counter) {
+    definition "All counters (of different types) that are bound to this context"
+    cardinality 0..n
+  }
+}
+
+class Label {
+  definition {
+    A label assigned to a content element, generated using a counter.
+  }
+
+  attribute content_element, String {
+    definition "Reference to the content element being labeled"
+  }
+  attribute counter, Counter {
+    definition "Counter used to generate this label"
+  }
+}
+
+class LabelRenderer {
+  definition {
+    Renders a label according to a pattern, which may include references to parent labels.
+  }
+
+  attribute counter, Counter {
+    definition "Counter driving the label generation"
+  }
+  attribute pattern, String {
+    definition {
+      Pattern for generating the label. Supports:
+      - %n: output number from the counter
+      - %p: parent's rendered label
+      - %pn: output number from parent's labelrenderer
+      - %local: localized label
+    }
+  }
+
+  method render_label(sequence: Integer) {
+    definition "Render a label based on the counter and pattern"
+  }
+}
+----
+
+=== Document hierarchy counters
+
+The document structure contains multiple types of counters for different elements:
+
+[source,lml]
+----
+class Document {
+  definition {
+    Root document containing various types of counters.
+  }
+
+  attribute clause_counter, Counter {
+    definition "Counter for clauses in the main document"
+  }
+  attribute annex_counter, Counter {
+    definition "Counter for annexes"
+  }
+  attribute figure_counter, Counter {
+    definition "Counter for figures"
+  }
+  attribute table_counter, Counter {
+    definition "Counter for tables"
+  }
+}
+
+class Clause {
+  definition {
+    A clause in the document that contains its own counters.
+  }
+
+  attribute subclause_counter, Counter {
+    definition "Counter for subclauses within this clause"
+  }
+}
+
+class Subclause {
+  definition {
+    A subclause that contains both structural and list counters.
+  }
+
+  attribute subclause_counter, Counter {
+    definition "Counter for further nested subclauses"
+  }
+  attribute list_counter, Counter {
+    definition "Counter for lists within this subclause"
+  }
+}
+
+class List {
+  definition {
+    A list containing items that need to be counted.
+  }
+
+  attribute list_item_counter, Counter {
+    definition "Counter for items within this list"
+  }
+}
+----
+
+=== Example instances
+
+The following examples demonstrate how the labeling model is used:
+
+[source,lml]
+----
+instance Document {
+  clause_counter = instance Counter {
+    id = "main_clauses"
+    sequence = instance NumberSequence {
+      initial_value = 1
+    }
+  }
+
+  figure_counter = instance Counter {
+    id = "figures"
+    sequence = instance NumberSequence {
+      initial_value = 1
+    }
+  }
+}
+
+instance Clause {
+  subclause_counter = instance Counter {
+    id = "clause1_subclauses"
+    parent_counter = ref:(Document.clause_counter)
+    sequence = instance NumberSequence {
+      initial_value = 1
+    }
+  }
+}
+
+instance LabelRenderer {
+  counter = ref:(Clause.subclause_counter)
+  pattern = "%p.%n"  // Produces labels like "1.1", "1.2", etc.
+}
+----
 
 [[auto-numbered-items]]
 == Auto-numbered items
@@ -1486,77 +1804,359 @@ instance Counter {
 Output: "壱", "弐", "参"
 ====
 
+[[annex-counter-hierarchy]]
+[appendix]
+== Counter hierarchy diagram
+
+The following diagram illustrates the relationships between different components in the labeling model:
+
+image::counter-hierarchy-document-full.svg[Counter hierarchy diagram,800]
+
+=== Diagram explanation
+
+The diagram illustrates the critical distinction between content hierarchy and labeling context in the LADL model:
+
+* *Double dashed lines* represent content hierarchy (e.g., document containing clauses containing subclauses)
+* *Unlabeled directional lines* represent ownership (e.g., document owning a ClauseCounter and an AnnexCounter)
+* *Lines labeled "Parent"* show counter inheritance relationships between parent and child counters
+* *Lines labeled "Labels"* show where a Counter/Labeller assigns a Label to a content element
+
+This diagram demonstrates how:
+
+* The LabelingContext is different from the actual content hierarchy
+* Elements may be labeled according to a higher context even if they belong to a lower document hierarchy
+* Some elements are labeled according to context belonging to the document hierarchy
+* In a LabelRenderer, the pattern used can depend on:
+  ** `%n` - the output number from the counter
+  ** `%p` - the parent's rendered label
+  ** `%pn` - the output number from the parent's labelrenderer
+  ** `%local` - the localized label
+* Some labelrenderers need to obtain the rendered label from the parent's labelrenderer
+
+=== Instance model
+
+The following instance model definitions illustrate the relationships shown in the diagram:
+
+[source,lml]
+----
+// Document and its counters
+instance Document {
+  // Document owns multiple counters for different element types
+  clause_counter = instance ClauseCounter {
+    id = "clause_counter"
+    sequence = instance NumberSequence {
+      initial_value = 1
+      format = "arabic"
+    }
+  }
+
+  annex_counter = instance AnnexCounter {
+    id = "annex_counter"
+    sequence = instance NumberSequence {
+      initial_value = 1
+      format = "alpha_upper"
+    }
+  }
+
+  figure_counter = instance FigureCounter {
+    id = "figure_counter"
+    sequence = instance NumberSequence {
+      initial_value = 1
+      format = "arabic"
+    }
+  }
+
+  table_counter = instance TableCounter {
+    id = "table_counter"
+    sequence = instance NumberSequence {
+      initial_value = 1
+      format = "arabic"
+    }
+  }
+}
+
+// Clause and its counter
+instance Clause {
+  id = "clause_1"
+
+  // Clause has a subclause counter
+  subclause_counter = instance SubClauseCounter {
+    id = "subclause_counter"
+    parent_counter = ref:(Document.clause_counter)
+    sequence = instance NumberSequence {
+      initial_value = 1
+      format = "arabic"
+    }
+  }
+}
+
+// Subclause and its counters
+instance Subclause {
+  id = "subclause_1"
+
+  // Subclause has both a subclause counter and a list counter
+  subclause_counter = instance SubClauseCounter {
+    id = "subsubclause_counter"
+    parent_counter = ref:(Clause.subclause_counter)
+    sequence = instance NumberSequence {
+      initial_value = 1
+      format = "arabic"
+    }
+  }
+
+  list_counter = instance ListCounter {
+    id = "list_counter"
+    sequence = instance NumberSequence {
+      initial_value = 1
+      format = "alpha_lower"
+    }
+  }
+}
+
+// List and its counter
+instance List {
+  id = "list_1"
+
+  // List has a list item counter
+  list_item_counter = instance ListItemCounter {
+    id = "list_item_counter"
+    parent_counter = ref:(Subclause.list_counter)
+    sequence = instance NumberSequence {
+      initial_value = 1
+      format = "arabic"
+    }
+  }
+}
+
+// Label renderers for different elements
+instance ClauseLabelRenderer {
+  counter = ref:(Document.clause_counter)
+  pattern = "%n"  // Renders as "1", "2", etc.
+}
+
+instance SubclauseLabelRenderer {
+  counter = ref:(Clause.subclause_counter)
+  pattern = "%p.%n"  // Renders as "1.1", "1.2", etc.
+}
+
+instance ListLabelRenderer {
+  counter = ref:(Subclause.list_counter)
+  pattern = "%p.%n)"  // Renders as "1.1.a)", "1.1.b)", etc.
+}
+
+instance ListItemLabelRenderer {
+  counter = ref:(List.list_item_counter)
+  pattern = "%p.%n"  // Renders as "1.1.a.1", "1.1.a.2", etc.
+}
+----
+
+This structure enables:
+
+* Separation between content hierarchy and labeling contexts
+* Flexible label generation through parent-child counter relationships
+* Context-aware label rendering based on usage location
+* Support for different label formats in different contexts
+
 [[annex-iso]]
 [appendix]
-== ISO DIR 2 auto-number items
+== ISO DIR 2 label definitions
 
-The following table provides a comprehensive reference for auto-numbering elements according to ISO Directives Part 2:
+The following section provides LADL instance definitions for ISO Directives Part 2 elements:
 
-.ISO Directives Part 2 auto-numbering elements
-[cols="1,2,2,2"]
-|===
-|Element type |Numbering scheme |Example |ANDL implementation
+[source,lml]
+----
+// Document-level context
+instance DocumentContext {
+  type = "document"
+}
 
-|Clauses
-|Arabic numerals, sequential throughout document
-|1, 2, 3
-|Counter bound to document scope
+// Clause labeling
+instance ClauseCounter {
+  id = "clause_counter"
+  sequence = instance NumberSequence {
+    initial_value = 1
+    format = "arabic"
+  }
+  scope = DocumentContext
+}
 
-|Subclauses
-|Hierarchical Arabic numerals
-|1.1, 1.2, 2.1.1
-|Counter with parent reference using hierarchical pattern
+instance ClauseLabelRenderer {
+  counter = ClauseCounter
+  pattern = "%n"
+}
 
-|Annexes
-|Capital letters, sequential
-|Annex A, Annex B
-|Counter with alpha_upper format bound to document scope
+// Subclause labeling
+instance SubclauseCounter {
+  id = "subclause_counter"
+  sequence = instance NumberSequence {
+    initial_value = 1
+    format = "arabic"
+  }
+  parent_counter = ClauseCounter
+  scope = instance Context {
+    type = "clause"
+  }
+}
 
-|Appendices (in annexes)
-|Arabic numerals, sequential within annex
-|Appendix 1, Appendix 2
-|Counter bound to annex scope
+instance SubclauseLabelRenderer {
+  counter = SubclauseCounter
+  pattern = "%p.%n"
+}
 
-|Ordered lists (first level)
-|Lowercase letters followed by closing parenthesis
-|a), b), c)
-|Counter with alpha_lower format and ")"-suffix pattern
+// Annex labeling
+instance AnnexCounter {
+  id = "annex_counter"
+  sequence = instance NumberSequence {
+    initial_value = 1
+    format = "alpha_upper"
+  }
+  scope = DocumentContext
+}
 
-|Ordered lists (second level)
-|Lowercase Roman numerals in parentheses
-|(i), (ii), (iii)
-|Counter with roman_lower format and parentheses pattern
+instance AnnexLabelRenderer {
+  counter = AnnexCounter
+  pattern = "Annex %n"
+}
 
-|Ordered lists (third level)
-|Arabic numerals followed by period
-|1., 2., 3.
-|Counter with arabic format and "."-suffix pattern
+// Figure labeling
+instance FigureCounter {
+  id = "figure_counter"
+  sequence = instance NumberSequence {
+    initial_value = 1
+    format = "arabic"
+  }
+  scope = DocumentContext
+}
 
-|Figures
-|Arabic numerals, sequential throughout document
-|Figure 1, Figure 2
-|Counter bound to document scope with "Figure %n" pattern
+instance FigureLabelRenderer {
+  counter = FigureCounter
+  pattern = "Figure %n"
+}
 
-|Tables
-|Arabic numerals, sequential throughout document
-|Table 1, Table 2
-|Counter bound to document scope with "Table %n" pattern
+// Table labeling
+instance TableCounter {
+  id = "table_counter"
+  sequence = instance NumberSequence {
+    initial_value = 1
+    format = "arabic"
+  }
+  scope = DocumentContext
+}
 
-|Notes
-|Arabic numerals, reset within each clause
-|NOTE 1, NOTE 2
-|Counter bound to clause scope with "NOTE %n" pattern
+instance TableLabelRenderer {
+  counter = TableCounter
+  pattern = "Table %n"
+}
 
-|Examples
-|Arabic numerals, reset within each clause
-|EXAMPLE 1, EXAMPLE 2
-|Counter bound to clause scope with "EXAMPLE %n" pattern
+// Example labeling
+instance ExampleCounter {
+  id = "example_counter"
+  sequence = instance NumberSequence {
+    initial_value = 1
+    format = "arabic"
+  }
+  scope = instance Context {
+    type = "clause"
+  }
+}
 
-|Formulae/equations
-|Arabic numerals in parentheses, sequential throughout or by clause
-|(1), (2), (3)
-|Counter bound to document or clause scope with "(%n)" pattern
-|===
+instance ExampleLabelRenderer {
+  counter = ExampleCounter
+  pattern = "EXAMPLE %n"
+}
+
+// Note labeling
+instance NoteCounter {
+  id = "note_counter"
+  sequence = instance NumberSequence {
+    initial_value = 1
+    format = "arabic"
+  }
+  scope = instance Context {
+    type = "clause"
+  }
+}
+
+instance NoteLabelRenderer {
+  counter = NoteCounter
+  pattern = "NOTE %n"
+}
+
+// Equation labeling
+instance EquationCounter {
+  id = "equation_counter"
+  sequence = instance NumberSequence {
+    initial_value = 1
+    format = "arabic"
+  }
+  scope = DocumentContext
+}
+
+instance EquationLabelRenderer {
+  counter = EquationCounter
+  pattern = "(%n)"
+}
+
+// List labeling - Level 1
+instance ListCounter1 {
+  id = "list_counter_1"
+  sequence = instance NumberSequence {
+    initial_value = 1
+    format = "alpha_lower"
+  }
+  scope = instance Context {
+    type = "list"
+  }
+}
+
+instance ListLabelRenderer1 {
+  counter = ListCounter1
+  pattern = "%n)"
+}
+
+// List labeling - Level 2
+instance ListCounter2 {
+  id = "list_counter_2"
+  sequence = instance NumberSequence {
+    initial_value = 1
+    format = "roman_lower"
+  }
+  scope = instance Context {
+    type = "list"
+  }
+}
+
+instance ListLabelRenderer2 {
+  counter = ListCounter2
+  pattern = "(%n)"
+}
+
+// List labeling - Level 3
+instance ListCounter3 {
+  id = "list_counter_3"
+  sequence = instance NumberSequence {
+    initial_value = 1
+    format = "arabic"
+  }
+  scope = instance Context {
+    type = "list"
+  }
+}
+
+instance ListLabelRenderer3 {
+  counter = ListCounter3
+  pattern = "%n."
+}
+----
+
+These instance definitions provide the complete labeling configuration for ISO DIR 2 elements, including:
+
+* Hierarchical clause and subclause labeling
+* Sequential annex labeling with letter-based counters
+* Document-wide figure and table labeling
+* Context-bound note and example labeling
+* Multi-level list labeling with different formats per level
+* Equation labeling with parenthetical format
 
 
 
