@@ -1,0 +1,1329 @@
+= MN 111: Encoding for Historic Chinese Documents and Their Semantics
+:docnumber: 111
+:edition: 1
+:revdate: 2024-10-25
+:copyright-year: 2024
+:language: en
+:title-main-en: Vertical layout rendering
+:doctype: standard
+:status: draft
+:mn-document-class: ribose
+:mn-output-extensions: xml,html,pdf,rxl
+:local-cache-only:
+
+
+[.preface]
+== Introduction
+
+This specification defines a markup syntax for encoding Han-script documents
+with semantic annotations, called Hanodoc.
+
+Hanodoc is designed according to the following principles:
+
+* Human-readable
+* Input-friendly across devices
+* Compatible with existing text systems
+* Minimalistic in non-display syntax
+* Unambiguous in parsing
+* Preserving original text semantics
+* Preserving original text features
+
+
+== Scope
+
+This specification covers the following aspects of the Hanodoc syntax:
+
+* Basic syntax structure
+* Delimiter selection
+* Text structure
+* Commentary and annotation
+* Editorial marks
+
+
+== Normative references
+
+* [[[JIS_X_4051,JIS X 4051:2004]]], Information processing - Japanese layout and character
+code
+
+* [[[iso-iec_10646,ISO/IEC 10646:2020]]]
+
+* [[[gbt-15834,GB/T 15834-2011]]], 中华人民共和国国家标准 GB/T 15834–2011：标点符号用法 [National Standard of the People's Republic of China GB/T 15834–2011: General Rules for Punctuation]
+
+* [[[JPSD,ISBN 978-4095041766]]], Shogakukan Dictionary Editorial Department (September 13, 2007). 句読点、記号・符号活用辞典。 [Punctuation, Symbol, and Sign Usage Dictionary].
+
+* [[[revised-handbook-of-punctuation,《重訂標點符號手冊》修訂版]]], official website of the Revised Handbook of Punctuation, December 2008 Edition
+
+
+== Terms and definitions
+
+=== delimiter
+
+A delimiter is a sequence of characters that marks the beginning and end of a
+section of text or a semantic unit.
+
+=== markup
+
+Markup is a set of symbols and rules used to annotate text with semantic
+information.
+
+=== semantic annotation
+
+Semantic annotation is the process of adding metadata to text to provide
+additional information about its meaning.
+
+
+
+== Symbol selection
+
+=== Selection principles
+
+The selection of symbols for markup delimiters is based on their availability
+across different platforms and systems.
+
+The following principles guide the selection of delimiting symbol patterns:
+
+* Minimal typing effort for common markup. This means that the symbols
+accessible to the current language keyboard should be used for markup.
+
+* Avoidance of conflict with existing text symbols used for content expressions.
+The selected symbols should not be commonly used in the text for other purposes,
+for example, the use of ASCII parentheses by themselves as delimiters would
+clash with their use in textual expressions.
+
+* Compatibility with existing textual markup. The selected symbols should be
+compatible with existing text markup systems and not interfere with their operation.
+For example, the use of double angle brackets would conflict with the use of
+angle brackets in AsciiDoc.
+
+* Prioritize symbols that are universally available and easy-to-type
+combinations over more complex or less common symbols.
+
+* Minimize ambiguity in expression. Which also minimizes ambiguity for parsing
+and reduces the need for escaping symbols in the text. For example, the use of
+using different delimiter symbol sequences as beginning and ending delimiters
+facilitates encoding and parsing.
+
+* All features should be accessible on standard keyboards. ASCII symbols are
+available on all platform language keyboard configurations, and is selected as
+the basic syntax.
+
+* Compatibility of semantics across language-specific symbols. For example, the
+meaning of the full-width equal sign in markup should be equal to the ASCII
+equal sign.
+
+
+=== Symbol availability
+
+The following platforms and language keyboard combinations are considered for
+symbol availability.
+
+Symbols available on platforms and language keyboards:
+
+[cols="a,a,2a,4a",options="header"]
+|===
+|Language |Platform |Keystrokes to access | Symbols
+
+.13+|English
+.4+|macOS
+|0
+|`=\[],./;'\-`
+|1 (Shift)
+|`!@#$%^&*()~+{}<>?:"\|_`
+|1 (Alt)
+|`¡™£¢¢∞§¶•ˆªº–≠æ…≤≥÷“‘`
+|1 (Alt+Shift)
+|`±⁄€‹›ﬁﬂ‡°·‚—»ÚÆ¯˘¿”’`
+
+.4+|Windows (TODO: check Windows)
+|0
+|`=\`[],./;'\-`
+|1 (Shift)
+|`!@#$%^&*()~+{}<>?:"\|_`
+|1 (Alt)
+|`¡¿¤€¥«»“”`
+|1 (Alt+Shift)
+|`¢£¤¥¦§¨©ª«¬®¯°±²³µ¶·¸¹º»¼½¾¿`
+
+.3+|Linux
+|0
+|`=\`[],./;'\-`
+|1 (Shift)
+|`!@#$%^&*()~+{}<>?:"\|_`
+|?
+|?
+
+.2+|iOS
+|1 ("123" key)
+|`-/:;()$&@".,?!’`
+|1 ("#+=" key)
+|`[]{}#%^*+=_\|\\~<>€£¥·` (duplicate symbols to "123" pane not shown)
+
+.6+|Chinese Traditional
+.4+|macOS
+|0
+|`=·-、；‘，。/【】`
+|1 (Shift)
+|`～+！@#$%⋯⋯&*（）——｜：“《》？「」`
+|1 (Alt)32
+|`·–«æ⋯⋯æ≤≥÷“‘`
+|1 (Alt+Shift)
+|`·±⁄€‹›ﬁﬂ‡°·‚—»ÚÆ¯˘¿`
+
+.2+|iOS
+|1 ("123" key)
+|`-/：；（）——$@「」。，、？！.`
+|1 ("#+=" key)
+|`［］｛｝#％^*+=_——\｜～《》€&·⋯，？！` (duplicate symbols to "123" pane not shown)
+
+.6+|Chinese Simplified
+.4+|macOS
+|0
+|`·=-、；‘，。/【】`
+|1 (Shift)
+|`～+！@#¥%……&*（）——｜：“《》？「」`
+|1 (Alt)
+|`·≠–«……æ≤≥÷”’`
+|1 (Alt+Shift)
+|`·±⁄€‹›ﬁﬂ‡°·‚—»ÚÆ¯˘¿”’`
+
+.2+|iOS
+|1 ("123" key)
+|`-/：；（）$@“”。，、？.`
+|1 ("#+=" key)
+|`【】｛｝#%^*+=_——\｜～€&·⋯，?!` (duplicate symbols to "123" pane not shown)
+
+.8+|Japanese
+.5+|macOS
+|0
+|`｀＝ー￥；’、。・「」`
+|1 (Shift)
+|`〜＋！＠＃＄％＾＆＊（）＿｜：”＜＞？『』`
+|1 (Alt)
+|`≠¡™£¢∞§¶•【】－＼…‘，．／［］`
+|1 (Alt+Shift)
+|`±⁄€‹›ﬁﬂ‡°〔〕—»‥“¯˘…｛｝`
+|2 (hold key)
+|`《》` (`「」` 次候補),  `【】` (`「」` 次候補)
+
+
+.3+|iOS
+|1 ("123" key)
+|`-/:@()「」$&。、？！`
+|1 ("#+=" key)
+|`［］｛｝#%^*＋＝_\;｜<>”’€£.,？！．` (duplicate symbols to "123" pane not shown)
+|2 (hold key)
+|`《》` (`[]` 次候補), `【】` (`「」` 次候補)
+
+.6+|Korean
+.4+|macOS
+|0
+|`₩=-\;',./[]`
+|1 (Shift)
+|`~+!@#$%^&*()_\|:"<>?{}`
+|1 (Alt)
+|`=-;',./[]`
+|1 (Alt+Shift)
+|(same as Shift plane)
+
+.2+|iOS
+|1 ("123" key)
+|`-/:;()$&@".,?!’`
+|1 ("#+=" key)
+|`[]{}#%^*+=_\|\~<>€£¥·` (duplicate symbols to "123" pane not shown)
+
+|===
+
+NOTE: The backtick (U+0060) is excluded from the list of symbols as it is used
+to enclose code blocks in AsciiDoc.
+
+=== Symbols used in default AsciiDoc
+
+The following symbols are used in the default AsciiDoc syntax:
+
+[options="header"]
+|===
+|Symbol |Unicode |Usage
+|`* *` |U+002A |Emphasis
+|`_ _` |U+005F |Italics
+|`+ +` |U+002B |Insertion
+|`- -` |U+002D |Deletion
+|`~ ~` |U+007E |Subscript
+|`^ ^` |U+005E |Superscript
+|`==` |U+003D |Title
+|`[ ]` |U+005B, U+005D |Attributes and anchors
+|`[[[ ]]]` |U+005B, U+005D |Bibliographic reference
+|`<< >>` |U+003C, U+003E |Cross-reference
+|`__` |U+002F |Quotation block
+|`--` |U+0027 |Open block and source block
+|`\|` |U+007C |Table cell
+|`//` |U+002F |Comment
+|`'` |U+0027 |Inline literal
+|`"` |U+0022 |Quotation
+|`(( ))` |U+0028, U+0029 |Index term
+
+|===
+
+[[symbols-reserved-compat]]
+=== CJK symbols reserved for markup compatibility
+
+Full-width compatible symbols for the default AsciiDoc syntax:
+
+[options="header"]
+|===
+|Full-width symbol |Unicode | Unicode name | ASCII equivalent
+|`＊` |U+FF0A | Fullwidth Asterisk | `*`
+|`＿` |U+FF3F | Fullwidth Low Line | `_`
+|`＋` |U+FF0B | Fullwidth Plus Sign | `+`
+|`－` |U+FF0D | Fullwidth Hyphen-Minus | `-`
+|`～` |U+FF5E | Fullwidth Tilde | `~`
+|`＾` |U+FF3E | Fullwidth Circumflex Accent | `^`
+|`＝` |U+FF1D | Fullwidth Equal Sign | `=`
+|`［ ］` |U+FF3B, U+FF3D | Fullwidth Left Square Bracket, Fullwidth Right Square Bracket | `[ ]`
+|`＜＞` |U+FF1C, U+FF1E | Fullwidth Left-Pointing Double Angle Quotation Mark, Fullwidth Right-Pointing Double Angle Quotation Mark | `< >`
+|`＿` |U+FF0F | Fullwidth Solidus | `_`
+|`－` |U+FF07 | Fullwidth Hyphen-Minus | `-`
+|`｜` |U+FF5C | Fullwidth Vertical Line | `\|`
+|`／` |U+FF0F | Fullwidth Solidus | `/`
+|`＇` |U+FF07 | Fullwidth Apostrophe | `'`
+|`＂` |U+FF02 | Fullwidth Quotation Mark | `"`
+|`（）` |U+FF08, U+FF09 | Fullwidth Left Parenthesis, Fullwidth Right Parenthesis | `( )`
+
+|===
+
+
+[[symbols-reserved-text]]
+=== CJK symbols reserved for textual content
+
+The following CJK symbols are traditionally used in textual content.
+
+Therefore these symbols should not be used alone for markup, unless combined
+with other symbols into a delimiter.
+
+[options="header"]
+|===
+|Symbol |Unicode |Usage
+|`「」` |U+300C, U+300D |Primary quotation
+|`『』` |U+300E, U+300F |Secondary quotation
+|`（）` |U+FF08, U+FF09 |Parentheses
+|`，` |U+FF0C |Full-width comma
+|`ー` |U+FF0D |Full-width hyphen-minus
+|`：` |U+FF1A |Full-width colon
+|`；` |U+FF1B |Full-width semicolon
+|`、` |U+3001 |Enumeration comma
+|`。` |U+3002 |Period
+|`！` |U+FF01 |Full-width exclamation mark
+|`？` |U+FF1F |Full-width question mark
+|`—` |U+2014 |Em dash
+|`～` |U+301C |Wave dash
+|`·` |U+00B7 |Middle dot
+|`⋯` |U+22EF |Midline horizontal ellipsis
+|`…` |U+2026 |Horizontal ellipsis
+
+|===
+
+
+
+=== CJK symbols available for markup
+
+The following CJK symbols are available for markup.
+
+This list explicitly excludes:
+
+* currency symbols
+* <<symbols-reserved-text>>
+* <<symbols-reserved-compat>>
+
+
+[options="header"]
+|===
+|Symbol |Unicode | Unicode name
+|`《》` |U+300A, U+300B | Left Double Angle Bracket, Right Double Angle Bracket
+|`【】` |U+3010, U+3011 | Left Black Lenticular Bracket, Right Black Lenticular Bracket
+|`〈〉` |U+3008, U+3009 | Left Angle Bracket, Right Angle Bracket
+|`（）` |U+FF08, U+FF09 | Fullwidth Left Parenthesis, Fullwidth Right Parenthesis
+|`［］` |U+FF3B, U+FF3D | Fullwidth Left Square Bracket, Fullwidth Right Square Bracket
+|`‹›` |U+2039, U+203A | Single Left-Pointing Angle Quotation Mark, Single Right-Pointing Angle Quotation Mark
+
+|===
+
+
+== Symbols and delimiters
+
+The following symbols are used as delimiters in the Hanodoc syntax.
+
+
+=== Bracket symbols selection
+
+TODO
+
+==== ASCII compatibility symbols
+
+[options="header"]
+|===
+|Delimiter |Usage |Example
+|`(( ))` |Book titles |((論語))
+|`(# #)` |Annotations |(#note:commentary#)
+|`(| |)` |Marginal notes |(|margin:text|)
+|`(< >)` |Range markers |(<start>)text(<end>)
+|`(+ +)` |Insertions |(+inserted text+)
+|`(- -)` |Deletions |(-removed text-)
+|`(~ ~)` |Variants |(~variant~)
+|===
+
+==== Native CJK symbols
+
+[options="header"]
+|===
+|Delimiter |Unicode |Usage |Example
+|《》 |U+300A, U+300B |Book titles |《論語》
+|【】 |U+3010, U+3011 |Technical marks |【注：原文】
+|〈〉 |U+3008, U+3009 |Sub-references |〈卷一〉
+|［］ |U+FF3B, U+FF3D |Special marks |［校：原缺］
+|===
+
+== Semantic element encoding
+
+=== Proper name element
+
+The proper name element is used to mark the name of a person, place, or thing.
+
+The native delimiter for marking proper names is the single left-pointing angle
+quotation mark and the single right-pointing angle quotation mark.
+
+The following elements can be supplemented to a proper name:
+
+* dynasty/era
+* date of birth and death
+* occupation
+* other relevant information
+
+Native syntax:
+
+----
+‹{name}›
+----
+
+[example]
+----
+‹孔子›
+‹曹操›
+‹東京›
+‹香港›
+‹上海›
+----
+
+[example]
+----
+‹孔子›
+‹人：孔子，魯›
+‹人：曹操，三國，155-220›
+‹地：東京›
+‹地：香港›
+‹地：上海›
+----
+
+
+Compatible ASCII syntax:
+
+----
+(|{name}|)
+----
+
+[example]
+----
+(|孔子|)
+(|曹操|)
+(|東京|)
+(|香港|)
+(|上海|)
+----
+
+[example]
+----
+(|person:孔子,dynasty=魯|)
+(|person:曹操,dynasty=三國,birth=155,death=220|)
+(|place:東京|)
+(|place:香港|)
+(|place:上海|)
+----
+
+Command syntax:
+
+----
+name:[{name}]
+name:[{name},time={dynasty},birth={birth},death={death},occupation={occupation}]
+----
+
+----
+place:[{place}]
+place:[{place},time={dynasty}]
+----
+
+[example]
+----
+name:[孔子]
+name:[曹操,time=三國,birth=155,death=220]
+----
+
+[example]
+----
+place:[東京]
+place:[香港]
+place:[上海]
+----
+
+In rendering Traditional Chinese text, the text in the proper name element shall be
+rendered as:
+
+* with the proper name mark (horizontal: `＿` with U+2574, vertical: `︳` with U+FF3F).
+
+In rendering Japanese text, the text in the proper name element shall be rendered as:
+
+* normal text.
+
+In rendering Simplified Chinese text, the text in the proper name element shall be
+rendered as:
+
+* with the proper name mark (horizontal: `＿` with U+2574, vertical: `︳` with U+FF3F).
+
+
+
+
+=== Title element
+
+The title element is is the title of a book or document.
+
+The native delimiter for marking titles is the double angle bracket.
+Sub-titles follow the main title using the sub-title delimiter.
+
+Native syntax:
+
+----
+《{title}》
+《{title}》〈{subtitle}〉〈{subsubtitle}〉
+----
+
+[example]
+----
+《論語》
+《論語》〈學而〉〈為政〉
+----
+
+[example]
+----
+《老子》
+《道德經》〈德經〉〈第一章〉
+----
+
+
+Compatible ASCII syntax:
+
+----
+(<{title}>)
+(<{title}>)(<{subtitle}>)(<{subsubtitle}>)
+----
+
+[example]
+----
+((論語))
+((論語))(<學而>)(<為政>)
+----
+
+[example]
+----
+((老子))
+((道德經))(<德經>)(<第一章>)
+----
+
+
+Command syntax:
+
+----
+title:[{title}]
+title:[{title};{subtitle};{subsubtitle}]
+----
+
+[example]
+----
+title:[論語]
+title:[論語,學而,為政]
+----
+
+
+In rendering Traditional Chinese text, the text in the title element shall be
+rendered as one of:
+
+. with the title mark (horizontal: wavy underline with U+301C, vertical: wavy
+underline with U+301C), with subtitles joined using the middle-dot (U+00B7)
+within the title mark
++
+[example]
+----
+論語
+論語·學而·為政
+----
+
+. with the double angle bracket (U+300A, U+300B) for the title mark, with subtitles
+in the single angle bracket (U+3008, U+3009) following the title mark.
++
+[example]
+----
+《論語》
+《論語》〈學而〉〈為政〉
+----
+
+
+In rendering Japanese text, the text in the title element shall be rendered as:
+
+. with the title mark (horizontal: double angular quotation mark with U+300E,
+vertical: double angular quotation mark with U+300F), with subtitles following
+wrapped in 「」(U+300C, U+300D) brackets.
++
+[example]
+----
+『論語』
+『論語』「學而」「為政」
+----
+
+
+In rendering Simplified Chinese text, the text in the title element shall be
+rendered as:
+
+. with the double angle bracket (U+300A, U+300B) for the title mark, with subtitles
+in the single angle bracket (U+3008, U+3009) following the title mark.
++
+[example]
+----
+《论语》
+《论语》〈学而〉〈为政〉
+----
+
+
+== Character-level modifications
+
+=== Reinstated text
+
+(補文)
+
+An insertion is a piece of text that is added to the original text.
+
+The native delimiter for marking insertions is the plus sign.
+
+The following elements can be supplemented to an insertion:
+
+* source of the insertion
+* author of the insertion
+* reason for the insertion
+
+Native syntax:
+
+----
+【補：{text}】
+【補：{text}；據：{source}】
+【補：{text}；據：{source}；{author}】
+【+{text}+】
+【+{text}；據：{source}+】
+【+{text}；據：{source}；{author}+】
+----
+
+[example]
+----
+《乙》本：廣德如不足，建德如【補：偷】。
+《乙》本：廣德如不足，建德如【補：偷。據：‹王›本】。
+《乙》本：廣德如不足，建德如【+偷+】。
+《乙》本：廣德如不足，建德如【+偷。據：‹王›本+】。
+----
+
+Compatible ASCII syntax:
+
+----
+(+{text}+)
+(+{text};source:{source}+)
+(+{text};source:{source};{author}+)
+----
+
+[example]
+----
+《乙》本：廣德如不足，建德如(+偷+)
+《乙》本：廣德如不足，建德如(+偷;source:‹王›本+)
+----
+
+Command syntax:
+
+----
+insert:[{text}]
+insert:[{text};source={source}]
+insert:[{text};source={source},author={author}]
+----
+
+[example]
+----
+《乙》本：廣德如不足，建德如 insert:[偷]
+《乙》本：廣德如不足，建德如 insert:[偷;source=‹王›本]
+----
+
+In rendering Traditional Chinese, Japanese, Simplified Chinese text, the text in
+the insertion element shall be rendered as:
+
+* with the tortoise shell mark (horizontal: `〔〕` with U+3014/U+3015, vertical:
+`︹︺` with U+FE39/U+FE3A).
++
+[example]
+----
+廣德如不足，建德如〔偷〕。
+廣德如不足，建德如〔偷〕。據：‹王›本。
+----
+
+
+
+=== Extraneous text
+
+(刪文)
+
+A deletion is a piece of text that is removed from the original text.
+
+The native delimiter for marking deletions is the minus sign.
+
+The following elements can be supplemented to a deletion:
+
+* reason for the deletion
+* source of the deletion
+* author of the deletion
+
+Native syntax:
+
+----
+【刪：{text}】
+【刪：{text}；據：{source}】
+【刪：{text}；據：{source}；{author}】
+【-{text}-】
+【-{text}；據：{source}-】
+【-{text}；據：{source}；{author}-】
+----
+
+[example]
+----
+繘，自關而東周洛韓魏之間謂之綆，或謂之絡。關西謂之繘【刪：綆】。
+繘，自關而東周洛韓魏之間謂之綆，或謂之絡。關西謂之繘【刪：綆；校本刪末句「綆」
+字。戴震謂《周易音義》及《左傳正義》引《方言》無「綆」字，故《方言疏證》亦刪，與
+校本同。】。
+繘，自關而東周洛韓魏之間謂之綆，或謂之絡。關西謂之繘【-綆-】。
+繘，自關而東周洛韓魏之間謂之綆，或謂之絡。關西謂之繘【-綆；校本刪末句「綆」
+字。戴震謂《周易音義》及《左傳正義》引《方言》無「綆」字，故《方言疏證》亦刪，與
+校本同。-】。
+----
+
+Compatible ASCII syntax:
+
+----
+(-{text}-)
+(-{text};source:{source}-)
+(-{text};source:{source};{author}-)
+（-{text}-）
+（-{text}-；source：{source}）
+----
+
+[example]
+----
+繘，自關而東周洛韓魏之間謂之綆，或謂之絡。關西謂之繘(-綆-)
+繘，自關而東周洛韓魏之間謂之綆，或謂之絡。關西謂之繘(-綆;source:校本刪末句「綆」
+字。戴震謂《周易音義》及《左傳正義》引《方言》無「綆」字，故《方言疏證》亦刪，與
+校本同。-)
+----
+
+Command syntax:
+
+----
+delete:[{text}]
+delete:[{text};source={source}]
+delete:[{text};source={source},author={author}]
+----
+
+[example]
+----
+繘，自關而東周洛韓魏之間謂之綆，或謂之絡。關西謂之繘 delete:[綆]
+繘，自關而東周洛韓魏之間謂之綆，或謂之絡。關西謂之繘 delete:[綆,reason=校本刪末句「綆」
+字。戴震謂《周易音義》及《左傳正義》引《方言》無「綆」字，故《方言疏證》亦刪，與
+校本同。]
+----
+
+In rendering Traditional Chinese, Japanese, Simplified Chinese text, the text in
+the deletion element shall be rendered as:
+
+* a footnote.
++
+[example]
+----
+繘，自關而東周洛韓魏之間謂之綆，或謂之絡。關西謂之繘^1^。
+
+^1^ 刪：校本刪末句「綆」字。戴震謂《周易音義》及《左傳正義》引《方言》無「綆」字，
+故《方言疏證》亦刪，與校本同。
+----
+
+
+=== Editorial correction
+
+(改文，校勘)
+
+A correction is a piece of text that is changed from the original text.
+
+The native delimiter for marking corrections is the ampersand symbol.
+
+The following elements can be supplemented to a correction:
+
+* source of the correction
+* author of the correction
+* reason for the correction
+
+Native syntax:
+
+----
+【改：{from}；{to}】
+【改：{text}；據：{source}】
+【改：{text}；據：{source}；{author}】
+【&{from}；{to}&】
+【&{text}；據：{source}&】
+【&{text}；據：{source}；{author}&】
+----
+
+[example]
+----
+《漢【改：史；書】》曰：王者，父事天，母事地，子育黔黎。
+《漢【改：史；書；注「史」當作「書」】》曰：王者，父事天，母事地，子育黔黎。
+----
+
+Compatible ASCII syntax:
+
+----
+(&{from}:{to}&)
+(&{text};source:{source}&)
+(&{text};source:{source};{author}&)
+----
+
+[example]
+----
+《漢(&史:書&)》曰：王者，父事天，母事地，子育黔黎。
+《漢(&史:書;source:注「史」當作「書」&)》曰：王者，父事天，母事地，子育黔黎。
+----
+
+Command syntax:
+
+----
+correction:[{from}:{to}]
+correction:[{text};source={source}]
+correction:[{text};source={source},author={author}]
+----
+
+[example]
+----
+《漢 correction:[史:書]》曰：王者，父事天，母事地，子育黔黎。
+《漢 correction:[史:書;source=注「史」當作「書」]》曰：王者，父事天，母事地，子育黔黎。
+----
+
+In rendering Traditional Chinese, Japanese, Simplified Chinese text, the text in
+the correction element shall be rendered as:
+
+* a footnote.
++
+[example]
+----
+《漢史^1^》曰：王者，父事天，母事地，子育黔黎。
+
+^1^ 改：注「史」當作「書」。
+----
+
+
+
+
+
+=== Character current variant
+
+(古今字異)
+
+A current character variant is a character that is written in a different form
+from current practice.
+
+The native delimiter for marking current character variants is the `@` at-sign.
+
+The following elements can be supplemented to a current character variant:
+
+* source of the variant
+* author of the variant
+* reason for the variant
+
+Native syntax:
+
+----
+【形：{orig}：{current}】
+【形：{orig}：{current}；{text}】
+【形：{orig}；{current}；{text}；據：{source}】
+【形：{orig}；{current}；{text}；據：{source}；{author}】
+【@{orig}：{current}@】
+【@{orig}：{current}；{text}@】
+【@{orig}；{current}；{text}；據：{source}@】
+【@{orig}；{current}；{text}；據：{source}；{author}@】
+----
+
+[example]
+----
+《甲》本：不出於戶，以知天下。不【形：規；窺】於牖，以知天道。
+《甲》本：不出於戶，以知天下。不【形：規；窺；據：《王》本】於牖，以知天道。
+《甲》本：不出於戶，以知天下。不【形：規；窺；「規」字今為「窺」】於牖，以知天道。
+《甲》本：不出於戶，以知天下。不【@規；窺@】於牖，以知天道。
+《甲》本：不出於戶，以知天下。不【@規；窺；據：《王》本@】於牖，以知天道。
+《甲》本：不出於戶，以知天下。不【@規；窺；「規」字今為「窺」@】於牖，以知天道。
+----
+
+Compatible ASCII syntax:
+
+----
+(@{orig}:{current}@)
+(@{orig}:{current};{text}@)
+(@{orig}:{current};{text};source:{source}@)
+(@{orig}:{current};{text};source:{source};{author}@)
+----
+
+[example]
+----
+《甲》本：不出於戶，以知天下。不(@規:窺@)於牖，以知天道。
+《甲》本：不出於戶，以知天下。不(@規:窺;source:《王》本@)於牖，以知天道。
+《甲》本：不出於戶，以知天下。不(@規:窺;「規」字今為「窺」@)於牖，以知天道。
+----
+
+Command syntax:
+
+----
+variant:[{orig}:{current}]
+variant:[{orig}:{current};{text}]
+variant:[{orig}:{current};{text};source={source}]
+variant:[{orig}:{current};{text};source={source},author={author}]
+----
+
+[example]
+----
+《甲》本：不出於戶，以知天下。不 variant:[規:窺] 於牖，以知天道。
+《甲》本：不出於戶，以知天下。不 variant:[規:窺;source=《王》本] 於牖，以知天道。
+《甲》本：不出於戶，以知天下。不 variant:[規:窺,「規」字今為「窺」] 於牖，以知天道。
+----
+
+In rendering Traditional Chinese, Japanese, Simplified Chinese text, the text in
+the current character variant element shall be rendered as:
+
+* with the parenthesis mark (horizontal: `（）` with U+FF08/U+FF09, vertical:
+`︵︶` with U+FE35/U+FE36) containing the current character variant, with the
+original character variant in the text, and a footnote that explains the variant if text is provided.
++
+[example]
+----
+《甲》本：不出於戶，以知天下。不規（窺）^1^ 於牖，以知天道。
+
+^1^ 「規」字今為「窺」。
+----
+
+
+
+== Annotation
+
+=== Pronunciation
+
+(音訓)
+
+A pronunciation annotation is a note that provides the pronunciation of a character.
+
+The following elements can be supplemented to a pronunciation annotation:
+
+* source of the pronunciation
+* author of the pronunciation
+* reason for the pronunciation
+
+Native syntax:
+
+----
+【音：{character}：{pronunciation}】
+【音：{character}：{pronunciation}；{text}】
+【音：{character}：{pronunciation}；{text}；據：{source}】
+【~{character}：{pronunciation}~】
+【~{character}：{pronunciation}；{text}~】
+【~{character}：{pronunciation}；{text}；據：{source}~】
+----
+
+[example]
+----
+‹子›‹列子›，居‹鄭›‹圃›【音：圃：補；《釋文》云，圃音補。】，四十年無人識者。
+‹子›‹列子›，居‹鄭›‹圃›【音：圃：補；《釋文》云，圃音補。；source:《釋文》】，四十年無人識者。
+‹子›‹列子›，居‹鄭›‹圃›【音：圃：補；《釋文》云，圃音補。】，四十年無人識者。
+----
+
+Compatible ASCII syntax:
+
+----
+(~{character};{pronunciation}~)
+(~{character};{pronunciation};{text}~)
+(~{character};{pronunciation};{text};source:{source}~)
+----
+
+[example]
+----
+‹子›‹列子›，居‹鄭›‹圃›(~圃：補~)，四十年無人識者。
+‹子›‹列子›，居‹鄭›‹圃›(~圃：補；《釋文》云，圃音補。~)，四十年無人識者。
+‹子›‹列子›，居‹鄭›‹圃›(~圃：補；《釋文》云，圃音補。；source:《釋文》~)，四十年無人識者。
+----
+
+Command syntax:
+
+----
+pronunciation:[{pronunciation}]
+pronunciation:[{pronunciation};{text}]
+pronunciation:[{pronunciation};{text};source={source}]
+----
+
+[example]
+----
+‹子›‹列子›，居‹鄭›‹圃› pronunciation:[圃:補]，四十年無人識者。
+‹子›‹列子›，居‹鄭›‹圃› pronunciation:[圃:補;《釋文》云，圃音補。]，四十年無人識者。
+‹子›‹列子›，居‹鄭›‹圃› pronunciation:[圃:補;source=《釋文》]，四十年無人識者。
+----
+
+In rendering Traditional Chinese, Japanese, Simplified Chinese text, the text in
+the pronunciation annotation element shall be rendered as:
+
+* as a footnote.
++
+[example]
+----
+‹子›‹列子›，居‹鄭›‹圃›^1^，四十年無人識者。
+
+^1^ 《釋文》云，圃音補。
+----
+
+
+=== Meaning
+
+(釋義)
+
+A meaning annotation is a note that provides the meaning of a character.
+
+The native delimiter for marking meaning annotations is the question mark.
+
+The following elements can be supplemented to a meaning annotation:
+
+* source of the meaning
+* author of the meaning
+* reason for the meaning
+
+Native syntax:
+
+----
+【義：{character}：{meaning-text}】
+【義：{character}：{meaning-text}】
+【義：{character}：{meaning-text}；據：{source}】
+【?：{character}：{meaning-text}?】
+【?{character}：{meaning-text}?】
+【?{character}：{meaning-text}；據：{source}?】
+----
+
+[example]
+----
+循之不得，故曰易也。【王重民曰：循當讀如揗。】【義：揗，摩也。】
+循之不得，故曰易也。【王重民曰：循當讀如揗。】【義：揗，摩也。；source:《說文》】
+循之不得，故曰易也。【王重民曰：循當讀如揗。】【義：揗，摩也。；source:《說文》；author:王重民】
+循之不得，故曰易也。【王重民曰：循當讀如揗。】【?循，摩也。?】
+循之不得，故曰易也。【王重民曰：循當讀如揗。】【?循，摩也。；source:《說文》?】
+循之不得，故曰易也。【王重民曰：循當讀如揗。】【?循，摩也。；source:《說文》；author:王重民?】
+----
+
+Compatible ASCII syntax:
+
+----
+(?{character}:{meaning-text}?)
+(?{character}:{meaning-text};source:{source}?)
+----
+
+[example]
+----
+循之不得，故曰易也。【王重民曰：循當讀如揗。】(?循:揗，摩也。?)
+循之不得，故曰易也。【王重民曰：循當讀如揗。】(?循:揗，摩也。;source:《說文》?)
+----
+
+Command syntax:
+
+----
+meaning:[{meaning-text}]
+meaning:[{meaning-text};source={source}]
+----
+
+[example]
+----
+循之不得，故曰易也。【王重民曰：循當讀如揗。】meaning:[循:揗，摩也。]
+循之不得，故曰易也。【王重民曰：循當讀如揗。】meaning:[循:揗，摩也。;source=《說文》]
+----
+
+In rendering Traditional Chinese, Japanese, Simplified Chinese text, the text in
+the meaning annotation element shall be rendered as:
+
+* as an inline annotation; or
++
+[example]
+----
+循之不得，故曰易也。【王重民曰：循當讀如揗。】small:[揗：揗，摩也。]。
+循之不得，故曰易也。【王重民曰：循當讀如揗。】small:[揗：《說文》揗，摩也。]。
+----
+
+* as a footnote.
++
+[example]
+----
+循之不得，故曰易也。【王重民曰：循當讀如揗。】^1^。
+
+^1^ 循：揗，摩也。
+
+循之不得，故曰易也。【王重民曰：循當讀如揗。】^2^。
+
+^2^ 循：《說文》揗，摩也。
+----
+
+
+
+=== Commentary
+
+(注)
+
+==== Plain
+
+
+A plain commentary is title-less and author-less, assumed to be part of the
+current contribution.
+
+The native delimiter for marking plain commentaries is the double square bracket.
+
+The following elements can be supplemented to a plain commentary:
+
+* type of commentary
+* source of the commentary
+* author of the commentary
+
+Native syntax:
+
+----
+【注：{commentary-text}】
+【注：{commentary-text}；據：{source}】
+【注：{commentary-text}；據：{source}；{author}】
+「『{commentary-text}』」
+「『{commentary-text}；據：{source}』」
+「『{commentary-text}；據：{source}；{author}』」
+----
+
+[example]
+----
+‹⼦列⼦›曰：「天地無全功，聖⼈無全能，萬物無全⽤。【注：全猶備也。】
+‹⼦列⼦›曰：「天地無全功，聖⼈無全能，萬物無全⽤。『「全猶備也。」』
+----
+
+[source]
+-----
+[commentary]
+====
+This is a block-based commentary. It can contain multiple paragraphs and lines.
+
+For example:
+
+First paragraph of the commentary.
+
+Second paragraph of the commentary.
+
+* Bullet points can also be included
+* Like this
+
+[source]
+----
+Code blocks can be included as well.
+----
+====
+-----
+
+-----
+[commentary,author="John Doe",year="2023"]
+====
+This is another block-based commentary with author and year.
+
+It can also contain multiple paragraphs and lines.
+
+For example:
+
+First paragraph of the commentary.
+
+Second paragraph of the commentary.
+
+* Bullet points can also be included
+* Like this
+
+[source]
+----
+Code blocks can be included in the commentary as well.
+----
+====
+-----
+
+[commentary#C1]
+====
+This is a block-based commentary. It can contain multiple paragraphs and lines.
+
+For example:
+
+First paragraph of the commentary.
+
+Second paragraph of the commentary.
+
+* Bullet points can also be included
+* Like this
+
+[source]
+----
+Code blocks can be included as well.
+----
+====
+
+《老子》曰「{C1}」：
+
+《⽼⼦》曰「『C1』」：
+
+「『‹徐靈府›曰：「且物之為貴，莫先於⼈，然不能定⼼援⽽朗照，裂愛網於通津，遂使性隨物遷，生與物化，至⼈哀之，
+故述⼤道之原，特標衆篇之⾸，俾尋原以階道，⽅觸事⽽即真，豈不有以者哉。」』」：
+「有物混成，先天地⽣「『』」，惟象無形，窈窈冥冥，寂寥淡漠，不聞其聲（四），
+吾强爲之名，字之曰道。
+
+‹朱弁›曰：「夫本相待者有原，體相證者有歸，⼤道無原，至理無歸。今推之道原，反在乎物象之内，但復物之性，原其遠乎？」
+停誘：惟南⼦源道述：「原，本也。本道根真，包裹天地，以歷萬物，故⽇原道，因以題篇。」
+感定案：原，本也。本⽼⼦之道，圖發道的學說。⼀九七三年長沙⾺⼟姥漢墓出⼟的帛書佬汙⼄本卷前古供
+書潢帝泗繩，道源是其⼀。汶⼦道線篇名同造帝泗您，列爲⾸算。惟璃⼦⾸篇爲源道。
+［1:1⽼⼦，春秋時哲學家，道家的創始⼈。姓李名⽿，字脾。楚國苦縣（今阿南鹿⾢東）厲綿曲仁⼈。周守藏室
+之史。孔⼦曾向他問禮。著⼦，亦稱道德您，是道家的經典。以下爲⽂⼦引⽼汙之⾔。
+〕⽼⼦⼆⼗五章：「有物混成，先⼤地⽣，寂兮寥兮，獨⽴不改，胃⾏不始，可以烏天地母，吾不知其名，字之⽇
+道，强爲之名⼜⼤。」王禹注：「混然不可得⽽知，⽽萬物由之以成，故⽇混成也，不知其誰之⼦，故先天地⽜
+
+
+
+==== With authorship and year
+
+A commentary with authorship and year is a commentary with the author's name
+and the year of the commentary.
+
+
+== Nesting
+
+Multiple levels allowed.
+
+[source,asciidoc]
+----
+TODO
+----
+
+ASCII equivalent
+[source,asciidoc]
+----
+TODO
+----
+
+Invalid nesting examples
+
+[source,asciidoc]
+----
+// INVALID - overlapping
+TODO
+
+// VALID - properly nested
+TODO
+----
+
+
+== Delimiter escaping
+
+=== Principles
+
+1. Literal delimiters must be distinguishable from markup delimiters
+2. Escaping method must work consistently across ASCII and CJK syntaxes
+3. Escape sequences must not interfere with normal text rendering
+
+=== Escape methods
+
+==== ASCII delimiters
+
+[source,asciidoc]
+----
+// Method 1: Backslash escape
+\((book title\))    // Shows: ((book title))
+\(#annotation\#)    // Shows: (#annotation#)
+
+// Method 2: Entity reference
+&#40;&#40;book title&#41;&#41;    // Shows: ((book title))
+
+// Invalid - will be interpreted as markup
+((book title))      // Interpreted as book title markup
+----
+
+==== CJK delimiters
+
+[source,asciidoc]
+----
+// Method 1: Backslash escape
+\《論語\》          // Shows: 《論語》
+\【注\】            // Shows: 【注】
+
+// Method 2: Entity reference
+&#x300A;論語&#x300B;  // Shows: 《論語》
+&#x3010;注&#x3011;    // Shows: 【注】
+
+// Invalid - will be interpreted as markup
+《論語》            // Interpreted as book title markup
+----
+
+=== Special cases
+
+==== Nested delimiters
+
+[source,asciidoc]
+----
+// Escaping inner delimiters
+《論語．\《序文\》》
+((論語.\《序文\》))
+
+// Alternative using entity references
+《論語．&#x300A;序文&#x300B;》
+((論語.&#x300A;序文&#x300B;))
+----
+
+==== Multiple consecutive delimiters
+
+[source,asciidoc]
+----
+// Multiple escaped delimiters
+\《\《重複\》\》    // Shows: 《《重複》》
+
+// Entity reference alternative
+&#x300A;&#x300A;重複&#x300B;&#x300B;
+----
+
+1. Backslash escapes MUST be processed before markup parsing
+2. Entity references MUST be decoded after markup parsing
+3. Escaped delimiters MUST NOT participate in markup matching
+4. Escape characters MUST be removed in final rendering
+
+
+[source,asciidoc]
+----
+// Mixed normal and escaped delimiters
+《道德經》云：「\【上德不德\】」
+((道德經)) says: "【上德不德】"
+
+// Complex nested case
+【注：參見\《史記．\【孔子世家\】》】
+(#note:see \《史記．\【孔子世家\】》#)
+
+// Preserving brackets in quotations
+「子曰：\『學而時習之\』」
+"子曰：『學而時習之』"
+----
+
+
+[bibliography]
+== Bibliography
