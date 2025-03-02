@@ -119,37 +119,56 @@ subsection 1, clause 2".
 
 === labeller
 
-component that assigns labels to content elements based on their position in the document structure and labeling context
+component that assigns labels to content elements based on their position in the
+document structure and labeling context
 
 === label renderer
 
-component that generates a human-readable label in string form from a label object, which may vary depending on the usage context
+component that generates a human-readable label in string form from a label
+object, which may vary depending on the usage context
 
 === reference
 
-general term for pointing to specific content elements using labels, enabling navigation, identification, and citation
+general term for pointing to specific content elements using labels, enabling
+navigation, identification, and citation
 
 === local reference
 
-reference to content within the same context or document section, using labels to provide precise location information
+reference to content within the same context or document section, using labels
+to provide precise location information
 
 === global reference
 
-reference to content across different contexts or document sections, using labels to provide unambiguous identification regardless of location
+reference to content across different contexts or document sections, using
+labels to provide unambiguous identification regardless of location
 
 === citation
 
-formal reference to content using labels, enabling precise identification in both internal and external referencing systems
+formal reference to content using labels, enabling precise identification in
+both internal and external referencing systems
 
 
 
 [[requirements]]
-== Requirements
+== Principles and requirements
 
-=== Problem statement
+=== Purpose
 
-Information management systems must produce consistent, predictable
-auto-labeling across multiple output formats while:
+Labels serve as the foundation for consistent and unambiguous reference of
+information within documents.
+
+Their primary purpose is to enable:
+
+* *Precise navigation* through hierarchical document structures
+* *Unambiguous identification* of content elements regardless of their position
+* *Citation systems* that work both internally and externally to the document
+
+Labels provide machine-readable identifiers that can be rendered in
+human-readable form, allowing both automated systems and human readers to locate
+and reference specific content with precision.
+
+A consistent, predictable auto-labeling language enables consistent, predictable
+auto-labeling with the following benefits:
 
 * Preserving semantic relationships between labeled elements
 * Adapting to different display requirements by format
@@ -158,28 +177,16 @@ auto-labeling across multiple output formats while:
 * Enabling flexible formatting of labels
 * Managing labeller scopes across document boundaries
 
-=== Usage in Metanorma
-
-Metanorma XML uses LADL to define label auto-assignment for elements that require
-sequence tracking. These definitions are interpreted by end-format renderers to generate
-appropriate labeling in the target format. The model must provide:
-
-* Common patterns applicable across formats
-* Format-specific transformation instructions
-* Separation of semantic labeling (what something is) from presentation (how it appears)
-* Support for complex labeling schemes required by standards organizations
 
 [[principles]]
-== Principles
-
-=== Separation of concerns
+=== Principles
 
 LADL follows these fundamental design principles:
 
 . *Separation of semantics and presentation*: Numbers represent both position in a sequence and
   visual labeling. These concerns must be separable for proper processing.
 
-. *Context awareness*: Numbering systems must understand their position within document hierarchies.
+. *Context awareness*: Labeling systems must understand their position within document hierarchies.
 
 . *Independence from format*: The model must define labeling in a way that can be consistently
   applied across HTML, PDF, Word, and other formats.
@@ -188,9 +195,10 @@ LADL follows these fundamental design principles:
 
 . *Internationalization support*: Non-Latin labeling systems must be fully supported.
 
-=== Model architecture
 
-The LADL model architecture consists of:
+=== Architecture
+
+The architecture consists of:
 
 * Core models defining labellers, sequences, and formats
 * Element-specific extensions for particular document components
@@ -198,6 +206,108 @@ The LADL model architecture consists of:
 * Hierarchical context management
 * Scope binding framework
 * Pattern interpolation system
+
+LADL defines a user-defined label definition language for elements that require
+automatic sequence tracking or numbering, ensuring consistent and predictable
+labeling.
+
+These definitions are interpreted by LADL-compliant runtimes to generate
+appropriate labeling in the target format.
+
+The architecture must provide:
+
+* Common patterns applicable across formats
+* Format-specific transformation instructions
+* Separation of semantic labeling (what something is) from presentation (how it appears)
+* Support for complex labeling schemes required by standards organizations
+
+
+=== Types of label references
+
+==== General
+
+Labels support different types of references depending on their scope and usage:
+
+* *Global references* point to content across different contexts
+* *Local references* point to content within the same context
+* *Citations* provide formal references to external content
+
+==== Global references
+
+A global reference label is a unique reference that refers to content scoped
+within an information container.
+
+Global references require string labels that include all necessary context
+information to ensure unambiguous identification.
+
+A label reference is considered fully-qualified as a global reference if:
+
+* All its labeling contexts are shown in the label
+* The label uniquely refers to a content element within the container
+
+[example]
+====
+A reference from Annex A to "Figure 3.2" clearly identifies the second figure in
+Clause 3, regardless of where the reference appears.
+====
+
+==== Local references
+
+A local reference label is a unique reference that refers to content scoped
+within a part of the information container.
+
+[example]
+====
+Within Clause 3, a reference to a list item "a)" is a local reference instead of
+the global reference counterpart of "Clause 3, a)".
+====
+
+Local references can be preferred over global references when referring content
+within the same context is more concise for the reader, due to omission of the
+duplicated self-reference.
++
+[example]
+====
+Within a list, a reference to "a)" is more concise than "List 1, a)".
+====
+
+
+==== Citations
+
+Citations are external references to the information container that the labels
+are attached to.
+
+Citations to labelled content in the current environment may be created
+by external document references or in bibliographic entries.
+
+For external users to create consistent citations to the content, the labels
+must be predictable and consistent across different documents.
+
+
+=== Reference resolution
+
+The process of resolving references involves:
+
+. *Identification*: Determining the target element based on its label
+
+. *Context mapping*: Understanding the relationship between the reference
+context and the target context
+
+. *Rendering*: Presenting the reference in an appropriate format for the current
+context
+
+
+The LADL model provides the foundation for this resolution process by ensuring
+that labels are:
+
+* *Unique*: Each label uniquely identifies a specific content element
+
+* *Structured*: Labels follow a consistent structure that reflects the document
+hierarchy
+
+* *Context-aware*: Labels can be interpreted correctly regardless of where they
+appear
+
 
 
 === Runtime requirements
@@ -220,9 +330,9 @@ auto-assignment definitions. The runtime:
 The core models in the LADL language framework are:
 
 * `Label`: Represents a label assigned to a content element
-* `Labeller`: Tracks sequence position within a context
+* `Labeller`: Tracks sequence position within a label context
 * `Sequence`: Defines the progression of values for a labeller
-* `Context`: Defines the scope and type of context for labeling elements
+* `LabelContext`: Defines the scope and type of label context for labeling elements
 * `LabelTemplate`: Defines how labeller values are combined with fixed text to create labels
 * `LabelRenderer`: Transforms a label template into a final label string
 
@@ -237,7 +347,7 @@ The following 3 model trees exist in the LADL model:
 * Content tree: an object tree that contains models that can
 be used to contain ContentElements that have Labels.
 
-* Context tree: an object tree made of Context objects (linked via the `parent` attribute) that provides labeling contexts.
+* Context tree: an object tree made of LabelContext objects (linked via the `parent` attribute) that provides label contexts.
 
 * Labeller tree: an object tree made of Labeller objects (linked via the `parent` attribute) that allows hierarchical labeling.
 
@@ -317,7 +427,7 @@ The following diagrams illustrate the key relationships in the LADL model.
 === ContentElement
 
 The ContentElement class represents a content element in an information
-container that can potentially hold a Context object.
+container that can potentially hold a LabelContext object.
 
 [source,lml]
 ----
@@ -526,9 +636,68 @@ values and any fixed text necessary.
 The following placeholders are supported:
 
 `%n`:: Labeller value
-`%parent`:: Parent labeller value
++
+[example]
+====
+The pattern `"Figure %n"` may generate labels like "Figure 1", "Figure 2",
+"Figure 3", etc.
+====
+
 `%pn`:: Parent labeller value
-`%self`:: Self label
++
+[example]
+====
+The pattern `"Figure %pn.%n"`, where the parent is a labeller for an Annex
+context, may generate the labels "Figure A.1", "Figure B.2", "Figure C.3".
+====
+
+`%parent`:: Rendered global label value of parent.
++
+[example]
+====
+The pattern "%parent, List %n", where the parent is a labeller for a Clause
+context, may generate the labels "Clause 1, List 1", "Clause 1, List 2", "Clause
+2, List 1", etc.
+====
+
+`%self`:: Rendered local label value of self.
++
+[example]
+====
+The pattern "%self" in a Clause labeller context, where the local reference template
+is "Clause %n",
+may generate the label "Clause 1", "Clause 2", "Clause 3".
+====
+
+
+.An unordered list label template
+[example]
+====
+The following definition describes a label template for unordered lists with no
+string interpolation.
+
+[source]
+----
+Level 1: •
+Level 2: ◦
+Level 3: ▪
+----
+
+[source,lml]
+----
+instance UnorderedListLabelLevel1Template {
+  pattern = "•"
+}
+
+instance UnorderedListLabelLevel2Template {
+  pattern = "◦"
+}
+
+instance UnorderedListLabelLevel3Template {
+  pattern = "▪"
+}
+----
+====
 
 .A simple figure labeling pattern
 [example]
@@ -552,27 +721,51 @@ Output: "Figure 1", "Figure 2", "Figure 3", etc.
 ====
 
 
-=== Context
+.A Japanese clause hierarchical labeling pattern
+[example]
+====
+The following definition describes a label template for clauses that uses the
+labeller value.
 
-The Context class defines the scope of labeling (and a label hierarchy) within
+[source]
+----
+%parentの%n
+----
+
+[source,lml]
+----
+instance JapaneseClauseLabelTemplate {
+  pattern = "%parentの%n"
+}
+----
+
+If parent clause is labelled as "二", the sequence is the JapaneseNumericSequence,
+the output would be "二の一", "二の二", "二の三", etc.
+
+If parent clause is labelled as "二の三", the sequence is the
+JapaneseNumericSequence, the output would be "二の三の一", "二の三の二", "二の三
+の三", etc.
+====
+
+
+=== Label context
+
+The LabelContext class defines the scope of labeling (and a label hierarchy) within
 an information container.
 
-This includes both the element that establishes the scope and the type of the
-scope.
-
 ----
-class Context {
+class LabelContext {
   attribute name, String {
-    definition "Name of the labeling context"
+    definition "Name of the label context"
   }
-  attribute parent, ref:(Context) {
-    definition "Parent context to which this context relates"
+  attribute parent, ref:(LabelContext) {
+    definition "Parent label context to which this label context relates"
   }
   attribute element, ContentElement {
-    definition "Content element associated with the context"
+    definition "Content element associated with the label context"
   }
   attribute labellers, ref:(Labeller) {
-    definition "Labellers (of different types) that are bound to this context"
+    definition "Labellers (of different types) that are bound to this label context"
     collection true
   }
 }
@@ -580,7 +773,7 @@ class Context {
 
 [example]
 ====
-The following definition describes a context for a document clause that
+The following definition describes a label context for a document clause that
 contains a labeller for figures.
 
 [source,lml]
@@ -598,7 +791,7 @@ instance ClauseContext {
 === Labeller
 
 The Labeller model defines the fundamental mechanism for tracking sequence
-position within a context.
+position within a label context.
 
 [source,lml]
 ----
@@ -607,8 +800,8 @@ class Labeller {
     definition "Sequence that defines the label's possible values"
   }
 
-  attribute context, Context {
-    definition "Context to which this labeller is bound"
+  attribute context, LabelContext {
+    definition "LabelContext to which this labeller is bound"
   }
 
   attribute type, String {
@@ -623,8 +816,16 @@ class Labeller {
     definition "Template for generating the label"
   }
 
+  attribute global_template, LabelTemplate {
+    definition "Template for generating the fully qualified, global label"
+  }
+
   method value_for_position(position: Integer) {
-    definition "Provide the value for a given order in the sequence"
+    definition "Provide the rendered string label for local reference."
+  }
+
+  method global_value_for_position(position: Integer) {
+    definition "Provide the rendered string label for global reference."
   }
 }
 ----
@@ -632,16 +833,18 @@ class Labeller {
 .Labeller model
 [source]
 ----
-+----------------+         +-------------------+
-|    Labeller    |-------->|  Sequence         |
-|----------------|         |-------------------|
-| id             |         | initial_value     |
-| context        |         | increment         |
-| sequence       |         | cycle_length      |
-+----------------+         +-------------------+
++-----------------+        +-------------------+
+|    Labeller     |------->|  Sequence         |
+|-----------------|        |-------------------|
+| id              |        | initial_value     |
+| context         |        | increment         |
+| sequence        |        | cycle_length      |
+| template        |        |                   |
+| global_template |        |                   |
++-----------------+        +-------------------+
         |
         |                  +-------------------+
-        +----------------->| Context           |
+        +----------------->| LabelContext      |
         |                  |-------------------|
         |                  | name              |
         |                  | parent            |
@@ -654,18 +857,118 @@ class Labeller {
                            |-------------------|
                            | id                |
                            | sequence          |
-                           | scope             |
+                           | context           |
+                           | template          |
+                           | global_template    |
                            +-------------------+
 ----
 
+
+.An unordered list label template
+[example]
+====
+The following definition describes a labeller for unordered lists with no
+string interpolation.
+
+[source,lml]
+----
+instance UnorderedListLabelTemplate {
+  pattern = "List %n"
+}
+
+instance UnorderedListLabelLevel1Template {
+  pattern = "•"
+}
+
+instance UnorderedListLabelLevel2Template {
+  pattern = "◦"
+}
+
+instance UnorderedListLabelLevel3Template {
+  pattern = "▪"
+}
+
+instance UnorderedListLabeller {
+  id = "unordered_list_labeller"
+  sequence = CharacterSequence
+  context = ClauseContext
+  type = "list"
+  template = UnorderedListLabelTemplate
+}
+
+instance UnorderedListLevel1Labeller {
+  id = "unordered_list_labeller_1"
+  sequence = CharacterSequence
+  context = ClauseContext
+  type = "list_item"
+  template = UnorderedListLabelLevel1Template
+}
+
+instance UnorderedListLevel2Labeller {
+  id = "unordered_list_labeller_1_1"
+  sequence = CharacterSequence
+  context = ClauseContext
+  type = "list_item"
+  template = UnorderedListLabelLevel2Template
+  parent = UnorderedListLevel1Labeller
+}
+
+instance UnorderedListLevel3Labeller {
+  id = "unordered_list_labeller_1_1_3"
+  sequence = CharacterSequence
+  context = ClauseContext
+  type = "list_item"
+  template = UnorderedListLabelLevel3Template
+  parent = UnorderedListLevel2Labeller
+}
+
+// Content elements
+instance ListContentElement < ContentElement {
+  // Content element definition
+  labellers = ["id:unordered_list_labeller"]
+}
+instance ListItem_1_ContentElement < ContentElement {
+  // Content element definition
+  labellers = ["id:unordered_list_item_labeller_1"]
+}
+instance ListItem_1_1_ContentElement < ContentElement {
+  // Content element definition
+  labellers = ["id:unordered_list_item_labeller_1_1"]
+}
+instance ListItem_1_1_3_ContentElement < ContentElement {
+  // Content element definition
+  labellers = ["id:unordered_list_item_labeller_1_1_3"]
+}
+----
+
+The values would be:
+
+----
+> UnorderedListLabeller.value_for_position(1) => "List 1"
+> UnorderedListLabeller.value_for_position(3) => "List 3"
+
+// Level 1, same per position
+> UnorderedListLevel1Labeller.value_for_position(1) => "•"
+> UnorderedListLevel1Labeller.value_for_position(8) => "•"
+
+// Level 2, same per position
+> UnorderedListLevel2Labeller.value_for_position(1) => "◦"
+> UnorderedListLevel2Labeller.value_for_position(3) => "◦"
+
+// Level 3, same per position
+> UnorderedListLevel3Labeller.value_for_position(1) => "▪"
+> UnorderedListLevel3Labeller.value_for_position(4) => "▪"
+----
+====
+
+
 For hierarchical labeling, a Labeller may have a parent labeller that provides
-context for the current labeller's position in the parent labeller's context'.
-
-
+label context for the current labeller's position in the parent labeller's label
+context'.
 
 [example]
 ====
-Simple labeller for tracking Notes in a Clause:
+Simple labeller for tracking Notes in a Clause.
 
 [source,lml]
 ----
@@ -679,10 +982,15 @@ instance NotesLabeller {
   context = ClauseContext
   parent = null // Does not rely on a parent Labeller
   template = NoteLabelTemplate
+  global_template = NoteGlobalLabelTemplate
 }
 
 instance NoteLabelTemplate < LabelTemplate {
   pattern = "NOTE %n"
+}
+
+instance NoteGlobalLabelTemplate < LabelTemplate {
+  pattern = "%parent, %self"
 }
 ----
 
@@ -691,6 +999,9 @@ The values would be:
 > NotesLabeller.value_for_position(1) => "NOTE 1"
 > NotesLabeller.value_for_position(2) => "NOTE 2"
 > NotesLabeller.value_for_position(3) => "NOTE 3"
+> NotesLabeller.global_value_for_position(1) => "Clause 1, NOTE 1"
+> NotesLabeller.global_value_for_position(2) => "Clause 1, NOTE 2"
+> NotesLabeller.global_value_for_position(3) => "Clause 1, NOTE 3"
 ----
 ====
 
@@ -711,10 +1022,15 @@ instance FigureLabeller {
     context = ClauseContext
   parent = null // Does not rely on a parent Labeller
   template = FigureLabelTemplate
+  global_template = FigureGlobalLabelTemplate
 }
 
 instance FigureLabelTemplate < LabelTemplate {
   pattern = "Figure %n"
+}
+
+instance FigureGlobalLabelTemplate < LabelTemplate {
+  pattern = "%parent, %self"
 }
 ----
 
@@ -723,6 +1039,9 @@ The values would be:
 > FigureLabelTemplate.value_for_position(1) => "Figure I"
 > FigureLabelTemplate.value_for_position(2) => "Figure II"
 > FigureLabelTemplate.value_for_position(3) => "Figure III"
+> FigureGlobalLabelTemplate.global_value_for_position(1) => "Section 1, Figure I"
+> FigureGlobalLabelTemplate.global_value_for_position(2) => "Section 1, Figure II"
+> FigureGlobalLabelTemplate.global_value_for_position(3) => "Section 1, Figure III"
 ----
 ====
 
@@ -757,160 +1076,121 @@ instance FigureLabel {
 ====
 
 
-
-
-
-
-
 == Usage of models
 
-EDITOR: define the usage of the defined models and how they interact in various contexts. Consider including examples for clarity.
+EDITOR: define the usage of the defined models and how they interact in various
+contexts. Consider including examples for clarity.
 
 Provide the algorithm of how to resolve a parent labeller.
 
 
-=== Prerequsites
+=== Prerequisites
 
 Every ContentElement that can either:
 
 * Serve as a label context
 * Be labeled
 
-Must be associated with a Context object.
+Must be associated with a LabelContext object.
+
 
 === Algorithm for resolving the label for a content element
 
 Given a ContentElement object, we want to get its label.
 
-. From the ContentElement, find its applicable Context object. The applicable Context object is one that has a Labeller that can label the type of the ContentElement.
+. From the ContentElement, find its applicable LabelContext object. The applicable LabelContext object is one that has a Labeller that can label the type of the ContentElement.
 
-.. If the Context object is on it, use it.
+.. If the LabelContext object is on it, use it.
 
 .. If not, navigate through its `parent`
-attribute subsequently until the closest Context object
+attribute subsequently until the closest LabelContext object
 is obtained.
 
-. From the Context object, find the Labeller object that is
+. From the LabelContext object, find the Labeller object that is
 applicable to the ContentElement.
 
 . Ask the Labeller object to generate a label for the ContentElement.
 
 .. The Labeller object will use its LabelTemplate object to generate the label.
 
-... If the LabelTemplate requires a sequence element, it will ask its Sequence object to generate a value for the position of the ContentElement in the Context.
+... If the LabelTemplate requires a sequence element, it will ask its Sequence object to generate a value for the position of the ContentElement in the LabelContext.
 
 ... If the LabelTemplate requires a parent labeller, it will ask its parent Labeller object to generate a label for the ContentElement.
 
 . Done.
+
 
 === Conditions
 
 EDITOR: Any conditions that need to be met for the algorithm to work correctly?
 
 
-[[referencing-model]]
-== Referencing model
 
-=== Purpose of labels
+[[auto-labeled-elements]]
+== Elements often auto-labeled
 
-Labels serve as the foundation for consistent and unambiguous reference of information within documents. Their primary purpose is to enable:
+=== Lists
 
-* *Precise navigation* through hierarchical document structures
-* *Unambiguous identification* of content elements regardless of their position
-* *Citation systems* that work both internally and externally to the document
+Lists are among the most commonly labeled elements in documents, with both
+ordered and unordered variants.
 
-Labels provide machine-readable identifiers that can be rendered in human-readable form, allowing both automated systems and human readers to locate and reference specific content with precision.
+==== Ordered Lists
 
-=== Types of references
-
-Labels support different types of references depending on their scope and usage:
-
-==== Local references
-
-Local references point to content within the same context, such as:
-
-* References to figures within the same clause
-* References to list items within the same list
-* References to subclauses within the same parent clause
-
-Local references may use simplified forms of labels that omit higher-level context information when that context is implied.
+Ordered lists use sequential labellers to number items in a list, increasing in value with each new item. They may also include nested hierarchies for sub-items.
 
 [example]
 ====
-Within Clause 3, a reference to "Figure 2" might be sufficient rather than "Figure 3.2" because the clause context is understood.
+. Item 1
+. Item 2
+.. Sub-item 2.1
+.. Sub-item 2.2
+. Item 3
 ====
 
-==== Global references
-
-Global references point to content across different contexts within the same document, such as:
-
-* References to clauses from annexes
-* References to figures from different sections
-* References to tables from anywhere in the document
-
-Global references require string labels that include all necessary context information to ensure unambiguous identification.
-
-[example]
-====
-A reference from Annex A to "Figure 3.2" clearly identifies the second figure in Clause 3, regardless of where the reference appears.
-====
-
-==== Citations
-
-Citations are formal references that may extend beyond the current document, such as:
-
-* References to external standards or publications
-* References to specific elements within other documents
-* References that may be used in bibliographic entries
-
-Citations require standardized label formats that can be consistently interpreted across different documents and systems.
-
-=== Reference resolution
-
-The process of resolving references involves:
-
-1. *Identification*: Determining the target element based on its label
-2. *Context mapping*: Understanding the relationship between the reference context and the target context
-3. *Rendering*: Presenting the reference in an appropriate format for the current context
-
-The LADL model provides the foundation for this resolution process by ensuring that labels are:
-
-* *Unique*: Each label uniquely identifies a specific content element
-* *Structured*: Labels follow a consistent structure that reflects the document hierarchy
-* *Context-aware*: Labels can be interpreted correctly regardless of where they appear
-
-
-[[auto-labeled-items]]
-== Auto-labeled items
-
-=== List labeling
-
-Lists are among the most commonly labeled elements in documents, with both ordered and unordered variants.
-
-==== Ordered lists
-
-Ordered lists use sequential labellers with various labeling formats and nested hierarchies.
-
-// TODO define
-
-==== Unordered lists
+==== Unordered Lists
 
 Unordered lists use non-sequential markers for visual distinction.
 
-// TODO define
+[example]
+====
+* Item A
+* Item B
+** Sub-item B.1
+** Sub-item B.2
+====
 
 === Clause labeling
 
 Clauses form the primary structural elements of technical documents and use hierarchical labeling.
 
-// TODO define
+[example]
+====
+"Clause 1: Introduction"
 
+"Clause 2: Background"
+
+"Sub-clause 2.1: Context"
+
+"Sub-clause 2.2: Importance"
+====
 
 === Annex and appendix labeling
 
 Annexes and appendices typically use different labeling schemes than the main document.
 
-// TODO define
+// TODO define Annex N, Annex A.N
+
+[example]
+====
+"Annex A: Glossary"
+
+"Annex B: References"
+
+"Annex A, Appendix 1: Sample Data"
+
+"Annex A, Appendix 2: Test Cases"
+====
+
 
 === Figure labeling
 
@@ -918,18 +1198,39 @@ Figures typically use a combination of sequential and hierarchical labeling.
 
 // TODO define Figure N, Figure A.N, Figure A.N a)
 
+[example]
+====
+"Figure 1: System Architecture"
+
+"Figure A.2: Data Flow Diagram"
+====
+
 === Table labeling
 
 Tables use labeling schemes similar to figures but often with different presentation.
 
 // TODO define Table N, Table A.N
 
+[example]
+====
+"Table 1: Data Summary"
+
+"Table A.2: Test Results"
+====
+
 
 === Note labeling
 
-Notes may appear throughout a document and are typically labeled within their context.
+Notes may appear throughout a document and are typically labeled within their label context.
 
 // TODO define Note N, Note A.N
+
+[example]
+====
+"NOTE 1: Important Information"
+
+"Clause 2, NOTE 1: Additional Details"
+====
 
 === Example labeling
 
@@ -937,18 +1238,26 @@ Examples often follow similar label templates to notes.
 
 // TODO define Example N, Example A.N
 
-=== Source code labeling
+[example]
+====
+"EXAMPLE 1: Basic Usage"
 
-Source code blocks may be labeled for reference.
-
-// TODO define
+"Clause 3, EXAMPLE 1: Advanced Features"
+====
 
 
 === Requirement labeling
 
 Requirements often need special labeling for traceability.
 
-EDITOR: Output: "REQ-1.1", "REQ-1.2", "REQ-2.1"
+// EDITOR: Output: "REQ-1.1", "REQ-1.2", "REQ-2.1"
+
+[example]
+====
+"REQ-1.1: System shall support multiple users"
+
+"REQ-1.2: The system shall ensure data security"
+====
 
 == Internationalization
 
@@ -956,8 +1265,14 @@ EDITOR: Output: "REQ-1.1", "REQ-1.2", "REQ-2.1"
 
 The CJK labeling model provides support for Chinese, Japanese, and Korean labeling systems.
 
-EDITOR: Output: "第一章", "第二章", "第三章"
+[example]
+====
+"第一章", "第二章", "第三章"
 
+"第一章, 附錄 1", "第一章, 附錄 2"
+====
+
+EDITOR: Add more examples.
 
 [[annex-labeller-hierarchy]]
 [appendix]
@@ -969,29 +1284,43 @@ image::images/counter-hierarchy-document-clause.svg[]
 .Document annex hierarchy and labellers
 image::images/counter-hierarchy-document-annex.svg[]
 
+
 === Diagram explanation
 
-The diagram illustrates the critical distinction between content hierarchy and labeling context in the LADL model:
+This diagram demonstrates how:
+
+* The LabelingContext is different from the actual content hierarchy
+
+* Elements may be labeled according to a higher label context even if they
+belong to a lower document hierarchy
+
+* Some elements are labeled according to label contexts belonging to the
+document hierarchy
+
+
+The diagram illustrates the critical distinction between content hierarchy and
+label context in the LADL model:
 
 * *Double dashed lines* represent content hierarchy (e.g., document containing clauses containing subclauses)
 * *Unlabeled directional lines* represent ownership (e.g., document owning a ClauseLabeller and an AnnexLabeller)
 * *Lines labeled "Parent"* show labeller inheritance relationships between parent and child labellers
 * *Lines labeled "Labels"* show where a Labeller/Labeller assigns a Label to a content element
 
-This diagram demonstrates how:
+The diagram also illustrates the 3 key model trees in the LADL model:
 
-* The LabelingContext is different from the actual content hierarchy
-* Elements may be labeled according to a higher context even if they belong to a lower document hierarchy
-* Some elements are labeled according to context belonging to the document hierarchy
-* In a LabelRenderer, the pattern used can depend on:
-** `%n` - the output number from the labeller
-** `%p` - the parent's rendered label
-** `%pn` - the output number from the parent's labelrenderer
-** `%self` - the localized label
-* Some labelrenderers need to obtain the rendered label from the parent's labelrenderer
+* *Content tree*: Contains models that can be used to contain ContentElements
+that have Labels. These are boxes in white.
+
+* *Context tree*: Made of LabelContext objects that provide label contexts.
+These are the boxes in brown.
+
+* *Labeller tree*: Made of Labeller objects that allow hierarchical labeling.
+These are boxes in blue.
+
 
 === Instance model
 
-The following instance model definitions illustrate the relationships shown in the diagrams.
+The following instance model definitions illustrate the relationships shown
+in the diagram.
 
 EDITOR: Add instance model definitions
