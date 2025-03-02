@@ -23,8 +23,7 @@ NOTE: "LADL" is pronounced as "ladel".
 Label auto-assignment is a critical component of structured documentation, enabling
 consistent referencing and organization of content elements throughout a document.
 The act is to automatically create correct Label objects that attach to the content
-element. A Labeller object labels things with machine understandable labels, while
-a LabelRenderer creates a string label from a Label object, depending on the usage
+element. A Labeller creates a string label from a Label object, depending on the usage
 context (e.g., the same item can be labelled differently in different parts of the
 content hierarchy).
 
@@ -90,7 +89,7 @@ rules for representing a labeller value in a particular alphanumeric system
 Arabic numerals, Roman numerals, alphabetic characters.
 ====
 
-=== labeller scope
+=== label context
 
 document boundary within which a labeller operates, defining when the labeller resets or continues
 
@@ -120,12 +119,8 @@ subsection 1, clause 2".
 === labeller
 
 component that assigns labels to content elements based on their position in the
-document structure and labeling context
-
-=== label renderer
-
-component that generates a human-readable label in string form from a label
-object, which may vary depending on the usage context
+document structure and labeling context, and generates a human-readable label in
+string form from a label object
 
 === reference
 
@@ -330,11 +325,10 @@ auto-assignment definitions. The runtime:
 The core models in the LADL language framework are:
 
 * `Label`: Represents a label assigned to a content element
-* `Labeller`: Tracks sequence position within a label context
+* `Labeller`: Transforms a label template into a final label string
 * `Sequence`: Defines the progression of values for a labeller
 * `LabelContext`: Defines the scope and type of label context for labeling elements
 * `LabelTemplate`: Defines how labeller values are combined with fixed text to create labels
-* `LabelRenderer`: Transforms a label template into a final label string
 
 In this document, we define the following models for illustration purposes of
 the LADL language:
@@ -537,7 +531,7 @@ ArabicNumericSequence that jumps every 3 positions.
 
 [source,lml]
 ----
-instance ThreeIncrementArabicNumericSequence {
+instance ThreeIncrementArabicNumericSequence < NumericSequence {
   base_sequence = ArabicNumericSequence
   initial_value = 1
   increment = 3
@@ -758,7 +752,7 @@ Figure %n
 
 [source,lml]
 ----
-instance FigureLabelTemplate {
+instance FigureLabelTemplate < LabelTemplate {
   pattern = "Figure %n"
 }
 ----
@@ -780,7 +774,7 @@ labeller value.
 
 [source,lml]
 ----
-instance JapaneseClauseLabelTemplate {
+instance JapaneseClauseLabelTemplate < LabelTemplate {
   pattern = "%parentの%n"
 }
 ----
