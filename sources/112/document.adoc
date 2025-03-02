@@ -461,6 +461,19 @@ There are two types of Sequence models that inherit from Sequence:
 [source,lml]
 ----
 class Sequence {
+  attribute char_direction, String {
+    definition "Whether the sequence contains characters in a left-to-right or right-to-left direction"
+
+    default "ltr"
+    values {
+      value "ltr" {
+        definition "Left-to-right"
+      }
+      value "rtl" {
+        definition "Right-to-left"
+      }
+    }
+  }
   method value_for_position(position: Integer) {
     definition "Provide the value for a given order in the sequence"
   }
@@ -496,19 +509,25 @@ class NumericSequence < Sequence {
 A LADL-compliant runtime should provide the following default labeling
 sequences:
 
-`DecimalNumericSequence`:: Standard decimal numbers (1, 2, 3...)
-`RomanUpperNumericSequence`:: Uppercase Roman numerals (I, II, III...)
-`RomanLowerNumericSequence`:: Lowercase Roman numerals (i, ii, iii...)
-`AlphaUpperNumericSequence`:: Uppercase letters (A, B, C...)
-`AlphaLowerNumericSequence`:: Lowercase letters (a, b, c...)
-`CyrillicUpperCharacterSequence`:: Uppercase Cyrillic alphabet characters (А, Б, В, Г, Д, Е, Ж, З...)
-`CyrillicLowerCharacterSequence`:: Lowercase Cyrillic alphabet characters (а, б, в, г, д, е, ж, з...)
-`GreekUpperCharacterSequence`:: Uppercase Greek alphabet characters (Α, Β, Γ, Δ, Ε, Ζ, Η, Θ...)
-`GreekLowerCharacterSequence`:: Lowercase Greek alphabet characters (α, β, γ, δ, ε, ζ, η, θ...)
-`ChineseNumericSequence`:: Chinese numerals (一, 二, 三...)
-`JapaneseNumericSequence`:: Japanese numerals (一, 二, 三...)
-`KoreanNumericSequence`:: Korean numerals (일, 이, 삼...)
-`ArabicNumericSequence`:: Arabic numerals in Arabic script (١, ٢, ٣...)
+Left-to-right sequences::
+
+`DecimalNumericSequence`::: Standard decimal numbers (1, 2, 3...)
+`RomanUpperNumericSequence`::: Uppercase Roman numerals (I, II, III...)
+`RomanLowerNumericSequence`::: Lowercase Roman numerals (i, ii, iii...)
+`AlphaUpperNumericSequence`::: Uppercase letters (A, B, C...)
+`AlphaLowerNumericSequence`::: Lowercase letters (a, b, c...)
+`CyrillicUpperCharacterSequence`::: Uppercase Cyrillic alphabet characters (А, Б, В, Г, Д, Е, Ж, З...)
+`CyrillicLowerCharacterSequence`::: Lowercase Cyrillic alphabet characters (а, б, в, г, д, е, ж, з...)
+`GreekUpperCharacterSequence`::: Uppercase Greek alphabet characters (Α, Β, Γ, Δ, Ε, Ζ, Η, Θ...)
+`GreekLowerCharacterSequence`::: Lowercase Greek alphabet characters (α, β, γ, δ, ε, ζ, η, θ...)
+`ChineseNumericSequence`::: Chinese numerals (一, 二, 三...)
+`JapaneseNumericSequence`::: Japanese numerals (一, 二, 三...)
+`KoreanNumericSequence`::: Korean numerals (일, 이, 삼...)
+
+Right-to-left sequences::
+
+`ArabicNumericSequence`::: Arabic numerals in Arabic script (١, ٢, ٣...). This is a sequence of RTL numbers.
+`HebrewNumericSequence`::: Hebrew numerals (א, ב, ג...). This is a sequence of RTL numbers.
 
 .An Arabic numeric sequence that increments by 3
 [example]
@@ -576,8 +595,21 @@ class CharacterSequence < Sequence {
       }
     }
   }
+  attribute direction, String {
+    definition "Direction of the sequence"
+    default "ltr"
+    values {
+      value "ltr" {
+        definition "Left-to-right"
+      }
+      value "rtl" {
+        definition "Right-to-left"
+      }
+    }
+  }
 }
 ----
+
 
 [example]
 ====
@@ -627,6 +659,18 @@ class LabelTemplate {
   attribute pattern, String {
     definition "Template string with placeholders for labeller values"
   }
+  attribute direction, String {
+    definition "Direction of the pattern string"
+    default "ltr"
+    values {
+      value "ltr" {
+        definition "Left-to-right"
+      }
+      value "rtl" {
+        definition "Right-to-left"
+      }
+    }
+  }
 }
 ----
 
@@ -669,6 +713,8 @@ is "Clause %n",
 may generate the label "Clause 1", "Clause 2", "Clause 3".
 ====
 
+The `direction` attribute defines the direction of the pattern string, which
+can be either "ltr" (left-to-right) or "rtl" (right-to-left).
 
 .An unordered list label template
 [example]
@@ -747,6 +793,47 @@ JapaneseNumericSequence, the output would be "二の三の一", "二の三の二
 の三", etc.
 ====
 
+A label template can be in a RTL direction. The following rules apply:
+
+* Numbers flow correctly from right-to-left
+* Hierarchical labels maintain proper RTL rendering
+* Global references preserve the RTL format when used in different contexts
+
+.RTL clause labels
+====
+Arabic documents use right-to-left (RTL) text direction.
+
+[source,lml]
+----
+instance ArabicClauseLabelTemplate < LabelTemplate {
+  pattern = "%n قسم"
+  direction = "rtl"
+}
+
+instance ArabicClauseLabelGlobalTemplate < LabelTemplate {
+  pattern = "%n قسم، %parent"
+  direction = "rtl"
+}
+
+instance ArabicClauseLabeller {
+  id = "arabic_clause_labeller"
+  sequence = ArabicNumericSequence // This is a sequence of RTL numbers
+  context = DocumentContext
+  type = "clause"
+  template = ArabicClauseLabelTemplate
+  global_template = ArabicClauseLabelGlobalTemplate
+}
+----
+
+The values would be:
+----
+> ArabicClauseLabeller.value_for_position(1) => "١ قسم"
+> ArabicClauseLabeller.value_for_position(2) => "٢ قسم"
+> ArabicClauseLabeller.value_for_position(3) => "٣ قسم"
+----
+====
+
+
 
 === Label context
 
@@ -813,11 +900,17 @@ class Labeller {
   }
 
   attribute template, LabelTemplate {
-    definition "Template for generating the label"
+    definition {
+      Template for generating the label. The template direction must be
+      respected when generating the label.
+    }
   }
 
   attribute global_template, LabelTemplate {
-    definition "Template for generating the fully qualified, global label"
+    definition {
+      Template for generating the fully qualified, global label. The template
+      direction must be respected when generating the label.
+    }
   }
 
   method value_for_position(position: Integer) {
