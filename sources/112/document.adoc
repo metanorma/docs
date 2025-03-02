@@ -43,20 +43,15 @@ while preserving both semantic structure and visual presentation requirements.
 [[scope]]
 == Scope
 
-This document establishes requirements for defining auto-labeling schemes for:
+This document defines a label definition language called the
+"Label Auto-assignment Definition Language" (LADL)
+for defining auto-labeling schemes.
 
-* Ordered and unordered list items with multiple nesting levels
-* Document structural elements (clauses, annexes, appendices)
-* Figures, tables, examples, and notes
-* Source code blocks and requirement statements
-* CJK and other international labeling systems
-* hierarchical labeling relationships
-* Advanced string pattern interpolation
-* Labeller scope binding based on document context
+It also defines requirements for auto-labeling systems that can perform the
+necessary labeling activity based on the defined schemes.
 
-This specification defines the conceptual models for auto-labeling and their
-transformation to implementation formats including CSS labellers, Word Styles,
-and XSLT labeller variables.
+It is a platform-independent, language-agnostic labeling model, allowing
+defined schemes to be deployed towards various rendering formats.
 
 
 [[terms-and-definitions]]
@@ -171,6 +166,8 @@ auto-labeling with the following benefits:
 * Allowing for hierarchical labeling schemes
 * Enabling flexible formatting of labels
 * Managing labeller scopes across document boundaries
+* Ability to deploy to different rendering engines, such as CSS, Word Styles,
+and XSLT.
 
 
 [[principles]]
@@ -178,46 +175,55 @@ auto-labeling with the following benefits:
 
 LADL follows these fundamental design principles:
 
-. *Separation of semantics and presentation*: Numbers represent both position in a sequence and
-  visual labeling. These concerns must be separable for proper processing.
+Semantics and presentation separation::
+Numbers represent both position in a sequence and
+visual labeling. These concerns must be separable for proper processing.
 
-. *Context awareness*: Labeling systems must understand their position within document hierarchies.
+Context awareness::
+Labeling systems must understand their position within content hierarchies.
 
-. *Independence from format*: The model must define labeling in a way that can be consistently
-  applied across HTML, PDF, Word, and other formats.
+Format-independence::
+The model must define labeling in a way that can be consistently applied across
+multiple forms of media.
 
-. *Transformation clarity*: Format-specific renderings must be clearly derivable from the base model.
+Implementation-free::
+The defined labeling system must not depend on any specific rendering engine or
+language outside of LADL.
 
-. *Internationalization support*: Non-Latin labeling systems must be fully supported.
+Internationalization support::
+Non-Latin labeling systems, including right-to-left languages, must be fully
+supported.
 
-
-=== Architecture
-
-The architecture consists of:
-
-* Core models defining labellers, sequences, and formats
-* Element-specific extensions for particular document components
-* Transformation templates for output formats
-* Hierarchical context management
-* Scope binding framework
-* Pattern interpolation system
-
-LADL defines a user-defined label definition language for elements that require
-automatic sequence tracking or numbering, ensuring consistent and predictable
-labeling.
-
-These definitions are interpreted by LADL-compliant runtimes to generate
-appropriate labeling in the target format.
-
-The architecture must provide:
-
-* Common patterns applicable across formats
-* Format-specific transformation instructions
-* Separation of semantic labeling (what something is) from presentation (how it appears)
-* Support for complex labeling schemes required by standards organizations
+Extensible::
+Support for complex labeling schemes required by standards organizations.
 
 
-=== Types of label references
+=== Reference resolution from labels
+
+The process of resolving references involves:
+
+. *Identification*: Determining the target element based on its label
+
+. *Context mapping*: Understanding the relationship between the reference
+context and the target context
+
+. *Rendering*: Presenting the reference in an appropriate format for the current
+context
+
+
+The LADL model provides the foundation for this resolution process by ensuring
+that labels are:
+
+* *Unique*: Each label uniquely identifies a specific content element
+
+* *Structured*: Labels follow a consistent structure that reflects the document
+hierarchy
+
+* *Context-aware*: Labels can be interpreted correctly regardless of where they
+appear
+
+
+=== Label reference types
 
 ==== General
 
@@ -279,30 +285,6 @@ For external users to create consistent citations to the content, the labels
 must be predictable and consistent across different documents.
 
 
-=== Reference resolution
-
-The process of resolving references involves:
-
-. *Identification*: Determining the target element based on its label
-
-. *Context mapping*: Understanding the relationship between the reference
-context and the target context
-
-. *Rendering*: Presenting the reference in an appropriate format for the current
-context
-
-
-The LADL model provides the foundation for this resolution process by ensuring
-that labels are:
-
-* *Unique*: Each label uniquely identifies a specific content element
-
-* *Structured*: Labels follow a consistent structure that reflects the document
-hierarchy
-
-* *Context-aware*: Labels can be interpreted correctly regardless of where they
-appear
-
 
 
 === Runtime requirements
@@ -315,6 +297,57 @@ auto-assignment definitions. The runtime:
 * Manages context hierarchies and inheritance relationships
 * Executes label generation according to defined patterns
 * Handles format-specific rendering requirements
+
+
+== Architecture
+
+=== General
+
+The LADL architecture consists of:
+
+* Core models
+* Hierarchical context management
+* Context hierarchy framework
+* Hierarchical pattern interpolation
+
+
+
+.Document clause hierarchy and labellers
+image::images/counter-hierarchy-document-clause.svg[]
+
+.Document annex hierarchy and labellers
+image::images/counter-hierarchy-document-annex.svg[]
+
+
+This diagram demonstrates how:
+
+* The LabelingContext is different from the actual content hierarchy
+
+* Elements may be labeled according to a higher label context even if they
+belong to a lower document hierarchy
+
+* Some elements are labeled according to label contexts belonging to the
+document hierarchy
+
+
+The diagram illustrates the critical distinction between content hierarchy and
+label context in the LADL model:
+
+* *Double dashed lines* represent content hierarchy (e.g., document containing clauses containing subclauses)
+* *Unlabeled directional lines* represent ownership (e.g., document owning a ClauseLabeller and an AnnexLabeller)
+* *Lines labeled "Parent"* show labeller inheritance relationships between parent and child labellers
+* *Lines labeled "Labels"* show where a Labeller/Labeller assigns a Label to a content element
+
+The diagram also illustrates the 3 key model trees in the LADL model:
+
+* *Content tree*: Contains models that can be used to contain ContentElements
+that have Labels. These are boxes in white.
+
+* *Context tree*: Made of LabelContext objects that provide label contexts.
+These are the boxes in brown.
+
+* *Labeller tree*: Made of Labeller objects that allow hierarchical labeling.
+These are boxes in blue.
 
 
 [[core-models]]
@@ -346,10 +379,7 @@ be used to contain ContentElements that have Labels.
 * Labeller tree: an object tree made of Labeller objects (linked via the `parent` attribute) that allows hierarchical labeling.
 
 
-EDITOR: These diagrams need to be updated.
-
 The following diagrams illustrate the key relationships in the LADL model.
-
 
 .Scope and Element Binding
 [source]
@@ -368,7 +398,6 @@ The following diagrams illustrate the key relationships in the LADL model.
                            | attributes     |
                            +----------------+
 ----
-
 
 
 === ContentElement
@@ -1215,20 +1244,14 @@ class LabelStyle {
 
 
 
-== Usage of models
-
-EDITOR: define the usage of the defined models and how they interact in various
-contexts. Consider including examples for clarity.
-
-Provide the algorithm of how to resolve a parent labeller.
-
+== Usage
 
 === Defining a label style
 
-A label style is a collection of labellers, sequences, templates, and contexts
-that define a coherent labeling system for a document.
+A label style (the LabelStyle class) represents a coherent collection of LADL
+models that define a coherent labeling system for a document.
 
-Steps to creating a label style:
+Steps to creating a label style are detailed below.
 
 . Understand the ContentElement tree that will be labeled.
 
@@ -1433,11 +1456,14 @@ instance FigureGlobalLabelTemplate < LabelTemplate {
 ====
 
 
-=== Algorithm for resolving the label for a content element
+=== Algorithm to resolve the label for a content element
 
-Given a ContentElement object, we want to get its label.
+The following algorithm describe how to resolve the label for a ContentElement
+object in a LADL-compliant runtime.
 
-. From the ContentElement, find its applicable LabelContext object. The applicable LabelContext object is one that has a Labeller that can label the type of the ContentElement.
+. From the ContentElement, find its applicable LabelContext object. The
+applicable LabelContext object is one that has a Labeller that can label the
+type of the ContentElement.
 
 .. If the LabelContext object is on it, use it.
 
@@ -1459,14 +1485,18 @@ applicable to the ContentElement.
 . Done.
 
 
-=== Conditions
-
-EDITOR: Any conditions that need to be met for the algorithm to work correctly?
-
-
 
 [[auto-labeled-elements]]
+[appendix]
 == Elements often auto-labeled
+
+=== General
+
+Many types of content elements in technical documents are auto-labeled to
+provide a consistent structure and reference system.
+
+This annex provides examples of common auto-labeled elements for the reader's
+reference.
 
 === Lists
 
@@ -1598,68 +1628,93 @@ Requirements often need special labeling for traceability.
 "REQ-1.2: The system shall ensure data security"
 ====
 
-== Internationalization
-
-=== CJK labeling support
-
-The CJK labeling model provides support for Chinese, Japanese, and Korean labeling systems.
-
-[example]
-====
-"第一章", "第二章", "第三章"
-
-"第一章, 附錄 1", "第一章, 附錄 2"
-====
-
-EDITOR: Add more examples.
 
 [[annex-labeller-hierarchy]]
 [appendix]
-== Labeller hierarchy diagram
+== Instance model examples
 
-.Document clause hierarchy and labellers
-image::images/counter-hierarchy-document-clause.svg[]
-
-.Document annex hierarchy and labellers
-image::images/counter-hierarchy-document-annex.svg[]
-
-
-=== Diagram explanation
-
-This diagram demonstrates how:
-
-* The LabelingContext is different from the actual content hierarchy
-
-* Elements may be labeled according to a higher label context even if they
-belong to a lower document hierarchy
-
-* Some elements are labeled according to label contexts belonging to the
-document hierarchy
-
-
-The diagram illustrates the critical distinction between content hierarchy and
-label context in the LADL model:
-
-* *Double dashed lines* represent content hierarchy (e.g., document containing clauses containing subclauses)
-* *Unlabeled directional lines* represent ownership (e.g., document owning a ClauseLabeller and an AnnexLabeller)
-* *Lines labeled "Parent"* show labeller inheritance relationships between parent and child labellers
-* *Lines labeled "Labels"* show where a Labeller/Labeller assigns a Label to a content element
-
-The diagram also illustrates the 3 key model trees in the LADL model:
-
-* *Content tree*: Contains models that can be used to contain ContentElements
-that have Labels. These are boxes in white.
-
-* *Context tree*: Made of LabelContext objects that provide label contexts.
-These are the boxes in brown.
-
-* *Labeller tree*: Made of Labeller objects that allow hierarchical labeling.
-These are boxes in blue.
-
-
-=== Instance model
+=== Illustration diagram
 
 The following instance model definitions illustrate the relationships shown
 in the diagram.
 
 EDITOR: Add instance model definitions
+
+=== ISO/IEC label style
+
+The ISO/IEC label style originates from and implements the requirements of:
+
+* the ISO/IEC Directives, Part 2
+* the ISO House Style.
+
+This style defines the labeling scheme used by ISO/IEC deliverables.
+
+It defines the following labeling requirements:
+
+==== ISO/IEC standard labeling scheme
+
+The element labeling scheme for ISO/IEC is specified as follows.
+
+.Clause labeling
+[%header,cols="1,2,2"]
+|===
+|Element |Labeling specification |LabelContext
+
+|Clause
+|Local and global: "Clause 1", "Clause 2"...
+|Document
+
+|Subclause
+|Local and global: "1.1", "1.2", "2.1.1"... +
+Uses parent's sequence number
+|Parent Clause
+
+|Annex
+|Local and global: "Annex A", "Annex B", "Annex AA"...
+|Document
+
+|Annex clause
+|Local and global: "A.1", "A.2"...
+|Annex
+
+|Figure
+|Local and global: "Figure 1", "Figure A.1" +
+Subfigure: "Figure A.1 a)"
+|Document (for main document) +
+Annex (for annex figures)
+
+|Table
+|Local and global: "Table 1", "Table A.1"
+|Document (for main document) +
+Annex (for annex tables)
+
+|NOTE
+|Local: "NOTE 1", "NOTE 2"... +
+Global: "Clause X, NOTE 1" +
+Special case: If single note, simply "NOTE" without number
+|Clause or Subclause
+
+|EXAMPLE
+|Local: "EXAMPLE 1", "EXAMPLE 2"... +
+Global: "Clause X, EXAMPLE 1", "1.2.3, EXAMPLE 2"
+|Clause or Subclause
+
+|Formula
+|Same pattern as Figure/Table
+|Clause
+
+|List
+|Local and global: "List 1", "List 2", "List A.1"...
+|Clause
+
+|List item (unordered)
+|All levels: "—"
+|List (first level), Parent ListItem (subsequent levels)
+
+|List item (ordered)
+|First level: a), b), c)... +
+Second level: 1), 2), 3)... +
+Third level: i), ii), iii)... +
+Fourth level: a), b), c)...
+|List (first level), Parent ListItem (subsequent levels)
+|===
