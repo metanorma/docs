@@ -369,54 +369,7 @@ The following diagrams illustrate the key relationships in the LADL model.
                            +----------------+
 ----
 
-.Hierarchical Labeller Example
-[source]
-----
-+-------------------+         +-------------------+
-| Parent Labeller   |         | Child Labeller    |
-|-------------------|<--------|-------------------|
-| id: "section"     |         | id: "figure"      |
-| sequence: 1,2,3.. |         | sequence: 1,2,3.. |
-| scope: document   |         | scope: section    |
-+-------------------+         +-------------------+
-                                       |
-                                       v
-                              +-------------------+
-                              | NumberingPattern  |
-                              |-------------------|
-                              | "%parent.%n"      |
-                              | -> "1.1", "1.2"   |
-                              +-------------------+
-----
 
-."Figure A.1" Construction
-[source]
-----
-+-------------------+         +-------------------+
-| Annex Labeller    |         | Figure Labeller   |
-|-------------------|<--------|-------------------|
-| id: "annex"       |         | id: "figure"      |
-| sequence: A,B,C.. |         | sequence: 1,2,3.. |
-| scope: document   |         | scope: annex      |
-+-------------------+         +-------------------+
-        |                               |
-        v                               v
-+-------------------+         +-------------------+
-| Output: "A"       |         | Output: "1"       |
-+-------------------+         +-------------------+
-        |                               |
-        |                               |
-        v                               v
-        +---------------+---------------+
-                        |
-                        v
-                +-------------------+
-                | Combined Pattern  |
-                |-------------------|
-                | "Figure %parent.%n"|
-                | -> "Figure A.1"   |
-                +-------------------+
-----
 
 === ContentElement
 
@@ -438,8 +391,17 @@ class ContentElement {
 }
 ----
 
-The `type` attribute is used to match whether a Labeller
-can label it.
+The `type` attribute is used to match whether a Labeller can label it.
+
+A ContentElement must be associated with a LabelContext object if it has
+children to be labeled.
+
+Every ContentElement that can either:
+
+* Serve as a label context
+* Be labeled
+
+
 
 === Sequence
 
@@ -946,9 +908,66 @@ class Labeller {
                            | sequence          |
                            | context           |
                            | template          |
-                           | global_template    |
+                           | global_template   |
                            +-------------------+
 ----
+
+
+.Illustration of labelling a subclause as "1.1" with a parent labeller for "Clause 1"
+[example]
+====
+[source]
+----
++-------------------+         +-------------------+
+| Parent Labeller   |  parent | Child Labeller    |
+|-------------------|<--------|-------------------|
+| id: "clause"      |         | id: "subclause"   |
+| sequence: Arabic  |         | sequence: Arabic  |
+| context: document |         | context: clause   |
++-------------------+         +-------------------+
+          |                              |
+          v                              v
++-------------------+         +-------------------+
+| LabelTemplate     |         | LabelTemplate     |
+|-------------------|   %pn   |-------------------|
+| "Clause %n"       | <- - - -| "%pn.%n"          |
+| -> "Clause 1"     |         | -> "1.1", "1.2"   |
++-------------------+         +-------------------+
+----
+====
+
+
+.Illustration of labelling a figure as "Figure A.1", where A is the parent label (an annex)
+[example]
+====
+[source]
+----
++-------------------+         +-------------------+
+| Annex Labeller    |         | Figure Labeller   |
+|-------------------|<--------|-------------------|
+| id: "annex"       |         | id: "figure"      |
+| sequence: A,B,C.. |         | sequence: 1,2,3.. |
+| context: document |         | context: annex    |
++-------------------+         +-------------------+
+        |                               |
+        v                               v
++-------------------+         +-------------------+
+| Output: "A"       |         | Output: "1"       |
++-------------------+         +-------------------+
+        |                               |
+        |                               |
+        v                               v
+        +---------------+---------------+
+                        |
+                        v
+               +---------------------+
+               | Combined Pattern    |
+               |---------------------|
+               | "Figure %parent.%n" |
+               | -> "Figure A.1"     |
+               +---------------------+
+----
+====
 
 
 .An unordered list label template
@@ -1163,6 +1182,39 @@ instance FigureLabel {
 ====
 
 
+=== Label style
+
+The LabelStyle class defines a full set of label models sufficient
+to implement a coherent labeling system for a publisher.
+
+[source,lml]
+----
+class LabelStyle {
+  attribute name, String {
+    definition "Name of the label style"
+  }
+  attribute labellers, Labeller {
+    definition "Labellers that are bound to this label style"
+    collection true
+  }
+  attribute sequences, Sequence {
+    definition "Sequences that are bound to this label style"
+    collection true
+  }
+  attribute templates, LabelTemplate {
+    definition "Templates that are bound to this label style"
+    collection true
+  }
+  attribute contexts, LabelContext {
+    definition "Label contexts that are bound to this label style"
+    collection true
+  }
+}
+----
+
+
+
+
 == Usage of models
 
 EDITOR: define the usage of the defined models and how they interact in various
@@ -1171,14 +1223,214 @@ contexts. Consider including examples for clarity.
 Provide the algorithm of how to resolve a parent labeller.
 
 
-=== Prerequisites
+=== Defining a label style
 
-Every ContentElement that can either:
+A label style is a collection of labellers, sequences, templates, and contexts
+that define a coherent labeling system for a document.
 
-* Serve as a label context
-* Be labeled
+Steps to creating a label style:
 
-Must be associated with a LabelContext object.
+. Understand the ContentElement tree that will be labeled.
+
+.. Consider the types of ContentElements to label.
++
+[example]
+====
+In a content tree there may be clauses, annexes and notes.
+====
+
+.. Consider the label contexts of those ContentElements.
++
+[example]
+====
+Consider whether a ContentElement type will have its label scoped by
+the document, or a subclause.
+====
+
+.. Consider the templates that will be used to format the labels.
++
+[example]
+====
+A clause may be labeled as "Clause 1", an annex as "Annex A", and a note as
+"Note 1".
+====
+
+.. Consider whether the label for a ContentElement will differ between
+global and local references.
++
+[example]
+====
+The first ordered list item may be labelled locally as "a)", but globally as
+"List N, a)".
+====
+
+
+. Define the LADL models from the bottom up, per type of ContentElement.
+
+.. Specify the LabelTemplate for generating the label for the type of ContentElement.
++
+[example]
+====
+A clause labeled as "Clause 1" is specified as a LabelTemplate with the pattern
+"Clause %n", where the sequence used is ArabicNumericSequence.
+====
+
+.. Specify the Sequence for generating numbering formats if a custom implementation is required.
++
+[example]
+====
+An Annex labeled as "Annex A" requires the sequence RomanUpperNumericSequence,
+which is available by default.
+====
+
+.. Specify the LabelContext for the type of ContentElement.
++
+[example]
+====
+A clause numbered according to a document-level scope requires a LabelContext that is
+linked to the ContentElement(Document).
+====
+
+.. Construct the Labeller for the type of ContentElement using the defined models
+in previous steps.
++
+[example]
+====
+A labeller requires a sequence, context, template (local and maybe global),
+potentially a parent labeller depending on whether the template incorporates the
+ContentElement's parent's label.
+====
+
+. Construct the LabelStyle object with the defined models.
+
+.Full label style definition of SimpleLabelStyle
+[example]
+====
+The following definition describes a label style for a document with a clause
+context and a figure labeller.
+
+The desired outputs are:
+
+For `ContentElement(Clause)`::
+"Clause 1" for the clause labeller, with label context of the document,
+identical global and local label.
+
+For `ContentElement(SubClause)`::
+"1.1" for the sub-clause labeller, with label context of the clause, identical
+global and local label.
+
+For `ContentElement(Figure)`::
+"Figure 1" for the figure labeller, with label context of the document,
+identical global and local label.
+
+Assume that we have this ContentElement tree:
+
+[source]
+----
+Document
+  Clause 1
+    Sub-clause 1
+    Sub-clause 2
+      Figure 1
+  Clause 2
+    Figure 2
+    Sub-clause 1
+    Sub-clause 2
+      Sub-clause 1
+      Sub-clause 2
+----
+
+The label contexts are:
+
+* The DocumentContext scopes the labels of clauses and figures
+* The ClauseContext scopes the labels of the first sub-clause level
+* The SubClauseContext scopes the labels of all other sub-clause levels
+* The Document scopes the labels of figures
+
+[source]
+----
+Document
+  Clause 1         [label scoped by Document: DocumentContext with ClauseLabeller]
+    Sub-clause 1   [label scoped by Clause 1: ClauseContext with SubClauseLabeller]
+    Sub-clause 2   [label scoped by Clause 1: ClauseContext with SubClauseLabeller]
+      Figure 1     [label scoped by Document: DocumentContext with FigureLabeller]
+  Clause 2         [label scoped by Document: DocumentContext with ClauseLabeller]
+    Figure 2       [label scoped by Document: DocumentContext with FigureLabeller]
+    Sub-clause 1   [label scoped by Clause 2: ClauseContext with SubClauseLabeller]
+    Sub-clause 2   [label scoped by Clause 2: ClauseContext with SubClauseLabeller]
+      Sub-clause 1 [label scoped by 2.2: SubClauseContext with SubClauseLabeller]
+      Sub-clause 2 [label scoped by 2.2: SubClauseContext with SubClauseLabeller]
+        Figure 3   [label scoped by Document: DocumentContext with FigureLabeller]
+----
+
+[source,lml]
+----
+instance SimpleLabelStyle {
+  name = "Simple Label Style"
+  labellers = ["id:figure_labeller", "id:clause_labeller", "id:subclause_labeller"]
+  sequences = [ArabicNumericSequence]
+  templates = [FigureLabelTemplate, ClauseLabelTemplate, SubClauseLabelTemplate]
+  contexts = [DocumentContext, ClauseContext, SubClauseContext]
+}
+
+instance DocumentContext < LabelContext {
+  name = "document"
+}
+
+instance ClauseContext < LabelContext {
+  // One per clause, link to ContentElement(Clause)
+  name = "clause"
+  parent = DocumentContext
+}
+
+instance SubClauseContext < LabelContext {
+  // One per subclause, link to ContentElement(Clause)
+  name = "subclause"
+  // Implementation set parent to ClauseContext
+}
+
+instance ClauseLabeller < Labeller {
+  id = "clause_labeller"
+  sequence = ArabicNumericSequence
+  context = DocumentContext
+  parent = null // Does not rely on a parent Labeller
+  template = ClauseLabelTemplate
+}
+
+instance ClauseLabelTemplate < LabelTemplate {
+  pattern = "Clause %n"
+}
+
+instance SubClauseLabeller < Labeller {
+  id = "subclause_labeller"
+  sequence = ArabicNumericSequence
+  context = ClauseContext
+  parent = ClauseLabeller // Rely on ClauseLabeller for parent label
+  template = SubClauseLabelTemplate
+}
+
+instance SubClauseLabelTemplate < LabelTemplate {
+  pattern = "%parent.%n"
+}
+
+instance FigureLabeller < Labeller {
+  id = "figure_labeller"
+  sequence = ArabicNumericSequence
+  context = DocumentContext
+  parent = null // Does not rely on a parent Labeller
+  template = FigureLabelTemplate
+  global_template = FigureGlobalLabelTemplate
+}
+
+instance FigureLabelTemplate < LabelTemplate {
+  pattern = "Figure %n"
+}
+
+instance FigureGlobalLabelTemplate < LabelTemplate {
+  pattern = "%parent, %self"
+}
+----
+====
 
 
 === Algorithm for resolving the label for a content element
