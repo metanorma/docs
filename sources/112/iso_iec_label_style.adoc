@@ -1,0 +1,636 @@
+= ISO/IEC label style definition
+:docnumber: 112-A
+:edition: 1
+:revdate: 2025-03-02
+:copyright-year: 2025
+:language: en
+:title-main-en: ISO/IEC Label Style Definition
+:doctype: standard
+:status: draft
+:mn-document-class: ribose
+:mn-output-extensions: xml,html,pdf,rxl
+:local-cache-only:
+
+== Introduction
+
+This document defines the ISO/IEC label style using the Label Auto-assignment Definition Language (LADL) as specified in MN 112. The ISO/IEC label style originates from and implements the requirements of:
+
+* the ISO/IEC Directives, Part 2
+* the ISO House Style
+
+This style defines the labeling scheme used by ISO/IEC deliverables.
+
+== Specification
+
+The element labeling scheme for ISO/IEC is specified as follows.
+
+.Labeling specification
+[%header,cols="1,2,2"]
+|===
+|Element |Labeling specification |LabelContext
+
+|Clause
+|Local and global: "Clause 1", "Clause 2"...
+|Document
+
+|Subclause
+|Local and global: "1.1", "1.2", "2.1.1"... +
+Uses parent's sequence number
+|Parent Clause
+
+|Annex
+|Local and global: "Annex A", "Annex B", "Annex AA"...
+|Document
+
+|Annex clause
+|Local and global: "A.1", "A.2"...
+|Annex
+
+|Figure
+|Local and global: "Figure 1", "Figure A.1" +
+Subfigure: "Figure A.1 a)"
+|Document (for main document) +
+Annex (for annex figures)
+
+|Table
+|Local and global: "Table 1", "Table A.1"
+|Document (for main document) +
+Annex (for annex tables)
+
+|NOTE
+|Local: "NOTE 1", "NOTE 2"... +
+Global: "Clause X, NOTE 1" +
+Special case: If single note, simply "NOTE" without number
+|Clause or Subclause
+
+|EXAMPLE
+|Local: "EXAMPLE 1", "EXAMPLE 2"... +
+Global: "Clause X, EXAMPLE 1", "1.2.3, EXAMPLE 2"
+|Clause or Subclause
+
+|Formula
+|Same pattern as Figure/Table
+|Clause
+
+|List
+|Local and global: "List 1", "List 2", "List A.1"...
+|Clause
+
+|List item (unordered)
+|All levels: "—"
+|List (first level), Parent ListItem (subsequent levels)
+
+|List item (ordered)
+|First level: a), b), c)... +
+Second level: 1), 2), 3)... +
+Third level: i), ii), iii)... +
+Fourth level: a), b), c)...
+|List (first level), Parent ListItem (subsequent levels)
+
+|===
+
+
+== Clause labeling
+
+The clause labeling scheme for ISO/IEC documents follows a hierarchical structure with Arabic numerals.
+
+[source,lml]
+----
+// Clause templates
+instance ClauseLabelTemplate < LabelTemplate {
+  pattern = "Clause %n"
+  definition "Template for local clause references"
+}
+
+instance ClauseGlobalLabelTemplate < LabelTemplate {
+  pattern = "Clause %n"
+  definition "Template for global clause references"
+}
+
+instance ClauseLabeller < Labeller {
+  id = "clause_labeller"
+  sequence = ArabicNumericSequence
+  context = DocumentContext
+  type = "clause"
+  template = ClauseLabelTemplate
+  global_template = ClauseGlobalLabelTemplate
+  definition "Labeller for clauses in the main document"
+}
+----
+
+== Subclause labeling
+
+Subclauses are labeled hierarchically, inheriting the parent clause number.
+
+[source,lml]
+----
+// Subclause templates
+instance SubclauseLabelTemplate < LabelTemplate {
+  pattern = "%pn.%n"
+  definition "Template for local subclause references"
+}
+
+instance SubclauseGlobalLabelTemplate < LabelTemplate {
+  pattern = "%pn.%n"
+  definition "Template for global subclause references"
+}
+
+instance SubclauseLabeller < Labeller {
+  id = "subclause_labeller"
+  sequence = ArabicNumericSequence
+  context = ClauseContext
+  parent = ClauseLabeller
+  type = "subclause"
+  template = SubclauseLabelTemplate
+  global_template = SubclauseGlobalLabelTemplate
+  definition "Labeller for subclauses within clauses"
+}
+----
+
+== Annex labeling
+
+Annexes use uppercase alphabetic labeling.
+
+[source,lml]
+----
+instance AnnexLabelTemplate < LabelTemplate {
+  pattern = "Annex %n"
+  definition "Template for local annex references"
+}
+
+instance AnnexGlobalLabelTemplate < LabelTemplate {
+  pattern = "Annex %n"
+  definition "Template for global annex references"
+}
+
+instance AnnexLabeller < Labeller {
+  id = "annex_labeller"
+  sequence = AlphaUpperNumericSequence
+  context = DocumentContext
+  type = "annex"
+  template = AnnexLabelTemplate
+  global_template = AnnexGlobalLabelTemplate
+  definition "Labeller for annexes in the document"
+}
+----
+
+== Annex clause labeling
+
+Clauses within annexes combine the annex letter with an Arabic numeral.
+
+[source,lml]
+----
+instance AnnexClauseLabelTemplate < LabelTemplate {
+  pattern = "%pn.%n"
+  definition "Template for local annex clause references"
+}
+
+instance AnnexClauseGlobalLabelTemplate < LabelTemplate {
+  pattern = "%pn.%n"
+  definition "Template for global annex clause references"
+}
+
+instance AnnexClauseLabeller < Labeller {
+  id = "annex_clause_labeller"
+  sequence = ArabicNumericSequence
+  context = AnnexContext
+  parent = AnnexLabeller
+  type = "clause"
+  template = AnnexClauseLabelTemplate
+  global_template = AnnexClauseGlobalLabelTemplate
+  definition "Labeller for clauses within annexes"
+}
+----
+
+== Figure labeling
+
+Figures are labeled with "Figure" followed by a sequential number.
+
+[source,lml]
+----
+instance FigureLabelTemplate < LabelTemplate {
+  pattern = "Figure %n"
+  definition "Template for local figure references in the main document"
+}
+
+instance FigureGlobalLabelTemplate < LabelTemplate {
+  pattern = "Figure %n"
+  definition "Template for global figure references in the main document"
+}
+
+instance FigureLabeller < Labeller {
+  id = "figure_labeller"
+  sequence = ArabicNumericSequence
+  context = DocumentContext
+  type = "figure"
+  template = FigureLabelTemplate
+  global_template = FigureGlobalLabelTemplate
+  definition "Labeller for figures in the main document"
+}
+----
+
+== Annex figure labeling
+
+Figures in annexes combine the annex letter with a figure number.
+
+[source,lml]
+----
+instance AnnexFigureLabelTemplate < LabelTemplate {
+  pattern = "Figure %pn.%n"
+  definition "Template for local figure references in annexes"
+}
+
+instance AnnexFigureGlobalLabelTemplate < LabelTemplate {
+  pattern = "Figure %pn.%n"
+  definition "Template for global figure references in annexes"
+}
+
+instance AnnexFigureLabeller < Labeller {
+  id = "annex_figure_labeller"
+  sequence = ArabicNumericSequence
+  context = AnnexContext
+  parent = AnnexLabeller
+  type = "figure"
+  template = AnnexFigureLabelTemplate
+  global_template = AnnexFigureGlobalLabelTemplate
+  definition "Labeller for figures in annexes"
+}
+----
+
+== Subfigure labeling
+
+Subfigures use lowercase alphabetic labels.
+
+[source,lml]
+----
+instance SubfigureLabelTemplate < LabelTemplate {
+  pattern = "Figure %pn %n)"
+  definition "Template for local subfigure references"
+}
+
+instance SubfigureGlobalLabelTemplate < LabelTemplate {
+  pattern = "Figure %pn %n)"
+  definition "Template for global subfigure references"
+}
+
+instance SubfigureLabeller < Labeller {
+  id = "subfigure_labeller"
+  sequence = AlphaLowerNumericSequence
+  context = DocumentContext
+  parent = FigureLabeller
+  type = "subfigure"
+  template = SubfigureLabelTemplate
+  global_template = SubfigureGlobalLabelTemplate
+  definition "Labeller for subfigures in the document"
+}
+----
+
+== Table labeling
+
+Tables are labeled with "Table" followed by a sequential number.
+
+[source,lml]
+----
+instance TableLabelTemplate < LabelTemplate {
+  pattern = "Table %n"
+  definition "Template for local table references in the main document"
+}
+
+instance TableGlobalLabelTemplate < LabelTemplate {
+  pattern = "Table %n"
+  definition "Template for global table references in the main document"
+}
+
+instance TableLabeller < Labeller {
+  id = "table_labeller"
+  sequence = ArabicNumericSequence
+  context = DocumentContext
+  type = "table"
+  template = TableLabelTemplate
+  global_template = TableGlobalLabelTemplate
+  definition "Labeller for tables in the main document"
+}
+----
+
+== Annex table labeling
+
+Tables in annexes combine the annex letter with a table number.
+
+[source,lml]
+----
+instance AnnexTableLabelTemplate < LabelTemplate {
+  pattern = "Table %pn.%n"
+  definition "Template for local table references in annexes"
+}
+
+instance AnnexTableGlobalLabelTemplate < LabelTemplate {
+  pattern = "Table %pn.%n"
+  definition "Template for global table references in annexes"
+}
+
+instance AnnexTableLabeller < Labeller {
+  id = "annex_table_labeller"
+  sequence = ArabicNumericSequence
+  context = AnnexContext
+  parent = AnnexLabeller
+  type = "table"
+  template = AnnexTableLabelTemplate
+  global_template = AnnexTableGlobalLabelTemplate
+  definition "Labeller for tables in annexes"
+}
+----
+
+== Note labeling
+
+Notes use conditional labeling based on the number of notes in a context. A single note is labeled simply as "NOTE" without a number, while multiple notes in the same context are labeled as "NOTE 1", "NOTE 2", etc.
+
+[source,lml]
+----
+instance NoteSingleLabelTemplate < LabelTemplate {
+  pattern = "NOTE"
+  definition "Template for single note references"
+}
+
+instance NoteMultipleLabelTemplate < LabelTemplate {
+  pattern = "NOTE %n"
+  definition "Template for multiple note references"
+  condition = {
+    type = "element_count_gt"
+    threshold = 1
+  }
+}
+
+instance NoteSingleGlobalLabelTemplate < LabelTemplate {
+  pattern = "%parent, NOTE"
+  definition "Template for global single note references"
+}
+
+instance NoteMultipleGlobalLabelTemplate < LabelTemplate {
+  pattern = "%parent, NOTE %n"
+  definition "Template for global multiple note references"
+  condition = {
+    type = "element_count_gt"
+    threshold = 1
+  }
+}
+
+instance NoteLabeller < Labeller {
+  id = "note_labeller"
+  sequence = ArabicNumericSequence
+  context = ClauseContext
+  type = "note"
+  template = [NoteSingleLabelTemplate, NoteMultipleLabelTemplate]
+  global_template = [NoteSingleGlobalLabelTemplate, NoteMultipleGlobalLabelTemplate]
+  definition "Labeller for notes in clauses with conditional templates based on note count"
+}
+----
+
+The `condition` property uses a LabelContextCondition object to determine which template to use based on element count. The condition `element_count_gt` with threshold 1 means "use this template when there are more than 1 notes in the context."
+
+== Example labeling
+
+Examples use conditional labeling similar to notes. A single example is labeled simply as "EXAMPLE" without a number, while multiple examples in the same context are labeled as "EXAMPLE 1", "EXAMPLE 2", etc.
+
+[source,lml]
+----
+instance ExampleSingleLabelTemplate < LabelTemplate {
+  pattern = "EXAMPLE"
+  definition "Template for single example references"
+}
+
+instance ExampleMultipleLabelTemplate < LabelTemplate {
+  pattern = "EXAMPLE %n"
+  definition "Template for multiple example references"
+  condition = {
+    type = "element_count_gt"
+    threshold = 1
+  }
+}
+
+instance ExampleSingleGlobalLabelTemplate < LabelTemplate {
+  pattern = "%parent, EXAMPLE"
+  definition "Template for global single example references"
+}
+
+instance ExampleMultipleGlobalLabelTemplate < LabelTemplate {
+  pattern = "%parent, EXAMPLE %n"
+  definition "Template for global multiple example references"
+  condition = {
+    type = "element_count_gt"
+    threshold = 1
+  }
+}
+
+instance ExampleLabeller < Labeller {
+  id = "example_labeller"
+  sequence = ArabicNumericSequence
+  context = ClauseContext
+  type = "example"
+  template = [ExampleSingleLabelTemplate, ExampleMultipleLabelTemplate]
+  global_template = [ExampleSingleGlobalLabelTemplate, ExampleMultipleGlobalLabelTemplate]
+  definition "Labeller for examples in clauses with conditional templates based on example count"
+}
+----
+
+Just like with notes, the LabelContextCondition determines which template to use based on the count of examples within the context.
+
+== Formula labeling
+
+Formulas are labeled with parenthesized numbers.
+
+[source,lml]
+----
+instance FormulaLabelTemplate < LabelTemplate {
+  pattern = "(%n)"
+  definition "Template for local formula references in the main document"
+}
+
+instance FormulaGlobalLabelTemplate < LabelTemplate {
+  pattern = "Formula (%n)"
+  definition "Template for global formula references in the main document"
+}
+
+instance FormulaLabeller < Labeller {
+  id = "formula_labeller"
+  sequence = ArabicNumericSequence
+  context = DocumentContext
+  type = "formula"
+  template = FormulaLabelTemplate
+  global_template = FormulaGlobalLabelTemplate
+  definition "Labeller for formulas in the main document"
+}
+----
+
+== Annex formula labeling
+
+Formulas in annexes combine the annex letter with a formula number.
+
+[source,lml]
+----
+instance AnnexFormulaLabelTemplate < LabelTemplate {
+  pattern = "(%pn.%n)"
+  definition "Template for local formula references in annexes"
+}
+
+instance AnnexFormulaGlobalLabelTemplate < LabelTemplate {
+  pattern = "Formula (%pn.%n)"
+  definition "Template for global formula references in annexes"
+}
+
+instance AnnexFormulaLabeller < Labeller {
+  id = "annex_formula_labeller"
+  sequence = ArabicNumericSequence
+  context = AnnexContext
+  parent = AnnexLabeller
+  type = "formula"
+  template = AnnexFormulaLabelTemplate
+  global_template = AnnexFormulaGlobalLabelTemplate
+  definition "Labeller for formulas in annexes"
+}
+----
+
+== List labeling
+
+Lists are labeled with "List" followed by a sequential number.
+
+[source,lml]
+----
+instance ListLabelTemplate < LabelTemplate {
+  pattern = "List %n"
+  definition "Template for local list references in the main document"
+}
+
+instance ListGlobalLabelTemplate < LabelTemplate {
+  pattern = "List %n"
+  definition "Template for global list references in the main document"
+}
+
+instance ListLabeller < Labeller {
+  id = "list_labeller"
+  sequence = ArabicNumericSequence
+  context = ClauseContext
+  type = "list"
+  template = ListLabelTemplate
+  global_template = ListGlobalLabelTemplate
+  definition "Labeller for lists in the main document"
+}
+----
+
+== Annex list labeling
+
+Lists in annexes combine the annex letter with a list number.
+
+[source,lml]
+----
+instance AnnexListLabelTemplate < LabelTemplate {
+  pattern = "List %pn.%n"
+  definition "Template for local list references in annexes"
+}
+
+instance AnnexListGlobalLabelTemplate < LabelTemplate {
+  pattern = "List %pn.%n"
+  definition "Template for global list references in annexes"
+}
+
+instance AnnexListLabeller < Labeller {
+  id = "annex_list_labeller"
+  sequence = ArabicNumericSequence
+  context = AnnexContext
+  parent = AnnexLabeller
+  type = "list"
+  template = AnnexListLabelTemplate
+  global_template = AnnexListGlobalLabelTemplate
+  definition "Labeller for lists in annexes"
+}
+----
+
+== Unordered list item labeling
+
+Unordered list items use a dash character at all levels.
+
+[source,lml]
+----
+instance UnorderedListItemLabelTemplate < LabelTemplate {
+  pattern = "—"
+  definition "Template for unordered list items at all levels"
+}
+
+instance UnorderedListItemLabeller < Labeller {
+  id = "unordered_list_item_labeller"
+  sequence = ArabicNumericSequence  // Not used but required
+  context = ListContext
+  type = "list_item_unordered"
+  template = UnorderedListItemLabelTemplate
+  definition "Labeller for unordered list items"
+}
+----
+
+== Ordered list item labeling
+
+Ordered list items use different sequences at different levels.
+
+[source,lml]
+----
+// Level 1: a), b), c)...
+instance OrderedListItemLevel1LabelTemplate < LabelTemplate {
+  pattern = "%n)"
+  definition "Template for first level ordered list items"
+}
+
+instance OrderedListItemLevel1Labeller < Labeller {
+  id = "ordered_list_item_level1_labeller"
+  sequence = AlphaLowerNumericSequence
+  context = ListContext
+  type = "list_item_ordered_level1"
+  template = OrderedListItemLevel1LabelTemplate
+  definition "Labeller for first level ordered list items"
+}
+
+// Level 2: 1), 2), 3)...
+instance OrderedListItemLevel2LabelTemplate < LabelTemplate {
+  pattern = "%n)"
+  definition "Template for second level ordered list items"
+}
+
+instance OrderedListItemLevel2Labeller < Labeller {
+  id = "ordered_list_item_level2_labeller"
+  sequence = ArabicNumericSequence
+  context = ListContext
+  parent = OrderedListItemLevel1Labeller
+  type = "list_item_ordered_level2"
+  template = OrderedListItemLevel2LabelTemplate
+  definition "Labeller for second level ordered list items"
+}
+
+// Level 3: i), ii), iii)...
+instance OrderedListItemLevel3LabelTemplate < LabelTemplate {
+  pattern = "%n)"
+  definition "Template for third level ordered list items"
+}
+
+instance OrderedListItemLevel3Labeller < Labeller {
+  id = "ordered_list_item_level3_labeller"
+  sequence = RomanLowerNumericSequence
+  context = ListContext
+  parent = OrderedListItemLevel2Labeller
+  type = "list_item_ordered_level3"
+  template = OrderedListItemLevel3LabelTemplate
+  definition "Labeller for third level ordered list items"
+}
+
+// Level 4: a), b), c)... (repeats first level)
+instance OrderedListItemLevel4LabelTemplate < LabelTemplate {
+  pattern = "%n)"
+  definition "Template for fourth level ordered list items"
+}
+
+instance OrderedListItemLevel4Labeller < Labeller {
+  id = "ordered_list_item_level4_labeller"
+  sequence = AlphaLowerNumericSequence
+  context = ListContext
+  parent = OrderedListItemLevel3Labeller
+  type = "list_item_ordered_level4"
+  template = OrderedListItemLevel4LabelTemplate
+  definition "Labeller for fourth level ordered list items"
+}
+----

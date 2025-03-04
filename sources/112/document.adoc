@@ -266,7 +266,7 @@ the global reference counterpart of "Clause 3, a)".
 Local references can be preferred over global references when referring content
 within the same context is more concise for the reader, due to omission of the
 duplicated self-reference.
-+
+
 [example]
 ====
 Within a list, a reference to "a)" is more concise than "List 1, a)".
@@ -656,11 +656,19 @@ class LabelTemplate {
       }
     }
   }
+  attribute condition, LabelContextCondition {
+    definition {
+      Condition of the LabelContext for selecting the pattern, select conditions
+      that return "true" first, then select the first pattern.
+    }
+    cardinality 0..1
+  }
 }
 ----
 
 The `pattern` attribute is a string that contains placeholders for labeller
 values and any fixed text necessary.
+
 
 The following placeholders are supported:
 
@@ -819,6 +827,71 @@ The values would be:
 ====
 
 
+The `condition` attribute is a LabelContextCondition object that defines the
+condition for selecting the pattern.
+
+* If the condition is met, the pattern is selected.
+* If multiple patterns have conditions that are met, the first pattern is
+selected.
++
+It is crucial to note that it is possible to create multiple matching
+templates that have overlapping conditions.
++
+[example]
+====
+A template with a `condition` of "element_count_gt" and a threshold of 1, and
+another template with a condition of "element_count_eq" and a threshold of 2,
+overlap when the count is equal to 2.
+====
+
+* If no conditions are met, the first pattern is selected.
+
+
+=== Label context condition
+
+The LabelContextCondition class defines a context condition for a labeller to
+determine which pattern to use.
+
+In some labeling systems, the labeller may need to switch between different
+conditions based on the defined thresholds.
+
+[example]
+====
+In the ISO/IEC labelling system, a "NOTE" label takes on these forms depending
+on the number of notes in a clause:
+
+* "NOTE" if there is only one note
+* "NOTE 1", "NOTE 2" if there are more than one notes
+====
+
+NOTE: This is only used for conditional label templates.
+
+[source,lml]
+----
+class LabelContextCondition {
+  attribute type, String {
+    definition "Type of label context condition"
+
+    values {
+      value "element_count_gt" {
+        definition "Element count greater than"
+      }
+      value "element_count_eq" {
+        definition "Element count equal to"
+      }
+      value "element_count_lt" {
+        definition "Element count less than"
+      }
+    }
+  }
+  attribute threshold, Integer {
+    definition "Threshold value for the label context condition"
+  }
+}
+----
+
+
+
 
 === Label context
 
@@ -840,8 +913,29 @@ class LabelContext {
     definition "Labellers (of different types) that are bound to this label context"
     collection true
   }
+  // attribute targets, Label {
+  //   definition "Labels that are assigned to content elements within this label context"
+  //   collection true
+  // }
 }
 ----
+
+The `name` attribute is a string that identifies the label context.
+
+The `parent` attribute is a reference to the parent label context to which this
+label context relates.
+
+The `element` attribute is a reference to the content element associated with
+the label context.
+
+The `labellers` attribute is a collection of Labeller objects that are bound to
+this label context.
+
+// The `targets` attribute is a collection of Label objects that are assigned to
+// content elements within this label context.
+
+// NOTE: The `targets` attribute is used for tracking the targets for content
+// elements, in order to achieve label template differentiation based on count.
 
 [example]
 ====
@@ -887,15 +981,20 @@ class Labeller {
   attribute template, LabelTemplate {
     definition {
       Template for generating the label. The template direction must be
-      respected when generating the label.
+      respected when generating the label. If there are more than one templates,
+      the labeller should select the appropriate template based on the condition.
     }
+    collection true
   }
 
   attribute global_template, LabelTemplate {
     definition {
       Template for generating the fully qualified, global label. The template
-      direction must be respected when generating the label.
+      direction must be respected when generating the label. If there are multiple
+      global templates, the labeller should choose the appropriate one based
+      on the context and condition.
     }
+    collection true
   }
 
   method value_for_position(position: Integer) {
@@ -971,28 +1070,30 @@ class Labeller {
 ====
 [source]
 ----
-+-------------------+         +-------------------+
-| Annex Labeller    |         | Figure Labeller   |
-|-------------------|<--------|-------------------|
-| id: "annex"       |         | id: "figure"      |
-| sequence: A,B,C.. |         | sequence: 1,2,3.. |
-| context: document |         | context: annex    |
-+-------------------+         +-------------------+
-        |                               |
-        v                               v
-+-------------------+         +-------------------+
-| Output: "A"       |         | Output: "1"       |
-+-------------------+         +-------------------+
-        |                               |
-        |                               |
-        v                               v
-        +---------------+---------------+
-                        |
-                        v
++-------------------+           +-------------------+
+| Annex Labeller    |  parent   | Figure Labeller   |
+|-------------------|<----------|-------------------|
+| id: "annex"       |           | id: "figure"      |
+| sequence: A,B,C.. |           | sequence: 1,2,3.. |
+| context: document |           | context: annex    |
++-------------------+           +-------------------+
+          |                              | %n: "1"
+          | %n: "A" - - - - - - - - - -> | %pn: "A"
+          v               + - - - - - -> v %parent: "Annex A"
++-------------------+     |     +-------------------+
+| LabelTemplate     |     |     | LabelTemplate     |
+|-------------------|-----+     |-------------------|
+| "Annex %n"        |           | "Figure %pn.%n"   |
+| %n: "A"           |           | %pn: "A"; %n: "1" |
+| -> "Annex A"      |           | -> "Figure A.1"   |
++-------------------+           +-------------------+
+                                        |
+                          +-------------+
+                          |
+                          v
                +---------------------+
                | Combined Pattern    |
                |---------------------|
-               | "Figure %parent.%n" |
                | -> "Figure A.1"     |
                +---------------------+
 ----
@@ -1179,6 +1280,66 @@ The values would be:
 > FigureGlobalLabelTemplate.global_value_for_position(3) => "Section 1, Figure III"
 ----
 ====
+
+
+.Conditional NOTE label
+[example]
+====
+The following definition describes a labeller for tracking Notes in a Clause
+with a conditional label template.
+
+[source,lml]
+----
+instance ClauseContext < LabelContext {
+  labellers = ["id:notes_labeller"]
+}
+
+instance NotesLabeller < Labeller {
+  id = "notes_labeller"
+  sequence = ArabicNumericSequence
+  context = ClauseContext
+  parent = null // Does not rely on a parent Labeller
+  template = [NoteSingleLabelTemplate, NoteMultipleLabelTemplate]
+  global_template = [NoteSingleGlobalLabelTemplate, NoteMultipleGlobalLabelTemplate]
+}
+
+instance NoteSingleLabelTemplate < LabelTemplate {
+  pattern = "NOTE"
+}
+
+instance NoteMultipleLabelTemplate < LabelTemplate {
+  pattern = "NOTE %n"
+  condition = {
+    type = "element_count_gt"
+    threshold = 1
+  }
+}
+
+instance NoteSingleGlobalLabelTemplate < LabelTemplate {
+  pattern = "%parent, NOTE"
+}
+
+instance NoteMultipleGlobalLabelTemplate < LabelTemplate {
+  pattern = "%parent, NOTE %n"
+  condition = {
+    type = "element_count_gt"
+    threshold = 1
+  }
+}
+----
+
+The values would be:
+
+----
+// If there is only one note
+> NotesLabeller.value_for_position(1) => "NOTE"
+
+// If there are more than one notes
+> NotesLabeller.value_for_position(1) => "NOTE 1"
+> NotesLabeller.value_for_position(2) => "NOTE 2"
+----
+====
+
 
 
 === Label
@@ -1458,8 +1619,29 @@ instance FigureGlobalLabelTemplate < LabelTemplate {
 
 === Algorithm to resolve the label for a content element
 
+==== General
+
 The following algorithm describe how to resolve the label for a ContentElement
 object in a LADL-compliant runtime.
+
+==== Prerequisites
+
+Before resolving a label, the following prerequisites must be met:
+
+. A valid LabelStyle must be defined with appropriate Labeller objects.
+. ContentElement objects must be correctly structured in a content tree.
+. LabelContext objects must be properly associated with ContentElement objects.
+. Each Labeller must have at least one valid LabelTemplate.
+
+The label resolution algorithm also requires:
+
+* Access to the current element count of similar elements in the same context (for conditional templates)
+
+* Ability to track labeller state across the document
+
+* Proper parent-child relationships between Labeller objects
+
+==== Algorithm
 
 . From the ContentElement, find its applicable LabelContext object. The
 applicable LabelContext object is one that has a Labeller that can label the
@@ -1477,6 +1659,14 @@ applicable to the ContentElement.
 . Ask the Labeller object to generate a label for the ContentElement.
 
 .. The Labeller object will use its LabelTemplate object to generate the label.
+
+... If the Labeller has multiple LabelTemplate objects with conditions, evaluate each condition:
+
+.... For each LabelTemplate, check if its LabelContextCondition evaluates to true for the current context.
+
+.... Select the first LabelTemplate whose condition evaluates to true.
+
+.... If no conditions evaluate to true, select the first LabelTemplate without a condition, or the first one if all have conditions
 
 ... If the LabelTemplate requires a sequence element, it will ask its Sequence object to generate a value for the position of the ContentElement in the LabelContext.
 
@@ -1640,81 +1830,5 @@ in the diagram.
 
 EDITOR: Add instance model definitions
 
-=== ISO/IEC label style
-
-The ISO/IEC label style originates from and implements the requirements of:
-
-* the ISO/IEC Directives, Part 2
-* the ISO House Style.
-
-This style defines the labeling scheme used by ISO/IEC deliverables.
-
-It defines the following labeling requirements:
-
-==== ISO/IEC standard labeling scheme
-
-The element labeling scheme for ISO/IEC is specified as follows.
-
-.Clause labeling
-[%header,cols="1,2,2"]
-|===
-|Element |Labeling specification |LabelContext
-
-|Clause
-|Local and global: "Clause 1", "Clause 2"...
-|Document
-
-|Subclause
-|Local and global: "1.1", "1.2", "2.1.1"... +
-Uses parent's sequence number
-|Parent Clause
-
-|Annex
-|Local and global: "Annex A", "Annex B", "Annex AA"...
-|Document
-
-|Annex clause
-|Local and global: "A.1", "A.2"...
-|Annex
-
-|Figure
-|Local and global: "Figure 1", "Figure A.1" +
-Subfigure: "Figure A.1 a)"
-|Document (for main document) +
-Annex (for annex figures)
-
-|Table
-|Local and global: "Table 1", "Table A.1"
-|Document (for main document) +
-Annex (for annex tables)
-
-|NOTE
-|Local: "NOTE 1", "NOTE 2"... +
-Global: "Clause X, NOTE 1" +
-Special case: If single note, simply "NOTE" without number
-|Clause or Subclause
-
-|EXAMPLE
-|Local: "EXAMPLE 1", "EXAMPLE 2"... +
-Global: "Clause X, EXAMPLE 1", "1.2.3, EXAMPLE 2"
-|Clause or Subclause
-
-|Formula
-|Same pattern as Figure/Table
-|Clause
-
-|List
-|Local and global: "List 1", "List 2", "List A.1"...
-|Clause
-
-|List item (unordered)
-|All levels: "—"
-|List (first level), Parent ListItem (subsequent levels)
-
-|List item (ordered)
-|First level: a), b), c)... +
-Second level: 1), 2), 3)... +
-Third level: i), ii), iii)... +
-Fourth level: a), b), c)...
-|List (first level), Parent ListItem (subsequent levels)
-|===
+[appendix]
+include::iso_iec_label_style.adoc[leveloffset=1]
