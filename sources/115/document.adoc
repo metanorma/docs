@@ -1,0 +1,677 @@
+= MN 115: Internationalized semantic punctuation framework
+:docnumber: 115
+:edition: 1
+:revdate: 2025-09-23
+:copyright-year: 2025
+:language: en
+:title-main-en: Internationalized semantic punctuation framework
+:doctype: standard
+:status: published
+:mn-document-class: ribose
+:mn-output-extensions: xml,html,pdf,rxl
+:local-cache-only:
+
+.Foreword
+This document is part of the Metanorma specifications series that defines
+requirements for internationalized document rendering, specifically addressing
+punctuation usage across multiple languages and writing systems.
+
+== Introduction
+
+Metanorma is a semantic authoring system that supports multiple languages and
+the publication of multi-lingual output.
+
+Support of semantic representation using native punctuation in their respective
+languages is essential for the accurate portrayal of information and to meet
+cultural and linguistic expectations.
+
+This document defines a framework for semantic punctuation usage across multiple
+languages and writing systems.
+
+The document covers the following languages and writing systems:
+
+* Traditional Chinese (Taiwan/Hong Kong conventions)
+* Simplified Chinese (Mainland China conventions)
+* Japanese (including vertical text layout)
+* Korean (Hangul-specific rules)
+* (informative) Latin-script languages (English, Spanish, French, Russian, etc.)
+
+The document defines punctuation marks into primary usage categories based
+on the semantic function of the punctuation symbols.
+
+This document addresses critical challenges including:
+
+Internationalization of auto-numbered elements::
+Applying appropriate punctuation to document elements, such as: clauses, lists,
+figures, tables and references use. Enabling definition of Label Auto-assignment
+Definition Language profiles (LADL) (<<MN112>>).
+
+Internationalization of bibliographic citations::
+Applying appropriate punctuation to in-text citations and reference lists,
+allowing for citation style definition and language-specific variations.
+
+Automatic spacing::
+Applying appropriate whitespace around punctuation marks based on
+language-specific rules.
+
+Rendering in vertical text layouts::
+Proper punctuation positioning and transformation in vertical text modes.
+
+
+== Scope
+
+This document defines a framework for semantic punctuation usage across multiple
+languages and writing systems.
+
+
+== Normative references
+
+* [[[MN112,MN 112]]], MN 112: _Label Auto-assignment Definition Language (LADL) specification_
+* [[[ISO10646,ISO/IEC 10646:2020]]]
+* [[[Unicode15,Unicode 15.1]]]
+
+
+== Terms and definitions
+
+=== punctuation mark
+
+symbol used in written language to clarify meaning, indicate pauses, separate
+elements, or convey syntactic relationships
+
+=== usage category
+
+functional classification of punctuation marks based on their primary purpose in
+text structure
+
+[example]
+====
+Sentence delimiters, pause indicators, grouping markers.
+====
+
+=== language variant
+
+specific form or application of a punctuation mark that differs between
+languages or writing systems
+
+[example]
+====
+Period: "." (Latin) vs "。" (CJK)
+====
+
+=== full-width character
+
+character that occupies the width of two half-width characters, commonly used in
+East Asian typography
+
+=== half-width character
+
+character that occupies standard Latin character width, used in Western
+typography and mixed East Asian text
+
+=== vertical text layout
+
+text arrangement where characters flow from top to bottom in columns arranged
+from right to left, traditional in East Asian documents
+
+=== spacing rule
+
+specification for whitespace insertion around punctuation marks that varies by
+language and context
+
+
+== Framework
+
+This framework provides guidelines for the consistent application of punctuation
+marks across different languages and writing systems. It aims to ensure that
+punctuation usage aligns with semantic meaning and cultural conventions.
+
+Punctuation profile:: A set of rules and mappings that define how punctuation
+marks are applied in a specific language or document context. Even in the same
+language, different publishers may require different punctuation styles.
++
+[example]
+====
+In Japanese, the
+https://www.bunka.go.jp/seisaku/bunkashingikai/kokugo/hokoku/pdf/93651301_01.pdf[「公用文作成の考え方」（建議）（付）「公用文作成の考え方（文化審議会建議）」解説] of
+the Agency for Cultural Affairs (2022) specifies different punctuation rules
+from JIS X 8301:2019, the Japanese Industrial Standard stating requirements for
+punctuation in Japanese standards:
+
+* sentence pausal mark: the former requires use of the "ten" `、` but the latter
+requires the use of the full-width western "comma" `，`.
+====
+
+Punctuation mark:: A symbol used in writing to clarify meaning, indicate pauses,
+separate elements, or convey syntactic relationships. Each punctuation mark has
+a specific semantic function that may vary across languages. Not all marks
+exist in all languages. A mark is commonly represented by one or more glyphs.
+
+Semantic function:: The primary purpose or role of a punctuation mark in text,
+which may include indicating sentence boundaries, pauses, grouping, emphasis,
+indicating relationships, semantic indication such as for named elements.
++
+[example]
+====
+The semantic function of "sentence pause" is represented by
+different punctuation marks in different languages:
+
+* Japanese: `、` (full-width "ten")
+* Chinese: `，` (full-width comma)
+* English: `,` (half-width comma)
+====
++
+Not all semantic functions exist in all languages.
++
+[example]
+The semantic function of "enumeration delimiter" used in
+Traditional Chinese and Simplified Chinese does not exist in English or
+Japanese.
+
+
+Punctuation rule:: A guideline that specifies how a punctuation mark should be
+used in a particular language or context, including placement, spacing, and
+variations. A semantic function may be represented by different punctuation
+marks in different languages.
+
+A punctuation profile is defined by:
+
+* A set of semantic functions that apply to semantic elements in text
+* Punctuation marks that are associated with each semantic function
+* A collection of punctuation rules that govern their usage
+
+Given a punctuation profile, a document rendering with appropriate punctuation
+that suits the target audience can be achieved.
+
+
+== Punctuation semantic functions
+
+=== General
+
+Punctuation marks are classified into semantic function categories.
+
+=== Sentence stops
+
+==== Declarative stop
+
+Mark that indicates the end of a complete grammatical statement.
+
+[cols="2,2,2,3"]
+|===
+|Language |Name of Mark |Symbol |Example
+
+|English
+|period
+|`.`
+|This is a sentence.
+
+|Traditional Chinese
+|句號
+|`。`
+|這是一句句子。
+
+|Simplified Chinese
+|句号
+|`。`
+|这是一句句子。
+
+|Japanese
+|句点
+|`。`
+|これは文です。
+
+|Korean
+|마침표
+|`.`
+|이것은 문장입니다.
+
+|===
+
+[NOTE]
+====
+Full-width vs half-width selection:
+
+* CJK languages: Use full-width forms (。？！) in native text
+* Latin languages: Use half-width forms (. ? !) with standard spacing
+* Mixed text: Follow primary language of the sentence
+
+Spacing rules:
+
+* No space before sentence delimiters in any language
+* Space after delimiter when followed by same-script text
+* No space after delimiter at paragraph end
+
+Vertical text handling:
+
+* Period (。) remains in same position
+* Question mark (？) and exclamation mark (！) remain in same position
+* No rotation required for CJK sentence delimiters
+====
+
+==== Interrogative stop
+
+[cols="2,2,2,3"]
+|===
+|Language |Name of Mark |Symbol |Example
+
+|English
+|question mark
+|`?`
+|Is this a question?
+
+|Traditional Chinese
+|問號
+|`？`
+|這是問題嗎？
+
+|Simplified Chinese
+|问号
+|`？`
+|这是问题吗？
+
+|Japanese
+|疑問符
+|`？`
+|これは質問ですか？
+
+|Korean
+|물음표
+|`?`
+|이것은 질문입니까?
+
+|===
+
+==== Exclamatory stop
+
+[cols="2,2,2,3"]
+|===
+|Language |Name of Mark |Symbol |Example
+
+|English
+|exclamation mark
+|`!`
+|What a great day!
+
+|Traditional Chinese
+|感嘆號
+|`！`
+|多麼美好的一天！
+
+|Simplified Chinese
+|感叹号
+|`！`
+|多么美好的一天！
+
+|Japanese
+|感嘆符
+|`！`
+|なんて素晴らしい日だ！
+
+|Korean
+|느낌표
+|`!`
+|정말 좋은 날이네요!
+
+|===
+
+
+=== Sentence pause indicators
+
+==== General
+
+Pause indicators provide breathing space within sentences and separate
+distinct elements.
+
+==== Minor pause
+
+[cols="2,2,2,3"]
+|===
+|Language |Name of Mark |Symbol |Example
+
+|English
+|comma
+|`,`
+|This is a sentence, with a pause.
+
+|Traditional Chinese
+|逗號
+|`，`
+|這是一句句子，有停頓。
+
+|Simplified Chinese
+|逗号
+|`，`
+|这是一句句子，有停顿。
+
+|Japanese
+|読点
+|`，`
+|これは文です，停止があります。
+
+|Korean
+|쉼표
+|`,`
+|이것은 문장입니다, 일시정지가 있습니다.
+
+|===
+
+==== Enumeration delimiter
+
+[cols="2,2,2,3"]
+|===
+|Language |Name of Mark |Symbol |Example
+
+|English
+|comma
+|`,`
+|First item, second item, third item.
+
+|Traditional Chinese
+|頓號
+|`、`
+|第一項、第二項、第三項。
+
+|Simplified Chinese
+|顿号
+|`、`
+|第一项、第二项、第三项。
+
+|Japanese
+|中黒
+|`・`
+|第一項・第二項・第三項。
+
+|Korean
+|모점
+|`,`
+|첫 번째 항목, 두 번째 항목, 세 번째 항목.
+
+|===
+
+==== Connecting delimiter (interpunct)
+
+Japanese middle punctuation mark used to separate items in a list.
+
+[cols="2,2,2,3"]
+|===
+|Language |Name of Mark |Symbol |Example
+
+|English
+|middle dot
+|`·`
+|First item · Second item · Third item
+
+|Traditional Chinese
+|間隔號
+|`·`
+|第一項·第二項·第三項
+
+|Simplified Chinese
+|间隔号
+|`·`
+|第一项·第二项·第三项
+
+|Japanese
+|中黒
+|`・`
+|第一項・第二項・第三項
+
+|Korean
+|가운뎃점
+|`·`
+|첫 번째 항목·두 번째 항목·세 번째 항목
+
+|===
+
+
+=== Named elements
+
+==== Title mark
+
+==== Name mark
+
+== Punctuation categories
+
+=== General principles
+
+Punctuation marks are classified by their primary functional usage rather than
+their linguistic origin.
+
+This approach enables consistent implementation across different languages while
+accommodating language-specific variations within each functional category.
+
+Each usage category defines:
+
+* Primary function and purpose
+* Common mark variations across languages
+* Spacing requirements
+* Special handling rules
+* Integration with auto-numbering systems
+
+// Enumeration comma handling::::
+// * Japanese: Use 、 for list items, ， for clause separation
+// * Chinese: Use 、 for list items, ， for clauses
+// * Latin languages: Use , for both functions with context-dependent spacing
+
+// French spacing rules::::
+// * No space before regular comma (,)
+// * Required space before semicolon ({nbsp};)
+// * Thin space preferred in professional typography
+
+// Mixed-language lists::::
+// When lists contain mixed scripts, follow the punctuation convention of the list's primary language while maintaining readability.
+
+
+=== Grouping markers
+
+==== General
+
+Grouping markers enclose, separate, or highlight specific text elements.
+
+// Direct quotation:::
+// Marks that enclose directly quoted speech or text.
+
+// Parenthetical information:::
+// Marks that enclose supplementary or explanatory information.
+
+// Emphasis enclosure:::
+// Marks that highlight or draw attention to specific content.
+
+// Title marking:::
+// Specialized marks for book titles, article titles, and similar works.
+
+// ==== Language implementations
+
+// [cols="2,2,2,2,2,2"]
+// |===
+// |Function |English |Traditional Chinese |Simplified Chinese |Japanese |Korean
+
+// |Direct quotation +
+// 引號/引号/引用符/따옴표
+// |"..."'...' +
+// (quotation marks)
+// |「...」『...』 +
+// (引號)
+// |"..."'...' +
+// (引号)
+// |「...」『...』 +
+// (引用符)
+// |"..."'...' +
+// (따옴표)
+
+// |Parenthetical +
+// 括號/括号/括弧/괄호
+// |(...) +
+// (parentheses)
+// |（...） +
+// (括號)
+// |（...） +
+// (括号)
+// |（...） +
+// (括弧)
+// |(...) +
+// (괄호)
+
+// |Title marking +
+// 書名號/书名号/書名符號/책이름표
+// |"..." or _..._ +
+// (quotation/italics)
+// |﹏...﹏/《...》 +
+// (書名號)
+// |《...》 +
+// (书名号)
+// |『...』 +
+// (鉤括弧)
+// |『...』 +
+// (책이름표)
+
+// |Title delimiter +
+// 書章分隔號/书章分隔号/書章區切符号/책장구분
+// |N/A
+// |· +
+// (間隔號)
+// |· +
+// (间隔号)
+// |・ +
+// (中点)
+// |· +
+// (가운뎃점)
+// |===
+
+
+
+=== Conjunctors
+
+==== General
+
+Connection indicators link related elements, show relationships between parts,
+or indicate continuation across boundaries.
+
+// Range indication:::
+// Marks that show spans between values, dates, or quantities.
+
+// Name component separation:::
+// Marks that separate parts of compound names or terms.
+
+// Word division:::
+// Marks that divide words at line breaks or indicate compound structures.
+
+// ==== Language implementations
+
+// [cols="2,2,2,2,2,2"]
+// |===
+// |Function |English |Traditional Chinese |Simplified Chinese |Japanese |Korean
+
+// |Range indication +
+// 破折號/破折号/ダッシュ/줄표
+// |-/–/— +
+// (hyphen/en dash/em dash)
+// |—/～ +
+// (破折號/波浪號)
+// |—/～ +
+// (破折号/波浪号)
+// |～/ー +
+// (波ダッシュ/長音符)
+// |—/～ +
+// (줄표/물결표)
+
+// |Name separation +
+// 間隔號/间隔号/中点/가운뎃점
+// |·/- +
+// (middle dot/hyphen)
+// |· +
+// (間隔號)
+// |· +
+// (间隔号)
+// |・/･ +
+// (中点/なかてん)
+// |· +
+// (가운뎃점)
+
+// |Word division +
+// 連字號/连字号/ハイフン/하이픈
+// |- +
+// (hyphen)
+// |N/A
+// |N/A
+// |N/A
+// |N/A
+// |===
+
+
+=== Emphasis markers
+
+==== General
+
+Emphasis markers highlight specific text elements through visual modification or
+annotation.
+
+// Stress emphasis:::
+// Marks that indicate vocal stress or importance.
+
+// Proper name marking:::
+// Traditional marks that identify names and titles in classical texts.
+
+// Annotation emphasis:::
+// Marks that add supplementary information above or alongside text.
+
+// ==== Language implementations
+
+// [cols="2,2,2,2,2,2"]
+// |===
+// |Function |English |Traditional Chinese |Simplified Chinese |Japanese |Korean
+
+// |Stress emphasis +
+// 着重號/着重号/圏点/방점
+// |*bold* or _italic_ +
+// (emphasis)
+// |‥‥‥ +
+// (着重號)
+// |‥‥‥ +
+// (着重号)
+// |‥‥‥ +
+// (圏点/けんてん)
+// |*bold* or _italic_ +
+// (방점)
+
+// |Proper name marking +
+// 專名號/专名号/固有名詞線/고유명사표
+// |N/A +
+// (not used)
+// |人̲名̲ +
+// (專名號)
+// |人̲名̲ +
+// (专名号)
+// |人̲名̲ +
+// (固有名詞線)
+// |N/A +
+// (not used)
+
+// |Annotation emphasis +
+// 旁註點/旁注点/傍注/방주
+// |footnotes/superscript +
+// (annotation marks)
+// |側點 +
+// (旁註點)
+// |侧点 +
+// (旁注点)
+// |傍点 +
+// (傍注)
+// |footnotes/superscript +
+// (방주)
+// |===
+
+
+== Whitespace handling
+
+TODO: TBD.
+
+== Bibliography
+
+* [[[re_PunctuationMarks,GB/T 15834-2011]]]
+// GB/T 15834-2011. _Rules for punctuation usage in Chinese writing_. Standards Press of China. 2011.
+
+* [[[tw_punct,1]]] Taiwan Ministry of Education. _Revised Handbook of Punctuation_ (Second Edition). Ministry of Education. 2017.
+
+* [[[bunka_guidelines,1]]] Japan Cultural Affairs Agency. _Guidelines for Creating Public Documents (Cultural Affairs Council Recommendation)_. Cultural Affairs Council. 2022.
+
+* [[[kumihan-en-2,4]]] Japan Electronic Publishing Association. _Requirements for Japanese Text Layout_. W3C Working Group Note. 2012.
