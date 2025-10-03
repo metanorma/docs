@@ -185,9 +185,35 @@ that suits the target audience can be achieved.
 
 == Punctuation semantic functions
 
-=== General
+=== General principles
 
-Punctuation marks are classified into semantic function categories.
+Punctuation marks are classified into semantic function categories by their
+primary functional usage rather than their linguistic origin.
+
+This approach enables consistent implementation across different languages while
+accommodating language-specific variations within each functional category.
+
+Each usage category defines:
+
+* Primary function and purpose
+* Common mark variations across languages
+* Spacing requirements
+* Special handling rules
+* Integration with auto-numbering systems
+
+// Enumeration comma handling::::
+// * Japanese: Use 、 for list items, ， for clause separation
+// * Chinese: Use 、 for list items, ， for clauses
+// * Latin languages: Use , for both functions with context-dependent spacing
+
+// French spacing rules::::
+// * No space before regular comma (,)
+// * Required space before semicolon ({nbsp};)
+// * Thin space preferred in professional typography
+
+// Mixed-language lists::::
+// When lists contain mixed scripts, follow the punctuation convention of the list's primary language while maintaining readability.
+
 
 === Sentence stops
 
@@ -429,37 +455,6 @@ Japanese middle punctuation mark used to separate items in a list.
 
 ==== Name mark
 
-== Punctuation categories
-
-=== General principles
-
-Punctuation marks are classified by their primary functional usage rather than
-their linguistic origin.
-
-This approach enables consistent implementation across different languages while
-accommodating language-specific variations within each functional category.
-
-Each usage category defines:
-
-* Primary function and purpose
-* Common mark variations across languages
-* Spacing requirements
-* Special handling rules
-* Integration with auto-numbering systems
-
-// Enumeration comma handling::::
-// * Japanese: Use 、 for list items, ， for clause separation
-// * Chinese: Use 、 for list items, ， for clauses
-// * Latin languages: Use , for both functions with context-dependent spacing
-
-// French spacing rules::::
-// * No space before regular comma (,)
-// * Required space before semicolon ({nbsp};)
-// * Thin space preferred in professional typography
-
-// Mixed-language lists::::
-// When lists contain mixed scripts, follow the punctuation convention of the list's primary language while maintaining readability.
-
 
 === Grouping markers
 
@@ -605,11 +600,119 @@ or indicate continuation across boundaries.
 Emphasis markers highlight specific text elements through visual modification or
 annotation.
 
-// Stress emphasis:::
-// Marks that indicate vocal stress or importance.
+==== Stress emphasis
 
-// Proper name marking:::
-// Traditional marks that identify names and titles in classical texts.
+[cols="2,2,2,3"]
+|===
+|Language |Name of Mark |Symbol |Example
+
+|English
+|stress emphasis
+| *bold* or _italic_
+| This is *important* text, and this is _emphasized_ text.
+
+|Traditional Chinese
+|着重號
+|`‥‥‥`
+| 這是‥‥‥重要的文字。
+
+|Simplified Chinese
+|着重号
+|`‥‥‥`
+| 这是‥‥‥重要的文字。
+
+|Japanese
+|圏点
+|`‥‥‥`
+| これは‥‥‥重要な文章です。
+
+|Korean
+|방점
+| *bold* or _italic_
+| 이것은 *중요한* 글자입니다.
+|===
+
+
+==== Italics (TBD)
+
+
+=== Annotation markers
+
+==== General
+
+Text annotation markers provide supplementary information or references
+related to the main text content.
+
+
+==== Parenthetical annotation
+
+[cols="2,2,2,3"]
+|===
+|Language |Name of Mark |Symbol |Example
+
+|English
+|parenthetical annotation
+|(...)
+| This is a sentence (with additional information).
+
+|Traditional Chinese
+|夾註
+|（...）
+| 這是一句句子（帶有附加信息）。
+
+|Simplified Chinese
+|夹注
+|（...）
+| 这是一句句子（带有附加信息）。
+
+|Japanese
+|括弧注
+|（...）
+| これは文です（追加情報付き）。
+
+|Korean
+|괄호주
+|(...)
+| 이것은 문장입니다 (추가 정보 포함).
+
+|===
+
+==== Footnote/superscript annotation
+
+Text annotation marks that provide supplementary information or references
+related to the main text content, typically placed at the bottom of the page or
+as superscript.
+
+[cols="2,2,2,3"]
+|===
+|Language |Name of Mark |Symbol |Example
+
+|English
+|footnotes/superscript
+|footnotes/superscript
+| This is a sentence with a footnote.
+
+|Traditional Chinese
+|傍註
+| ?
+| 這是一句帶有傍註的句子。
+
+|Simplified Chinese
+|旁注
+| ?
+| 这是一句带有旁注的句子。
+
+|Japanese
+|傍注
+| ?
+| これは傍注付きの文です。
+
+|Korean
+|방주
+|footnotes/superscript
+| 이것은 각주가 있는 문장입니다.
+
+|===
 
 // Annotation emphasis:::
 // Marks that add supplementary information above or alongside text.
@@ -660,6 +763,112 @@ annotation.
 // (방주)
 // |===
 
+=== Semantic identification
+
+==== General
+
+Traditional marks that identify names and titles in classical texts.
+
+==== Title mark
+
+[cols="2,2,2,3"]
+|===
+|Language |Name of Mark |Symbol |Example
+
+|English
+|N/A
+|N/A
+|N/A
+
+|Traditional Chinese
+|書名號
+|`﹏...﹏` or `《...》`
+|我讀過《紅樓夢》。
+
+|Simplified Chinese
+|书名号
+|`《...》`, inner mark `〈...〉`
+|我读过《红楼梦》。
+
+|Japanese
+|鉤括弧
+|`『...』`
+|私は『源氏物語』を読みました。
+
+|Korean
+|책이름표
+|`『...』`
+|나는 『홍루몽』을 읽었습니다。
+
+|===
+
+==== Title delimiter
+
+[cols="2,2,2,3"]
+|===
+|Language |Name of Mark |Symbol |Example
+
+|English
+|N/A
+|N/A
+|N/A
+
+|Traditional Chinese
+|書章分隔號
+|`．`
+|《老子．道德經》
+
+|Simplified Chinese
+|书章分隔号
+|`．`
+|《老子．道德经》
+
+|Japanese
+|書章分隔符
+|`．`
+|《老子．道徳経》
+
+|Korean
+|책장구분
+|`．`
+|『노자．도덕경』
+
+|===
+
+
+
+==== Proper name mark
+
+[cols="2,2,2,3"]
+|===
+|Language |Name of Mark |Symbol |Example
+
+|English
+|N/A
+|N/A
+|N/A
+
+|Traditional Chinese
+|專名號
+|`人̲名̲`
+|我讀過《紅樓夢》，作者是曹雪芹。
+
+|Simplified Chinese
+|专名号
+|`人̲名̲`
+|我读过《红楼梦》，作者是曹雪芹。
+
+|Japanese
+|固有名詞線
+|`人̲名̲`
+|私は『紅楼夢』を読みました。著者は曹雪芹です。
+
+|Korean
+|고유명사표
+|?
+|?
+
+|===
 
 == Whitespace handling
 
