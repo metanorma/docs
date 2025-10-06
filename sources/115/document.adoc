@@ -252,6 +252,18 @@ Mark that indicates the end of a complete grammatical statement.
 
 |===
 
+NN: Korean uses half-width punctuation for commas and periods, unlike Traditional Chinese, Simplified Chinese, and Japanese which use full-width forms.
+
+NN: The placement of period and comma are different by language and by vertical/horizontal text orientation, but they do not involve different Unicode codepoints, so the browser/operating system is assumed to handle positioning appropriately.
+
+NN: In Japanese horizontal text, the period appears at the bottom right. In Japanese vertical text, the period appears below and to the right of the character.
+
+NN: In Simplified Chinese horizontal text, the period appears at the bottom left. In Simplified Chinese vertical text, the period appears below and to the right (U+FE12).
+
+NN: In Traditional Chinese, the period appears at mid-height in both horizontal and vertical text orientations.
+
+NN: Japanese full stop is often left out of standalone sentences, as it functions primarily as a separator between sentences rather than a terminator.
+
 [NOTE]
 ====
 Full-width vs half-width selection:
@@ -347,6 +359,12 @@ Vertical text handling:
 Pause indicators provide breathing space within sentences and separate
 distinct elements.
 
+NN: In Japanese horizontal text, the comma appears at the bottom right. In Japanese vertical text, the comma appears below and to the right of the character.
+
+NN: Japanese normally uses U+3001 (、) for comma. In mixed Japanese-Western text, full-width comma U+FF0C (，) can be used instead to maintain visual consistency.
+
+NN: Space can be used in Japanese corresponding to English comma or colon usage in certain contexts.
+
 ==== Minor pause
 
 [cols="2,2,2,3"]
@@ -382,6 +400,10 @@ distinct elements.
 
 ==== Enumeration delimiter
 
+NN: Traditional and Simplified Chinese use the enum comma U+3001 (、) instead of the normal comma in lists. For example, "A, B, and C" are usually rendered as "A、B及C" or "A、B、C".
+
+NN: Korean uses the interpunct for short lists instead of comma in some contexts.
+
 [cols="2,2,2,3"]
 |===
 |Language |Name of Mark |Symbol |Example
@@ -416,6 +438,14 @@ distinct elements.
 ==== Connecting delimiter (interpunct)
 
 Japanese middle punctuation mark used to separate items in a list.
+
+NN: The Japanese interpunct (Katakana middle dot `・`) is used for decimal points in Chinese numbers. For example, "3.14" becomes "三・一四".
+
+NN: In Traditional Chinese, U+2027 is used for decimal point in Chinese numbers. For example, "3.5" becomes "三‧五".
+
+NN: The interpunct is used instead of hyphen, dash, or colon in Japanese vertical text.
+
+NN: In Japanese vertical text, the middle period appears centered rather than at a specific corner position.
 
 [cols="2,2,2,3"]
 |===
@@ -461,6 +491,20 @@ Japanese middle punctuation mark used to separate items in a list.
 ==== General
 
 Grouping markers enclose, separate, or highlight specific text elements.
+
+NN: Traditional Chinese default quotation marks are U+300C and U+300D (「」). Nested quotes within quotes use U+300E and U+300F (『』).
+
+NN: In Traditional Chinese vertical text, quotation marks are rotated as U+FE41 and U+FE42 (﹁﹂).
+
+NN: Simplified Chinese quotation marks in horizontal text are officially full-width western quotes ("…'…'…"). However, corner brackets are commonly used in horizontal text, similar to Traditional Chinese.
+
+NN: In Simplified Chinese vertical text, quotation marks are ﹃…﹁…﹂…﹄, with double quotes as default and single quotes nested.
+
+NN: Japanese lenticular brackets are used as quotation marks. The double quote 『　』is used nested within single quotes 「　」. Double quotes are also used for book titles.
+
+NN: Korean quotation marks are officially double Western quotes in South Korea (guillements in North Korea), but 『...』or 「...」are often used in practice.
+
+NN: Both Traditional and Simplified Chinese use 「...」and『...』in vertical text for quotations.
 
 // Direct quotation:::
 // Marks that enclose directly quoted speech or text.
@@ -541,6 +585,22 @@ Grouping markers enclose, separate, or highlight specific text elements.
 Connection indicators link related elements, show relationships between parts,
 or indicate continuation across boundaries.
 
+NN: Em-dash is U+2E3A, which gets rendered informally as twice U+2014.
+
+NN: Range between words uses en-dash, but can also be tilde or single em-dash in CJK languages.
+
+NN: Range between numbers uses wave dash U+301C in CJK, can also be U+FF5E, and can be en-dash.
+
+NN: In Japanese, wave dash is used for ranges, separation of title from subtitle (corresponding to English colon), and as subtitle delimiter.
+
+NN: Japanese uses double wave dash instead of dash or bracket in some contexts.
+
+NN: Korean uses wave dash for numeric ranges, though en-dash is also allowed.
+
+NN: Some Japanese academic writing uses colons, though this is not universal.
+
+NN: Simplified Chinese often uses `*` for multiplication instead of traditional symbols.
+
 // Range indication:::
 // Marks that show spans between values, dates, or quantities.
 
@@ -599,6 +659,14 @@ or indicate continuation across boundaries.
 
 Emphasis markers highlight specific text elements through visual modification or
 annotation.
+
+NN: Italics are not used in CJK languages. Instead, single or double quotes or brackets are used for emphasis, or emphasis marks are applied.
+
+NN: Emphasis marks (underdot in Chinese, various forms in Japanese) are used instead of italics. These are rare online and unsupported in many Word processors, but can be achieved using CSS text-emphasis-style.
+
+NN: Japanese emphasis marks include a wide range: filled or hollow dot, circle, double circle, triangle, and "sesame" marks.
+
+NN: Emphasis marking will need to be implemented as a separate i18n function, invoked discretionarily for `<em>` spans, with a configurable emphasis mark.
 
 ==== Stress emphasis
 
@@ -769,6 +837,16 @@ as superscript.
 
 Traditional marks that identify names and titles in classical texts.
 
+NN: Title marks are to be handled in relaton-render as bibliographic punctuation, not in general l10n translation.
+
+NN: Traditional Chinese uses wavy underline U+FE4F as official title markup. Square brackets 【】and double quotation marks『』are also used. Single title marks 〈...〉are used for article and chapter titles.
+
+NN: Simplified Chinese uses《...》for titles, with inner marks 〈...〉for article and chapter titles. Square brackets【】and double quotation marks『』are also used for song titles.
+
+NN: Japanese uses『...』(double quotes) for book titles.
+
+NN: Western quotes are unofficially used in press for titles in Traditional Chinese, Japanese, and Korean.
+
 ==== Title mark
 
 [cols="2,2,2,3"]
@@ -872,7 +950,130 @@ Traditional marks that identify names and titles in classical texts.
 
 == Whitespace handling
 
-TODO: TBD.
+NN: CJK full-width space (U+3000) is rare and meaningful. It is used in specific contexts, for example as an honorific spacing for certain names (e.g., Chang Kai-shek in Chinese text).
+
+NN: Japanese requires a quarter-em space (U+2005) between Japanese text and Latin characters. This applies to the transition between Japanese characters and any Latin text.
+
+NN: There is an open question about whether the quarter-em space rule should apply between Japanese and numbers. Currently implemented to apply between Japanese and all Latin characters including numbers.
+
+NN: Japanese also requires space after non-Japanese punctuation marks, such as exclamation marks and question marks.
+
+NN: In Japanese, a single space is used at the start of paragraphs in text with little Kanji for disambiguation purposes.
+
+NN: Japanese can use U+3000 (full-width space) in text with little Kanji for better readability and disambiguation.
+
+NN: Ellipsis in CJK languages can be three dots or six dots. In horizontal text, it can be baseline or centered. In vertical text, it is centered. The six-dot form uses twice U+22EF as explicit centered markup, or twice U+2026 where centering is inexplicit.
+
+
+== Implementation
+
+=== Three classes of punctuation translation
+
+NN: There are three classes of punctuation translation/localisation in the Metanorma system:
+
+==== Bibliographic punctuation
+
+NN: Bibliographic punctuation is distinct from auto-text punctuation and is already catered for in the relaton-render gem. This class of punctuation does not need to be considered in isodoc-i18n, as it will be delegated to that gem.
+
+NN: Title marks and subtitle delimiters (such as the Japanese use of wave dash) are to be handled in relaton-render as bibliographic punctuation.
+
+==== Auto-text punctuation via l10n()
+
+NN: Auto-text punctuation translation through the l10n() function will continue to be supported. This mechanism translates Latin punctuation in automatically generated text to the appropriate target language punctuation.
+
+NN: The input to l10n() will continue to be Latin punctuation where possible, but some distinctions are not possible with Latin as a starting point.
+
+NN: Auto-text is restricted in what it should be called on to represent; ellipses are supported but not anticipated in common use.
+
+==== Direct i18n config values
+
+NN: Building text directly from i18n configuration values is also supported. It is not yet clear whether this will replace l10n() entirely, but it won't in the immediate term.
+
+=== Configurable punctuation marks
+
+NN: Most punctuation has variability and needs to be configurable. All punctuation will be configured in the i18n YAML files.
+
+NN: One configuration value for punctuation per document will be used. The system cannot flip between different punctuation styles within a language and a document.
+
+NN: Punctuation configuration will be set in i18n YAML, which will be per language in isodoc-i18n, overridable per flavour/language, and then overridable again per document.
+
+NN: The following is the set of configurable punctuation marks in isodoc-i18n:
+
+* colon
+* comma
+* enum-comma
+* semicolon
+* period
+* close-paren
+* open-paren
+* close-bracket
+* open-bracket
+* question-mark
+* exclamation-mark
+* emphasis-mark
+* em-dash
+* en-dash
+* number-en-dash
+* open-quote
+* close-quote
+* open-nested-quote
+* close-nested-quote
+* ellipse
+
+NN: A subset of the foregoing will be translated from Roman punctuation in autotext via l10n():
+
+* colon: `:`
+* comma: `,`
+* enum-comma (contextual)
+* semicolon: `;`
+* period: `.`
+* close-paren: `)`
+* open-paren: `(`
+* close-bracket: `]`
+* open-bracket: `[`
+* question-mark: `?`
+* exclamation-mark: `!`
+* emphasis-mark (contextual)
+* em-dash: `—`
+* en-dash: `–`
+* number-en-dash: `–` (invoked depending on context - both surrounding characters need to be Unicode numbers)
+* open-quote: `"`
+* close-quote: `"`
+* open-nested-quote: `'`
+* close-nested-quote: `'`
+* ellipse: `…`
+
+NN: Enum comma is not to be supported in l10n() directly. It is already handled with explicit support through the `multiple_and` i18n YAML value.
+
+NN: The input to l10n() needs to be unambiguous. In particular, the default quotation uses `" "`. Nested quotes use `' '` in templated auto-text, reserving `'` for apostrophe. Ellipse uses the single character `…`.
+
+=== Self-references in YAML configuration
+
+NN: The system needs to embed i18n YAML values within other i18n YAML values. For example:
+
+[source,yaml]
+----
+multiple_and: "%1#{ self["punct"]["enum-comma"] }%2"
+----
+
+NN: Self-references in the YAML are realized as `#{ self.label }`, for example referencing the current enum-comma:
+
+[source,yaml]
+----
+#{ self["punct"]["enum-comma"] }
+----
+
+NN: Liquid syntax is not used because Liquid is already being used to pass external variables into i18n, and Liquid needs to be unprocessed in such i18n entries.
+
+=== Writing mode parameterization
+
+NN: Script directionality has no standard code comparable to ISO 15924. The online assumption has been to use the CSS `writing-mode` style to convey directionality, as it is considered a presentation concern.
+
+NN: RFC 5646 combines language, script, and locale, none of which are related to directionality. It is further extensible, but the IANA Registry does not cater for script directionality.
+
+NN: A fourth optional parameter is added to l10n(), alongside locale, for writing_mode: `vertical-rl`, `vertical-lr`, `horizontal-tb`.
+
+NN: This allows differentiation of punctuation based on text direction, which is necessary for some CJK languages where punctuation changes between horizontal and vertical text layouts.
 
 == Bibliography
 
