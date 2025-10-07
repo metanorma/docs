@@ -21,20 +21,25 @@ punctuation usage across multiple languages and writing systems.
 Metanorma is a semantic authoring system that supports multiple languages and
 the publication of multi-lingual output.
 
-Support of semantic representation using native punctuation in their respective
-languages is essential for the accurate portrayal of information and to meet
-cultural and linguistic expectations.
+A major component of Metanorma architecture is dedicated to providing presentation rendering
+for the semantic content it encodes. This means that Metanorma often composes punctuated
+text to  represent semantic text, and that punctuation needs to follow the norms of a target
+language. Metanorma requires a semantic framework to capture the various types of punctuation
+it will add to the text it composes, and to provide well-governed rendering of that punctuation
+in the languages it supports.
 
 This document defines a framework for semantic punctuation usage across multiple
 languages and writing systems.
 
 The document covers the following languages and writing systems:
 
-* Traditional Chinese (Taiwan/Hong Kong conventions)
-* Simplified Chinese (Mainland China conventions)
-* Japanese (including vertical text layout)
-* Korean (Hangul-specific rules)
-* (informative) Latin-script languages (English, Spanish, French, Russian, etc.)
+* CJK (East Asian ideographic writing systems)
+  * Traditional Chinese (Taiwan/Hong Kong conventions)
+  * Simplified Chinese (Mainland China conventions)
+  * Japanese (including vertical text layout)
+  * Korean (Hangul-specific rules)
+* Latin-script languages (English, Spanish, French)
+* Cyrillic-script languages (Russian)
 
 The document defines punctuation marks into primary usage categories based
 on the semantic function of the punctuation symbols.
@@ -61,8 +66,12 @@ Proper punctuation positioning and transformation in vertical text modes.
 == Scope
 
 This document defines a framework for semantic punctuation usage across multiple
-languages and writing systems.
+languages and writing systems. It also outlines how that framework is realised
+in Metanorma implementation, and how its configuration can be updated.
 
+NOTE: following linguistic practice, and to avoid confusion with quotations, individual
+characters are cited in angle practice, and where necessary following by Unicode codepoint, and
+preceded by Unicode name; e.g.`<，>`;  `<，>` (U+FF0C); FULLWIDTH COMMA `<，>` (U+FF0C).
 
 == Normative references
 
@@ -73,9 +82,29 @@ languages and writing systems.
 
 == Terms and definitions
 
+=== script
+
+set of symbols representing a particular language
+
+=== writing system
+
+script, and the rules whereby it represents a particular language
+
+=== locale
+
+regional variant of a language and/or script, typically specific to a country
+
+=== ideographic
+
+written character that represents a semantic component of a language, rather than a sound in a language
+
+=== CJK
+
+Chinese, Japanese, Korean, and other writing systems based on Chinese or East Asian ideographs
+
 === punctuation mark
 
-symbol used in written language to clarify meaning, indicate pauses, separate
+symbol used in written language to clarify meaning, indicate clausal structure, separate
 elements, or convey syntactic relationships
 
 === usage category
@@ -95,12 +124,12 @@ languages or writing systems
 
 [example]
 ====
-Period: "." (Latin) vs "。" (CJK)
+Period: `<.>` (Latin) vs `<。>` (CJK)
 ====
 
 === full-width character
 
-character that occupies the width of two half-width characters, commonly used in
+character that occupies the width of an ideographic character, commonly used in
 East Asian typography
 
 === half-width character
@@ -108,15 +137,17 @@ East Asian typography
 character that occupies standard Latin character width, used in Western
 typography and mixed East Asian text
 
-=== vertical text layout
+=== directionality
 
-text arrangement where characters flow from top to bottom in columns arranged
-from right to left, traditional in East Asian documents
+text arrangement of characters, including left-to-right (LTR), used in Latin and Cyrillic,
+right-to-left (RTL), used in Hebrew and Arabic, horizontal (identical to LTR), usually used in CJK,
+and vertical (top-to-bottom in columns arranged from right to left), traditionally used in CJK
+
 
 === spacing rule
 
 specification for whitespace insertion around punctuation marks that varies by
-language and context
+language, locale, and context
 
 
 == Framework
@@ -126,8 +157,8 @@ marks across different languages and writing systems. It aims to ensure that
 punctuation usage aligns with semantic meaning and cultural conventions.
 
 Punctuation profile:: A set of rules and mappings that define how punctuation
-marks are applied in a specific language or document context. Even in the same
-language, different publishers may require different punctuation styles.
+marks are applied in a specific language, locale or document context. Even in the same
+language and locale, different publishers may require different punctuation styles.
 +
 [example]
 ====
@@ -135,29 +166,30 @@ In Japanese, the
 https://www.bunka.go.jp/seisaku/bunkashingikai/kokugo/hokoku/pdf/93651301_01.pdf[「公用文作成の考え方」（建議）（付）「公用文作成の考え方（文化審議会建議）」解説] of
 the Agency for Cultural Affairs (2022) specifies different punctuation rules
 from JIS X 8301:2019, the Japanese Industrial Standard stating requirements for
-punctuation in Japanese standards:
+punctuation in Japanese standards
 
-* sentence pausal mark: the former requires use of the "ten" `、` but the latter
-requires the use of the full-width western "comma" `，`.
+* sentence pausal mark: the former requires use of the _ten_ (IDEOGRAPHIC COMMA) `<、>` (U+3001),
+ but the latter requires the use of the full-width Latin comma, FULLWIDTH COMMA `<，>` (U+FF0C).
 ====
 
-Punctuation mark:: A symbol used in writing to clarify meaning, indicate pauses,
-separate elements, or convey syntactic relationships. Each punctuation mark has
-a specific semantic function that may vary across languages. Not all marks
+Punctuation mark:: A symbol used in writing to clarify meaning, indicate clause structure,
+separate elements, or convey syntactic relationships. Each punctuation mark can have
+several semantic functions, and these may vary across languages. Not all marks
 exist in all languages. A mark is commonly represented by one or more glyphs.
 
-Semantic function:: The primary purpose or role of a punctuation mark in text,
-which may include indicating sentence boundaries, pauses, grouping, emphasis,
-indicating relationships, semantic indication such as for named elements.
+Semantic function:: The purpose or role of a punctuation mark in text,
+which may include indicating sentence and clause boundaries, grouping, emphasis,
+indicating relationships, semantic indication such as for named elements. The correspondence
+of semantic function to punctuation mark is many-to-many.
 +
 [example]
 ====
-The semantic function of "sentence pause" is represented by
+The semantic function of "clause  delimiter within a sentence" is represented by
 different punctuation marks in different languages:
 
-* Japanese: `、` (full-width "ten")
-* Chinese: `，` (full-width comma)
-* English: `,` (half-width comma)
+* Japanese: IDEOGRAPHIC COMMA `<、>` (U+3001)
+* Chinese: FULLWIDTH COMMA `<，>` (U+FF0C)
+* English: COMMA `<,>` (U+002C)
 ====
 +
 Not all semantic functions exist in all languages.
@@ -166,21 +198,56 @@ Not all semantic functions exist in all languages.
 The semantic function of "enumeration delimiter" used in
 Traditional Chinese and Simplified Chinese does not exist in English or
 Japanese.
++
+The correspondence
+of semantic function to punctuation mark is many-to-many.
++
+[example]
+====
+In English, a period can be used as a sentence delimiter, but also as an abbreviation
+marker (_Bros._, _p.m._). So English period is a punctuation mark fulfilling two semantic
+functions. In Hebrew, there are two abbreviation markers, 
+_geresh_ `<׳>` (U+05F3) for a single word (ר׳ "r." = רבי rabbi), and _gershayim_ `<״>` (U+05F4) 
+for multi-word phrases (ארה״ב "U.S." =  ארצות הברית "United States"); these are
+distinct from the sentence delimiter:  
+ר׳  יעקב גר בארה״ב. וגם אני, "R(abbi) Yaakov lives in the U.S. And so do I".
+So the mapping of abbreviation marker function is conflated with the sentence delimiter 
+function as the period punctuation mark in English, but is split into a single-word and 
+a multi-word punctuation mark in Hebrew. 
 
+The _geresh_ also has other semantic functions, such as indicating
+numerals, or as a diacritic for non-Hebrew sounds (גם /ɡam/ "also" vs ג׳ם /dʒam/ "jam"). 
+As a diacritic, the _geresh_ is no longer punctuation, but represents phonological sounds.
+====
 
 Punctuation rule:: A guideline that specifies how a punctuation mark should be
 used in a particular language or context, including placement, spacing, and
-variations. A semantic function may be represented by different punctuation
-marks in different languages.
+variations. Some punctuation rules are completely predictable, and can be automated. Other punctuation rules are not predictable, and need to be
+applied manually
++
+[example]
+The semantic function of range in Chinese differentiates between word ranges, which use en-dash `<—>` (U+2013)
+(1月—7月 "January to July", literally "Month 1–Month 7"), and numeric ranges, which use
+wavy dash `<～>` (U+301C) (5～20個字 "5 to 20 words"). This punctuation rule is predictable: wavy dash is used between
+two numerals (including Chinese numerals).
++
+[example]
+In Hebrew, _geresh_ follows the initial letters of a word as an abbreviation mark in Hebrew, but 
+the abbreviation may involve just the first letter (ר׳ "r." = רבי "rabbi"), or more than one letter
+(גב׳ "Mrs, Ms" = גברת "lady"). It is not predictable how many letters appear in a Hebrew abbreviation:
+implementing Hebrew abbreviation on full words, in a semantic punctuation model, involves either
+a lookup table of abbreviations, or providing the already abbreviated words as input. (The latter is
+what is already done by typing גב׳, just as it is in English by typing _Mrs_ instead of `abbreviate("Mistress")`.)
 
 A punctuation profile is defined by:
 
 * A set of semantic functions that apply to semantic elements in text
 * Punctuation marks that are associated with each semantic function
-* A collection of punctuation rules that govern their usage
+* A collection of predictable punctuation rules that govern their usage
 
 Given a punctuation profile, a document rendering with appropriate punctuation
-that suits the target audience can be achieved.
+that suits the target audience can be achieved—provided that the needed punctuation
+rules can be automated.
 
 
 == Punctuation semantic functions
@@ -196,31 +263,67 @@ accommodating language-specific variations within each functional category.
 Each usage category defines:
 
 * Primary function and purpose
-* Common mark variations across languages
+* Range of semantic functions they cover
+* Common punctuation mark variations across languages for each function
 * Spacing requirements
 * Special handling rules
 * Integration with auto-numbering systems
 
-// Enumeration comma handling::::
-// * Japanese: Use 、 for list items, ， for clause separation
-// * Chinese: Use 、 for list items, ， for clauses
-// * Latin languages: Use , for both functions with context-dependent spacing
-
-// French spacing rules::::
-// * No space before regular comma (,)
-// * Required space before semicolon ({nbsp};)
-// * Thin space preferred in professional typography
-
-// Mixed-language lists::::
-// When lists contain mixed scripts, follow the punctuation convention of the list's primary language while maintaining readability.
-
 
 === Sentence stops
+
+==== General
+
+===== Primary function and purpose
+
+Sentence stops delimit a full grammatical sentence. 
+
+===== Range of semantic functions
+
+Writing systems vary as to whether they also
+terminate a standalone sentence, and therefore act as a sentence terminator.
+That is the case in formal English (though often not in texting),
+but it is not the case in Japanese.
+
+===== Punctuation mark variations
+
+* Korean sentence stops are half-width.
+* Chinese and Japanese sentence stops are full-width. 
+* In text mixed between Latin and Chinese or Japanese, usual practice is to follow the document
+main language: e.g. _现在很多人都在用 iPhone。_, with full-width punctuation in a Chinese text after English words;
+_This app 很好用._ in English text. Fine typography will apply kerning in such contexts so that the switch in
+width does not look obtrusive. 
+* Some desktop publishing applications in Japanese and CJK OpenType fonts allow switching contextually 
+between full-width and half-width punctuation (欧文混在時の約物処理 "treat punctuation when mixed with Western text"). 
+
+===== Spacing requirements 
+
+* Latin and Cyrillic require space after sentence stops as delimiters between sentences, as does Korean.
+* Writing systems do not use space after the final sentence stop in a paragraph.
+* Chinese and Japanese by default do not use space after sentence stops. 
+* None of these writing systems has space before sentence stops. 
+
 
 ==== Declarative stop
 
 Mark that indicates the end of a complete grammatical statement.
 
+[example]
+English: the period in _This is a sentence._
+
+[example]
+Traditional Chinese: the ideographic period in 這是一句句子。
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin: FULL STOP `<.>` (U+002E)
+* Cyrillic: FULL STOP `<.>` (U+002E)
+* Traditional Chinese: IDEOGRAPHIC FULL STOP `<。>` (U+3002)
+* Simplified Chinese: IDEOGRAPHIC FULL STOP `<。>` (U+3002)
+* Japanese: IDEOGRAPHIC FULL STOP `<。>` (U+3002)
+* Korean: FULL STOP `<.>` (U+002E)
+
+////
 [cols="2,2,2,3"]
 |===
 |Language |Name of Mark |Symbol |Example
@@ -251,42 +354,43 @@ Mark that indicates the end of a complete grammatical statement.
 |이것은 문장입니다.
 
 |===
+////
 
-NN: Korean uses half-width punctuation for commas and periods, unlike Traditional Chinese, Simplified Chinese, and Japanese which use full-width forms.
+===== Special handling
 
-NN: The placement of period and comma are different by language and by vertical/horizontal text orientation, but they do not involve different Unicode codepoints, so the browser/operating system is assumed to handle positioning appropriately.
+The placement of period in CJK is different by language and by directionality, but this does not involve 
+different Unicode codepoints, so the browser/operating system is assumed to handle positioning appropriately.
+(While there is a PRESENTATION FORM FOR VERTICAL IDEOGRAPHIC FULL STOP `<︒>` (U+FE12), this is only
+included in Unicode as a compatibility character.)
 
-NN: In Japanese horizontal text, the period appears at the bottom right. In Japanese vertical text, the period appears below and to the right of the character.
+* In Japanese and Simplified Chinese horizontal text, the period appears at the bottom right. 
+In Japanese and Simplified Chinese vertical text, 
+the period appears below and to the right of the character.
+* In Traditional Chinese, the period appears at mid-height in both horizontal and vertical text orientations.
 
-NN: In Simplified Chinese horizontal text, the period appears at the bottom left. In Simplified Chinese vertical text, the period appears below and to the right (U+FE12).
 
-NN: In Traditional Chinese, the period appears at mid-height in both horizontal and vertical text orientations.
-
-NN: Japanese full stop is often left out of standalone sentences, as it functions primarily as a separator between sentences rather than a terminator.
-
-[NOTE]
-====
-Full-width vs half-width selection:
-
-* CJK languages: Use full-width forms (。？！) in native text
-* Latin languages: Use half-width forms (. ? !) with standard spacing
-* Mixed text: Follow primary language of the sentence
-
-Spacing rules:
-
-* No space before sentence delimiters in any language
-* Space after delimiter when followed by same-script text
-* No space after delimiter at paragraph end
-
-Vertical text handling:
-
-* Period (。) remains in same position
-* Question mark (？) and exclamation mark (！) remain in same position
-* No rotation required for CJK sentence delimiters
-====
 
 ==== Interrogative stop
 
+Mark that indicates this grammatical statement is a question.
+
+[example]
+English: the question mark in _Is this a question?_
+
+[example]
+Traditional Chinese: the ideographic question mark in 這是問題嗎？
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin: QUESTION MARK `<?>` (U+003F)
+* Cyrillic: QUESTION MARK `<?>` (U+003F)
+* Traditional Chinese: FULLWIDTH QUESTION MARK `<？>` (U+FF1F)
+* Simplified Chinese: FULLWIDTH QUESTION MARK `<？>` (U+FF1F)
+* Japanese: FULLWIDTH QUESTION MARK `<？>` (U+FF1F)
+* Korean: QUESTION MARK `<?>` (U+003F)
+
+
+////
 [cols="2,2,2,3"]
 |===
 |Language |Name of Mark |Symbol |Example
@@ -317,9 +421,41 @@ Vertical text handling:
 |이것은 질문입니까?
 
 |===
+////
+
+===== Special handling
+ 
+* In Spanish and languages under Spanish cultural influence (e.g. Catalan), INVERTED QUESTION MARK `<¿>` 
+ (U+00BF) is used at the start of an interrogative sentence or clause. If a declarative sentence contains
+ an  interrogative clause, only the interrogative clause is so delimited: 
+ _Si no puedes ir con ellos, ¿quieres ir con nosotros?_ ("If you cannot go with them, ¿would you like to go with us?")
+* There is some variation by locale in usage: short questions can omit the inverted question mark
+in Galician; Catalan in Catalonia does not use inverted question marks; Catalan in Valencia uses them
+optionally.
+
+TIP: Metanorma does not currently implement inverted question marks.
+
 
 ==== Exclamatory stop
 
+Mark that indicates this grammatical statement is an exclamation.
+
+[example]
+English: the exlcamation mark in _What a great day!_
+
+[example]
+Traditional Chinese: the ideographic exclamation mark in 多麼美好的一天！
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin: EXCLAMATION MARK `<!>` (U+0021)
+* Cyrillic: EXCLAMATION MARK `<!>` (U+0021)
+* Traditional Chinese: FULLWIDTH EXCLAMATION MARK `<！>` (U+FF01)
+* Simplified Chinese: FULLWIDTH EXCLAMATION MARK `<！>` (U+FF01)
+* Japanese: FULLWIDTH EXCLAMATION MARK `<！>` (U+FF01)
+* Korean: QEXCLAMATION MARK `<!>` (U+0021)
+
+////
 [cols="2,2,2,3"]
 |===
 |Language |Name of Mark |Symbol |Example
@@ -350,6 +486,15 @@ Vertical text handling:
 |정말 좋은 날이네요!
 
 |===
+////
+
+===== Special handling
+ 
+* In Spanish and languages under Spanish cultural influence (e.g. Catalan), INVERTED EXCLAMATION MARK `<¡>` 
+ (U+00A1) is used at the start of an exclamatory sentence or clause. 
+* The same locale considerations apply for Catalan as for inverted question mark.
+
+TIP: Metanorma does not currently implement inverted exclamation marks.
 
 
 === Sentence pause indicators
@@ -364,6 +509,13 @@ NN: In Japanese horizontal text, the comma appears at the bottom right. In Japan
 NN: Japanese normally uses U+3001 (、) for comma. In mixed Japanese-Western text, full-width comma U+FF0C (，) can be used instead to maintain visual consistency.
 
 NN: Space can be used in Japanese corresponding to English comma or colon usage in certain contexts.
+
+// French spacing rules::::
+// * No space before regular comma (,)
+// * Required space before semicolon ({nbsp};)
+// * Thin space preferred in professional typography
+
+
 
 ==== Minor pause
 
@@ -398,7 +550,20 @@ NN: Space can be used in Japanese corresponding to English comma or colon usage 
 
 |===
 
+NN The placement of period and comma are different by language and by vertical/horizontal text orientation, but they do not involve different Unicode codepoints, so the browser/operating system is assumed to handle positioning appropriately.
+
+
 ==== Enumeration delimiter
+
+// Enumeration comma handling::::
+// * Japanese: Use 、 for list items, ， for clause separation
+// * Chinese: Use 、 for list items, ， for clauses
+// * Latin languages: Use , for both functions with context-dependent spacing
+
+// Mixed-language lists::::
+// When lists contain mixed scripts, follow the punctuation convention of the list's primary language while maintaining readability.
+
+
 
 NN: Traditional and Simplified Chinese use the enum comma U+3001 (、) instead of the normal comma in lists. For example, "A, B, and C" are usually rendered as "A、B及C" or "A、B、C".
 
@@ -964,6 +1129,7 @@ NN: Japanese can use U+3000 (full-width space) in text with little Kanji for bet
 
 NN: Ellipsis in CJK languages can be three dots or six dots. In horizontal text, it can be baseline or centered. In vertical text, it is centered. The six-dot form uses twice U+22EF as explicit centered markup, or twice U+2026 where centering is inexplicit.
 
+NN: French colons
 
 == Implementation
 
