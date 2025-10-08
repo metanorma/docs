@@ -555,8 +555,8 @@ other separating functions, such as listing separators, and decimal points.
 * Traditional Chinese: FULLWIDTH COMMA `<，>` (U+FF0C)
 * Simplified Chinese: FULLWIDTH COMMA `<，>` (U+FF0C)
 * Japanese: IDEOGRAPHIC COMMA `<、>` (U+3001)
-  * In mixed Japanese-Western text, FULLWIDTH COMMA `<，>` (U+FF0C) can be used instead to maintain visual consistency
-  * Space can be used in Japanese corresponding to English comma or colon usage in certain contexts.
+** In mixed Japanese-Western text, FULLWIDTH COMMA `<，>` (U+FF0C) can be used instead to maintain visual consistency
+** Space can be used in Japanese corresponding to English comma or colon usage in certain contexts.
 * Korean: COMMA `<,>` (U+002C)
 
 ===== Special handling
@@ -668,7 +668,7 @@ This function is represented in Metanorma i18n files as `punct.colon`.
 * Traditional Chinese: FULLWIDTH COLON `<：>` (U+FF1A)
 * Simplified Chinese: FULLWIDTH COLON `<：>` (U+FF1A)
 * Japanese: FULLWIDTH COLON `<：>` (U+FF1B)
-  * Space can be used in Japanese corresponding to English comma or colon usage in certain contexts.
+** Space can be used in Japanese corresponding to English comma or colon usage in certain contexts.
 * Korean: COLON `<,>` (U+003A)
 
 ====== Spacing rules
@@ -701,12 +701,12 @@ This function is represented in Metanorma i18n files as `punct.em-dash`.
 ===== Punctuation mark in scripts, languages, and locales
 
 * Latin: EM DASH `<—>` (U+2014)
-  * The EN DASH `<–>` (U+2013) is also used in this function
+** The EN DASH `<–>` (U+2013) is also used in this function
 * Cyrillic:  EM DASH `<—>` (U+2014)
 * Traditional Chinese: TWO EM DASH `<⸺>` (U+2E3A)
 * Simplified Chinese: TWO EM DASH `<⸺>` (U+2E3A)
 * Japanese: TWO EM DASH `<⸺>` (U+2E3A)
-  * Informally in CJK, twice em dash (U+2014 U+2014) is used instead of the two em dash.
+** Informally in CJK, twice em dash (U+2014 U+2014) is used instead of the two em dash.
 * Korean:  EM DASH `<—>` (U+2014)
 
 ====== Spacing rules
@@ -768,11 +768,11 @@ alternation between abbreviations, and to separate professional titles, names, a
 * Traditional Chinese: IDEOGRAPHIC COMMA `<，>` (U+3001)
 * Simplified Chinese: IDEOGRAPHIC COMMA `<，>` (U+3001)
 * Japanese: IDEOGRAPHIC COMMA `<、>` (U+3001)
-  * Japanese uses the interpunct for short lists instead of comma in some contexts. This is rendered as
+** Japanese uses the interpunct for short lists instead of comma in some contexts. This is rendered as
  KATAKANA MIDDLE DOT  `<・>` (U+30FB)
-  * In mixed Japanese-Western text, FULLWIDTH COMMA `<，>` (U+FF0C) can be used instead to maintain visual consistency
+** In mixed Japanese-Western text, FULLWIDTH COMMA `<，>` (U+FF0C) can be used instead to maintain visual consistency
 * Korean: COMMA `<,>` (U+002C)
-  * Korean uses the interpunct for short lists instead of comma in some contexts. This is rendered as
+** Korean uses the interpunct for short lists instead of comma in some contexts. This is rendered as
    HANGUL LETTER ARAEA `<ㆍ>` U+318D
 
 ===== Special handling
@@ -840,20 +840,22 @@ This function is represented in Metanorma i18n files as `punct.open-quote` and `
 
 * Latin, Cyrillic: There is significant variation among Latin and Cyrillic script languages on their
 choice of paired quotation delimiter, and different languages and locales draw from 15 Unicode codepoints.
-  * In English, good typographical practice uses LEFT DOUBLE QUOTATION MARK `<“>` (U+201C) and 
-  RIGHT DOUBLE QUOTATION MARK `<”>` (U+201D)
-  * French uses guillemets, LEFT-POINTING DOUBLE ANGLE QUOTATION MARK `<«>` (U+00AB) and
+** In American English, good typographical practice uses LEFT DOUBLE QUOTATION MARK `<“>` (U+201C) and 
+  RIGHT DOUBLE QUOTATION MARK `<”>` (U+201D). In British English, some publishers use double quotation marks,
+  and others use single quotation marks, LEFT SINGLE QUOTATION MARK `<‘>` (U+2018) and 
+  RIGHT SINGLE QUOTATION MARK `<’>` (U+2019)
+** French uses guillemets, LEFT-POINTING DOUBLE ANGLE QUOTATION MARK `<«>` (U+00AB) and
   RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK `<»>` (U+00AB)
 * Traditional Chinese: LEFT CORNER BRACKET `<「>` (U+300C) and RIGHT CORNER BRACKET `<」>` (U+300D)
 * Simplified Chinese: LEFT DOUBLE QUOTATION MARK `<“>` (U+201C) and 
   RIGHT DOUBLE QUOTATION MARK `<”>` (U+201D). 
-  * The corner brackets of Traditional Chinese are also in common use.
+** The corner brackets of Traditional Chinese are also in common use.
 * Japanese: LEFT CORNER BRACKET `<「>` (U+300C) and RIGHT CORNER BRACKET `<」>` (U+300D)
-  * Japanese also uses lenticular brackets, LEFT BLACK LENTICULAR BRACKET `<【>` (U+3010) and
+** Japanese also uses lenticular brackets, LEFT BLACK LENTICULAR BRACKET `<【>` (U+3010) and
   RIGHT BLACK LENTICULAR BRACKET `< 】>` (U+3011)
 * Korean: South Korea uses the same punctuation marks as English. North Korea uses full-width guillemets,
 LEFT DOUBLE ANGLE BRACKET `<《>` (U+300A) and RIGHT DOUBLE ANGLE BRACKET `<》>` (U+300B)
-  * Corner brackets and white corner brackets are often used in practice.
+** Corner brackets and white corner brackets are often used in practice.
 
 
 ===== Spacing rules
@@ -894,6 +896,9 @@ Nested paired quotation delimiters indicate the start and end of quoted text wit
 delimited quoted text, and attributed to a different speaker from the of the nesting quoted text.
 This function is represented in Metanorma i18n files as `punct.open-nested-quote` and `punct.close-nested-quote`.
 
+[example]
+“Didn't she say ‘I like red best’ when I asked her wine preferences?” he asked his guests.
+
 ===== Range of semantic functions
 
 * The English nested paired quotation delimiters are often conflated with the apostrophe.
@@ -902,20 +907,22 @@ This function is represented in Metanorma i18n files as `punct.open-nested-quote
 
 * Latin, Cyrillic: There is significant variation among Latin and Cyrillic script languages on their
 choice of paired quotation delimiter, and different languages and locales draw from 15 Unicode codepoints.
-  * In English, good typographical practice uses LEFT SINGLE QUOTATION MARK `<‘>` (U+2018) and 
-  RIGHT SINGLE QUOTATION MARK `<’>` (U+2019)
-  * French uses single guillemets, LEFT-POINTING SINGLE ANGLE QUOTATION MARK `<«>` (U+2039) and
+** In American English, good typographical practice uses LEFT SINGLE QUOTATION MARK `<‘>` (U+2018) and 
+  RIGHT SINGLE QUOTATION MARK `<’>` (U+2019). In British English, some publishers use single quotation marks,
+  and others use double quotation marks, LEFT DOUBLE QUOTATION MARK `<“>` (U+201C) and 
+  RIGHT DOUBLE QUOTATION MARK `<”>` (U+201D)
+** French uses single guillemets, LEFT-POINTING SINGLE ANGLE QUOTATION MARK `<«>` (U+2039) and
   RIGHT-POINTING SINGLE ANGLE QUOTATION MARK `<»>` (U+203A)
 * Traditional Chinese: LEFT WHITE CORNER BRACKET `<『>` (U+300E) and RIGHT WHITE CORNER BRACKET `<』>` (U+300F)
 * Simplified Chinese: LEFT SINGLE QUOTATION MARK `<‘>` (U+2018) and 
   RIGHT SINGLE QUOTATION MARK `<’>` (U+2019). 
-  * The white corner brackets of Traditional Chinese are also in common use.
+** The white corner brackets of Traditional Chinese are also in common use.
 * Japanese: LEFT CORNER BRACKET `<「>` (U+300C) and RIGHT CORNER BRACKET `<」>` (U+300D)
-  * Japanese also uses lenticular brackets, LEFT BLACK LENTICULAR BRACKET `<【>` (U+3010) and
+** Japanese also uses lenticular brackets, LEFT BLACK LENTICULAR BRACKET `<【>` (U+3010) and
   RIGHT BLACK LENTICULAR BRACKET `< 】>` (U+3011)
 * Korean: South Korea uses the same punctuation marks as English. North Korea uses full-width guillemets,
 LEFT DOUBLE ANGLE BRACKET `<《>` (U+300A) and RIGHT DOUBLE ANGLE BRACKET `<》>` (U+300B)
-  * Corner brackets and white corner brackets are often used in practice.
+** Corner brackets and white corner brackets are often used in practice.
 
 
 ===== Spacing rules
@@ -951,6 +958,12 @@ LEFT CORNER BRACKET `<「>` (U+300C) and RIGHT CORNER BRACKET `<」>` (U+300D).
 ===== Primary function and purpose
 
 A single initial marker used to represent one turn in an alternation of direct speech.
+
+[example]
+====
+― O saints above! Miss Douce said, sighed above her jumping rose. I wished I hadn't laughed so much. I feel all wet.
+― O Miss Douce! Miss Kennedy protested. You horrid thing!
+====
 
 ===== Punctuation mark in scripts, languages, and locales
 
