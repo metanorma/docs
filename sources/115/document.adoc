@@ -260,7 +260,11 @@ primary functional usage rather than their linguistic origin.
 This approach enables consistent implementation across different languages while
 accommodating language-specific variations within each functional category.
 
-Each usage category defines:
+Under each category of semantic functions, each distinct function in the framework is given,
+along with its typical corresponding mark in English (or a different language, if its function
+is conflated in the English punctuation mark.)
+
+Each usage category and each individual function defines one of more of the following:
 
 * Primary function and purpose
 * Range of semantic functions they cover
@@ -296,17 +300,25 @@ width does not look obtrusive.
 * Some desktop publishing applications in Japanese and CJK OpenType fonts allow switching contextually 
 between full-width and half-width punctuation (欧文混在時の約物処理 "treat punctuation when mixed with Western text"). 
 
-===== Spacing requirements 
+===== Spacing rules 
 
 * Latin and Cyrillic require space after sentence stops as delimiters between sentences, as does Korean.
 * Writing systems do not use space after the final sentence stop in a paragraph.
 * Chinese and Japanese by default do not use space after sentence stops. 
 * None of these writing systems has space before sentence stops. 
+* In French in France, Switzerland and Belgium, question mark and exclamation mark 
+is preceded by a non-breaking thin space (U+202F).
+In common practice, a full non-breaking space (U+00A0) is used instead.
+
+==== Declarative stop (_period_)
+
+===== Primary function and purpose
+
+Mark that indicates the end of a complete declarative grammatical statement.
+This function is represented in Metanorma i18n files as `punct.period`.
 
 
-==== Declarative stop
 
-Mark that indicates the end of a complete grammatical statement.
 
 [example]
 English: the period in _This is a sentence._
@@ -358,7 +370,7 @@ Traditional Chinese: the ideographic period in 這是一句句子。
 
 ===== Special handling
 
-The placement of period in CJK is different by language and by directionality, but this does not involve 
+The placement of period in CJK is different by directionality, but this does not involve 
 different Unicode codepoints, so the browser/operating system is assumed to handle positioning appropriately.
 (While there is a PRESENTATION FORM FOR VERTICAL IDEOGRAPHIC FULL STOP `<︒>` (U+FE12), this is only
 included in Unicode as a compatibility character.)
@@ -370,9 +382,12 @@ the period appears below and to the right of the character.
 
 
 
-==== Interrogative stop
+==== Interrogative stop (_question mark_)
+
+===== Primary function and purpose
 
 Mark that indicates this grammatical statement is a question.
+This function is represented in Metanorma i18n files as `punct.question-mark`.
 
 [example]
 English: the question mark in _Is this a question?_
@@ -423,6 +438,9 @@ Traditional Chinese: the ideographic question mark in 這是問題嗎？
 |===
 ////
 
+
+
+
 ===== Special handling
  
 * In Spanish and languages under Spanish cultural influence (e.g. Catalan), INVERTED QUESTION MARK `<¿>` 
@@ -436,12 +454,16 @@ optionally.
 TIP: Metanorma does not currently implement inverted question marks.
 
 
-==== Exclamatory stop
+==== Exclamatory stop (_exclamation mark_)
+
+===== Primary function and purpose
 
 Mark that indicates this grammatical statement is an exclamation.
+This function is represented in Metanorma i18n files as `punct.exclamation-mark`.
+
 
 [example]
-English: the exlcamation mark in _What a great day!_
+English: the exclamation mark in _What a great day!_
 
 [example]
 Traditional Chinese: the ideographic exclamation mark in 多麼美好的一天！
@@ -453,7 +475,7 @@ Traditional Chinese: the ideographic exclamation mark in 多麼美好的一天�
 * Traditional Chinese: FULLWIDTH EXCLAMATION MARK `<！>` (U+FF01)
 * Simplified Chinese: FULLWIDTH EXCLAMATION MARK `<！>` (U+FF01)
 * Japanese: FULLWIDTH EXCLAMATION MARK `<！>` (U+FF01)
-* Korean: QEXCLAMATION MARK `<!>` (U+0021)
+* Korean: EXCLAMATION MARK `<!>` (U+0021)
 
 ////
 [cols="2,2,2,3"]
@@ -488,6 +510,8 @@ Traditional Chinese: the ideographic exclamation mark in 多麼美好的一天�
 |===
 ////
 
+
+
 ===== Special handling
  
 * In Spanish and languages under Spanish cultural influence (e.g. Catalan), INVERTED EXCLAMATION MARK `<¡>` 
@@ -497,28 +521,59 @@ Traditional Chinese: the ideographic exclamation mark in 多麼美好的一天�
 TIP: Metanorma does not currently implement inverted exclamation marks.
 
 
-=== Sentence pause indicators
+=== Clause stops
 
 ==== General
 
-Pause indicators provide breathing space within sentences and separate
-distinct elements.
-
-NN: In Japanese horizontal text, the comma appears at the bottom right. In Japanese vertical text, the comma appears below and to the right of the character.
-
-NN: Japanese normally uses U+3001 (、) for comma. In mixed Japanese-Western text, full-width comma U+FF0C (，) can be used instead to maintain visual consistency.
-
-NN: Space can be used in Japanese corresponding to English comma or colon usage in certain contexts.
-
-// French spacing rules::::
-// * No space before regular comma (,)
-// * Required space before semicolon ({nbsp};)
-// * Thin space preferred in professional typography
+Clause stops delimit clauses within a sentence.
 
 
+==== Minor clause separator (_comma_)
 
-==== Minor pause
+===== Primary function and purpose
 
+Mark that delimits a minor break between clauses within a sentence.
+This function is represented in Metanorma i18n files as `punct.comma`.
+
+[example]
+English: the comma in _This is a sentence, with a pause._
+
+[example]
+Traditional Chinese: the full-width comma in 這是一句句子，有停頓。
+
+===== Range of semantic functions
+
+* The contexts in which the minor break is marked between clauses varies significantly
+by language and by style.
+* In many writing systems, the same mark (comma) is used for minor clause separators and 
+other separating functions, such as listing separators, and decimal points.
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin: COMMA `<,>` (U+002C)
+* Cyrillic: COMMA `<,>` (U+002C)
+* Traditional Chinese: FULLWIDTH COMMA `<，>` (U+FF0C)
+* Simplified Chinese: FULLWIDTH COMMA `<，>` (U+FF0C)
+* Japanese: IDEOGRAPHIC COMMA `<、>` (U+3001)
+  * In mixed Japanese-Western text, FULLWIDTH COMMA `<，>` (U+FF0C) can be used instead to maintain visual consistency
+  * Space can be used in Japanese corresponding to English comma or colon usage in certain contexts.
+* Korean: COMMA `<,>` (U+002C)
+
+===== Special handling
+
+The placement of comma in CJK is different by directionality, but this does not involve 
+different Unicode codepoints, so the browser/operating system is assumed to handle positioning appropriately.
+(While there is a PRESENTATION FORM FOR VERTICAL COMMA `<︐>` (U+FE10) and a 
+PRESENTATION FORM FOR VERTICAL IDEOGRAPHIC COMMA `<︑>` (U+FE11), these are only
+included in Unicode as a compatibility character.)
+
+* In Japanese and Simplified Chinese horizontal text, the comma appears at the bottom right. 
+In Japanese and Simplified Chinese vertical text, 
+the comma appears below and to the right of the character.
+* In Traditional Chinese, the comma appears at mid-height in both horizontal and vertical text orientations.
+
+
+////
 [cols="2,2,2,3"]
 |===
 |Language |Name of Mark |Symbol |Example
@@ -549,69 +604,185 @@ NN: Space can be used in Japanese corresponding to English comma or colon usage 
 |이것은 문장입니다, 일시정지가 있습니다.
 
 |===
-
-NN The placement of period and comma are different by language and by vertical/horizontal text orientation, but they do not involve different Unicode codepoints, so the browser/operating system is assumed to handle positioning appropriately.
-
-
-==== Enumeration delimiter
-
-// Enumeration comma handling::::
-// * Japanese: Use 、 for list items, ， for clause separation
-// * Chinese: Use 、 for list items, ， for clauses
-// * Latin languages: Use , for both functions with context-dependent spacing
-
-// Mixed-language lists::::
-// When lists contain mixed scripts, follow the punctuation convention of the list's primary language while maintaining readability.
+////
 
 
 
-NN: Traditional and Simplified Chinese use the enum comma U+3001 (、) instead of the normal comma in lists. For example, "A, B, and C" are usually rendered as "A、B及C" or "A、B、C".
 
-NN: Korean uses the interpunct for short lists instead of comma in some contexts.
+==== Major clause separator (_semicolon_)
 
-[cols="2,2,2,3"]
-|===
-|Language |Name of Mark |Symbol |Example
+===== Primary function and purpose
 
-|English
-|comma
-|`,`
-|First item, second item, third item.
+Mark that delimits a major break between clauses within a sentence.
+This function is represented in Metanorma i18n files as `punct.semicolon`.
 
-|Traditional Chinese
-|頓號
-|`、`
-|第一項、第二項、第三項。
+[example]
+English: the semicolon in _This is a sentence; with a pause._
 
-|Simplified Chinese
-|顿号
-|`、`
-|第一项、第二项、第三项。
+[example]
+Traditional Chinese: the full-width comma in 這是一句句子，有停頓。
 
-|Japanese
-|中黒
-|`・`
-|第一項・第二項・第三項。
+===== Range of semantic functions
 
-|Korean
-|모점
-|`,`
-|첫 번째 항목, 두 번째 항목, 세 번째 항목.
+* The contexts in which the major break is marked between clauses varies significantly
+by language and by style. In many styles, it is avoided as an overly fine distinction from the 
+minor break (comma).
+* The clauses separated by a major clause separator are typically independent sentences grammatically.
 
-|===
+===== Punctuation mark in scripts, languages, and locales
 
-==== Connecting delimiter (interpunct)
+* Latin: SEMICOLON `<;>` (U+002C)
+* Cyrillic: SEMICOLON `<;>` (U+002C)
+* Traditional Chinese: FULLWIDTH SEMICOLON `<；>` (U+FF1B)
+* Simplified Chinese: FULLWIDTH SEMICOLON `<；>` (U+FF1B)
+* Japanese: FULLWIDTH SEMICOLON `<；>` (U+FF1B)
+* Korean: SEMICOLON `<;>` (U+002C)
 
-Japanese middle punctuation mark used to separate items in a list.
+====== Spacing rules
 
-NN: The Japanese interpunct (Katakana middle dot `・`) is used for decimal points in Chinese numbers. For example, "3.14" becomes "三・一四".
+* In French in France, Switzerland and Belgium, semicolon 
+is preceded by a non-breaking thin space (U+202F).
+In common practice, a full non-breaking space (U+00A0) is used instead.
 
-NN: In Traditional Chinese, U+2027 is used for decimal point in Chinese numbers. For example, "3.5" becomes "三‧五".
 
-NN: The interpunct is used instead of hyphen, dash, or colon in Japanese vertical text.
+===== Special handling
 
-NN: In Japanese vertical text, the middle period appears centered rather than at a specific corner position.
+The placement of semicolon in CJK is different by directionality, but this does not involve 
+different Unicode codepoints, so the browser/operating system is assumed to handle positioning appropriately.
+(While there is a PRESENTATION FORM FOR VERTICAL SEMICOLON `<︔ >` (U+FE14), this is only
+included in Unicode as a compatibility character.)
 
+
+==== Introductory clause separator (_colon_)
+
+===== Primary function and purpose
+
+Mark that delimits clauses within a sentence, where the first clause
+introduces the second.
+This function is represented in Metanorma i18n files as `punct.colon`.
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin: COLON `<:>` (U+003A)
+* Cyrillic: COLON `<,>` (U+003A)
+* Traditional Chinese: FULLWIDTH COLON `<：>` (U+FF1A)
+* Simplified Chinese: FULLWIDTH COLON `<：>` (U+FF1A)
+* Japanese: FULLWIDTH COLON `<：>` (U+FF1B)
+  * Space can be used in Japanese corresponding to English comma or colon usage in certain contexts.
+* Korean: COLON `<,>` (U+003A)
+
+====== Spacing rules
+
+* In French, colon is preceded by a non-breaking space. There is more variation
+by locale of this spacing rule than for other punctuation marks. In Switzerland,
+it is thin space (U+202F). In Canada, colon is the only punctuation mark where spacing 
+is expected, and it is a full space (U+00A0). In France, a full space (U+00A0) is usual.
+
+
+
+===== Special handling
+
+The placement of colon in CJK is different by directionality, but this does not involve 
+different Unicode codepoints, so the browser/operating system is assumed to handle positioning appropriately.
+(While there is a PRESENTATION FORM FOR VERTICAL COLON `<︓ >` (U+FE13), this is only
+included in Unicode as a compatibility character.)
+
+The interpunct is used instead of hyphen, dash, or colon in Japanese vertical text.
+
+
+==== Breaking clause separator (_em-dash_)
+
+===== Primary function and purpose
+
+Mark that delimits clauses within a sentence, where there is a conceptual break of some short
+between the first clause and the second.
+This function is represented in Metanorma i18n files as `punct.em-dash`.
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin: EM DASH `<—>` (U+2014)
+  * The EN DASH `<–>` (U+2013) is also used in this function
+* Cyrillic:  EM DASH `<—>` (U+2014)
+* Traditional Chinese: TWO EM DASH `<⸺>` (U+2E3A)
+* Simplified Chinese: TWO EM DASH `<⸺>` (U+2E3A)
+* Japanese: TWO EM DASH `<⸺>` (U+2E3A)
+  * Informally in CJK, twice em dash (U+2014 U+2014) is used instead of the two em dash.
+* Korean:  EM DASH `<—>` (U+2014)
+
+====== Spacing rules
+
+* There is variation between languages and locales as to whether em dash or en dash
+is used. Spaces surrounding the dash are required for en dash, and may or may not be required
+for em dash. The spaces are thin spaces in fine typography, but may be normal spaces in common practice.
+
+===== Special handling
+
+The placement of colon in CJK is different by directionality, but this does not involve 
+different Unicode codepoints, so the browser/operating system is assumed to handle positioning appropriately.
+(While there is a PRESENTATION FORM FOR VERTICAL EM DASH `<︱>` (U+FE31), this is only
+included in Unicode as a compatibility character.)
+
+The interpunct is used instead of hyphen, dash, or colon in Japanese vertical text.
+
+
+=== Listing stops
+
+==== General
+
+===== Primary function and purpose
+
+Listing stops are used to delimit multiple items in a listing, other than clauses. 
+
+===== Range of semantic functions
+
+Because of the conceptual similarity between clause stops and listing stops, as joining multiple
+items, punctuation marks for the two are often conflated.
+
+
+==== Enumeration delimiter (_enumeration comma_)
+
+===== Primary function and purpose
+
+The enumeration delimiter separates items in a list.
+This function is represented in Metanorma i18n files as `punct.enum-comma`.
+
+In CJK, both comma-like punctuation marks and interpuncts are used as enumeration delimiters.
+There is no consistent semantic distinction between the two, so no such distinction is made here.
+
+===== Range of semantic functions
+
+* There is variation in whether the enumeration delimiter is used in a list of two items.
+* There is (linguistic) variation in whether a conjunction is used before the last item in a list, 
+and (punctuation) variation in whether the enumeration delimiter is used before the last item.
+Thus English allows both _A, B and C_ and _A, B, and C_ as style variants (the latter is known as the
+"Oxford comma"). Chinese allows both  _A、B及C_ and _A、B、C_.
+* The punctuation mark for the enumeration delimiter is often the same as that for the minor clause stop (comma).
+* The punctuation mark for the enumeration delimiter is often the same as that for other separators;
+for example Japanese uses the interpunct as an enumeration delimiter, as a decimal point, to indicate
+alternation between abbreviations, and to separate professional titles, names, and positions.
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin: COMMA `<,>` (U+002C)
+* Cyrillic: COMMA `<,>` (U+002C)
+* Traditional Chinese: IDEOGRAPHIC COMMA `<，>` (U+3001)
+* Simplified Chinese: IDEOGRAPHIC COMMA `<，>` (U+3001)
+* Japanese: IDEOGRAPHIC COMMA `<、>` (U+3001)
+  * Japanese uses the interpunct for short lists instead of comma in some contexts. This is rendered as
+ KATAKANA MIDDLE DOT  `<・>` (U+30FB)
+  * In mixed Japanese-Western text, FULLWIDTH COMMA `<，>` (U+FF0C) can be used instead to maintain visual consistency
+* Korean: COMMA `<,>` (U+002C)
+  * Korean uses the interpunct for short lists instead of comma in some contexts. This is rendered as
+   HANGUL LETTER ARAEA `<ㆍ>` U+318D
+
+===== Special handling
+
+* When lists contain mixed scripts in CJK, follow the punctuation convention of the list's primary language 
+while maintaining readability.
+* Japanese also supports HALFWIDTH KATAKANA MIDDLE DOT `<･>` (U+FF65) for the interpunct.
+* In Japanese vertical text, the interpunct appears centered rather than at a specific corner position.
+
+////
 [cols="2,2,2,3"]
 |===
 |Language |Name of Mark |Symbol |Example
@@ -642,48 +813,155 @@ NN: In Japanese vertical text, the middle period appears centered rather than at
 |첫 번째 항목·두 번째 항목·세 번째 항목
 
 |===
+////
 
-
-=== Named elements
-
-==== Title mark
-
-==== Name mark
-
-
-=== Grouping markers
+=== Quotation markers
 
 ==== General
 
-Grouping markers enclose, separate, or highlight specific text elements.
 
-NN: Traditional Chinese default quotation marks are U+300C and U+300D (「」). Nested quotes within quotes use U+300E and U+300F (『』).
+===== Primary function and purpose
 
-NN: In Traditional Chinese vertical text, quotation marks are rotated as U+FE41 and U+FE42 (﹁﹂).
+Quotation markers indicate that a span of text constitutes direct speech, or otherwise
+attribute it to  some third party. 
 
-NN: Simplified Chinese quotation marks in horizontal text are officially full-width western quotes ("…'…'…"). However, corner brackets are commonly used in horizontal text, similar to Traditional Chinese.
 
-NN: In Simplified Chinese vertical text, quotation marks are ﹃…﹁…﹂…﹄, with double quotes as default and single quotes nested.
 
-NN: Japanese lenticular brackets are used as quotation marks. The double quote 『　』is used nested within single quotes 「　」. Double quotes are also used for book titles.
+==== Paired quotation delimiters (_double quotes_)
+===== Primary function and purpose
+Paired quotation delimiters indicate the start and end of quoted text.
+This function is represented in Metanorma i18n files as `punct.open-quote` and `punct.close-quote`.
 
-NN: Korean quotation marks are officially double Western quotes in South Korea (guillements in North Korea), but 『...』or 「...」are often used in practice.
+===== Range of semantic functions
 
-NN: Both Traditional and Simplified Chinese use 「...」and『...』in vertical text for quotations.
+* Paired quotation markers are often conflated with title markers.
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin, Cyrillic: There is significant variation among Latin and Cyrillic script languages on their
+choice of paired quotation delimiter, and different languages and locales draw from 15 Unicode codepoints.
+  * In English, good typographical practice uses LEFT DOUBLE QUOTATION MARK `<“>` (U+201C) and 
+  RIGHT DOUBLE QUOTATION MARK `<”>` (U+201D)
+  * French uses guillemets, LEFT-POINTING DOUBLE ANGLE QUOTATION MARK `<«>` (U+00AB) and
+  RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK `<»>` (U+00AB)
+* Traditional Chinese: LEFT CORNER BRACKET `<「>` (U+300C) and RIGHT CORNER BRACKET `<」>` (U+300D)
+* Simplified Chinese: LEFT DOUBLE QUOTATION MARK `<“>` (U+201C) and 
+  RIGHT DOUBLE QUOTATION MARK `<”>` (U+201D). 
+  * The corner brackets of Traditional Chinese are also in common use.
+* Japanese: LEFT CORNER BRACKET `<「>` (U+300C) and RIGHT CORNER BRACKET `<」>` (U+300D)
+  * Japanese also uses lenticular brackets, LEFT BLACK LENTICULAR BRACKET `<【>` (U+3010) and
+  RIGHT BLACK LENTICULAR BRACKET `< 】>` (U+3011)
+* Korean: South Korea uses the same punctuation marks as English. North Korea uses full-width guillemets,
+LEFT DOUBLE ANGLE BRACKET `<《>` (U+300A) and RIGHT DOUBLE ANGLE BRACKET `<》>` (U+300B)
+  * Corner brackets and white corner brackets are often used in practice.
+
+
+===== Spacing rules
+
+* In French in France, Switzerland and Belgium, the opening paired quotation delimiter,
+the left guillemet 
+is followed by a non-breaking thin space (U+202F); 
+the right guillemet
+is preceded by a non-breaking thin space.
+In common practice, a full non-breaking space (U+00A0) is used instead.
+
+===== Special handling
+
+* The placement of quotation marks in CJK is different by directionality, but this does not involve 
+different Unicode codepoints, so the browser/operating system is assumed to handle positioning appropriately.
+(While there is e.g. a PRESENTATION FORM FOR VERTICAL LEFT CORNER BRACKET `<﹁>` (U+FE41) and
+PRESENTATION FORM FOR VERTICAL RIGHT CORNER BRACKET `<﹂>` (U+FE42), these are only
+included in Unicode as a compatibility character.)
+* Quotation marks in English are routinely typed as straight quotes, QUOTATION MARK `<\">` (U+0022),
+with the expectation that software will transform them contextually into paired quotation marks
+("smart quotes").
++
+--
+TIP: Metanorma transforms straight quotes in Asciidoc source into smart quotes following English conventions.
+--
+* Simplified Chinese uses the font to make Western quotation marks (U+201C, U+201D) full-width, instead of deploying
+distinct codepoints (REVERSED DOUBLE PRIME QUOTATION MARK `<〝>` (U+301D)
+DOUBLE PRIME QUOTATION MARK `<〞>` (U+301E))
+* In vertical directionality, Traditional and Simplified Chinese use presentation variants of the codepoints
+LEFT WHITE CORNER BRACKET `<『>` (U+300E) and RIGHT WHITE CORNER BRACKET `< 』>` (U+300F).
+
+
+
+==== Nested paired quotation delimiters (_single quotes_)
+
+===== Primary function and purpose
+Nested paired quotation delimiters indicate the start and end of quoted text within another
+delimited quoted text, and attributed to a different speaker from the of the nesting quoted text.
+This function is represented in Metanorma i18n files as `punct.open-nested-quote` and `punct.close-nested-quote`.
+
+===== Range of semantic functions
+
+* The English nested paired quotation delimiters are often conflated with the apostrophe.
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin, Cyrillic: There is significant variation among Latin and Cyrillic script languages on their
+choice of paired quotation delimiter, and different languages and locales draw from 15 Unicode codepoints.
+  * In English, good typographical practice uses LEFT SINGLE QUOTATION MARK `<‘>` (U+2018) and 
+  RIGHT SINGLE QUOTATION MARK `<’>` (U+2019)
+  * French uses single guillemets, LEFT-POINTING SINGLE ANGLE QUOTATION MARK `<«>` (U+2039) and
+  RIGHT-POINTING SINGLE ANGLE QUOTATION MARK `<»>` (U+203A)
+* Traditional Chinese: LEFT WHITE CORNER BRACKET `<『>` (U+300E) and RIGHT WHITE CORNER BRACKET `<』>` (U+300F)
+* Simplified Chinese: LEFT SINGLE QUOTATION MARK `<‘>` (U+2018) and 
+  RIGHT SINGLE QUOTATION MARK `<’>` (U+2019). 
+  * The white corner brackets of Traditional Chinese are also in common use.
+* Japanese: LEFT CORNER BRACKET `<「>` (U+300C) and RIGHT CORNER BRACKET `<」>` (U+300D)
+  * Japanese also uses lenticular brackets, LEFT BLACK LENTICULAR BRACKET `<【>` (U+3010) and
+  RIGHT BLACK LENTICULAR BRACKET `< 】>` (U+3011)
+* Korean: South Korea uses the same punctuation marks as English. North Korea uses full-width guillemets,
+LEFT DOUBLE ANGLE BRACKET `<《>` (U+300A) and RIGHT DOUBLE ANGLE BRACKET `<》>` (U+300B)
+  * Corner brackets and white corner brackets are often used in practice.
+
+
+===== Spacing rules
+
+* In French in France, Switzerland and Belgium, the opening nested paired quotation delimiter,
+the left single guillemet 
+is followed by a non-breaking thin space (U+202F); 
+the right single guillemet
+is preceded by a non-breaking thin space.
+In common practice, a full non-breaking space (U+00A0) is used instead.
+
+===== Special handling
+
+* The placement of quotation marks in CJK is different by directionality, but this does not involve 
+different Unicode codepoints, so the browser/operating system is assumed to handle positioning appropriately.
+(While there is e.g. a PRESENTATION FORM FOR VERTICAL LEFT WHITE CORNER BRACKET `<﹃>` (U+FE43) and
+PRESENTATION FORM FOR VERTICAL RIGHT WHITE CORNER BRACKET `<﹄>` (U+FE44), these are only
+included in Unicode as a compatibility character.)
+* Nested quotation marks in English are routinely typed as straight quotes, APOSTROPHE `<\'>` (U+0027),
+with the expectation that software will transform them contextually into paired quotation marks
+("smart quotes").
++
+--
+TIP: Metanorma transforms straight quotes in Asciidoc source into smart quotes following English conventions.
+--
+* Simplified Chinese uses the font to make Western quotation marks (U+2018, U+2019) full-width, instead of deploying
+distinct codepoints
+* In vertical directionality, Traditional and Simplified Chinese use presentation variants of the codepoints
+LEFT CORNER BRACKET `<「>` (U+300C) and RIGHT CORNER BRACKET `<」>` (U+300D).
+
+==== Single quotation delimiters (_quotation dash_)
+
+===== Primary function and purpose
+
+A single initial marker used to represent one turn in an alternation of direct speech.
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin, Cyrillic: Properly HORIZONTAL BAR `<―>` (U+2015) is used; in practice EM DASH `<—>` (U+2014)
+is usually used.
+  * The quotation dash is almost unknown in English, but is commonplace in other European languages,
+  such as French.
+
 
 // Direct quotation:::
 // Marks that enclose directly quoted speech or text.
-
-// Parenthetical information:::
-// Marks that enclose supplementary or explanatory information.
-
-// Emphasis enclosure:::
-// Marks that highlight or draw attention to specific content.
-
-// Title marking:::
-// Specialized marks for book titles, article titles, and similar works.
-
-// ==== Language implementations
 
 // [cols="2,2,2,2,2,2"]
 // |===
@@ -702,44 +980,10 @@ NN: Both Traditional and Simplified Chinese use 「...」and『...』in vertical
 // |"..."'...' +
 // (따옴표)
 
-// |Parenthetical +
-// 括號/括号/括弧/괄호
-// |(...) +
-// (parentheses)
-// |（...） +
-// (括號)
-// |（...） +
-// (括号)
-// |（...） +
-// (括弧)
-// |(...) +
-// (괄호)
 
-// |Title marking +
-// 書名號/书名号/書名符號/책이름표
-// |"..." or _..._ +
-// (quotation/italics)
-// |﹏...﹏/《...》 +
-// (書名號)
-// |《...》 +
-// (书名号)
-// |『...』 +
-// (鉤括弧)
-// |『...』 +
-// (책이름표)
 
-// |Title delimiter +
-// 書章分隔號/书章分隔号/書章區切符号/책장구분
-// |N/A
-// |· +
-// (間隔號)
-// |· +
-// (间隔号)
-// |・ +
-// (中点)
-// |· +
-// (가운뎃점)
-// |===
+
+
 
 
 
@@ -750,7 +994,7 @@ NN: Both Traditional and Simplified Chinese use 「...」and『...』in vertical
 Connection indicators link related elements, show relationships between parts,
 or indicate continuation across boundaries.
 
-NN: Em-dash is U+2E3A, which gets rendered informally as twice U+2014.
+
 
 NN: Range between words uses en-dash, but can also be tilde or single em-dash in CJK languages.
 
@@ -765,6 +1009,12 @@ NN: Korean uses wave dash for numeric ranges, though en-dash is also allowed.
 NN: Some Japanese academic writing uses colons, though this is not universal.
 
 NN: Simplified Chinese often uses `*` for multiplication instead of traditional symbols.
+
+NN: The Japanese interpunct (Katakana middle dot `・`) is used for decimal points in Chinese numbers. For example, "3.14" becomes "三・一四".
+
+NN: In Traditional Chinese, U+2027 is used for decimal point in Chinese numbers. For example, "3.5" becomes "三‧五".
+
+NN: The interpunct is used instead of hyphen, dash, or colon in Japanese vertical text.
 
 // Range indication:::
 // Marks that show spans between values, dates, or quantities.
@@ -825,6 +1075,8 @@ NN: Simplified Chinese often uses `*` for multiplication instead of traditional 
 Emphasis markers highlight specific text elements through visual modification or
 annotation.
 
+// Marks that highlight or draw attention to specific content.
+
 NN: Italics are not used in CJK languages. Instead, single or double quotes or brackets are used for emphasis, or emphasis marks are applied.
 
 NN: Emphasis marks (underdot in Chinese, various forms in Japanese) are used instead of italics. These are rare online and unsupported in many Word processors, but can be achieved using CSS text-emphasis-style.
@@ -873,11 +1125,25 @@ NN: Emphasis marking will need to be implemented as a separate i18n function, in
 
 ==== General
 
+===== Primary function and purpose
+
 Text annotation markers provide supplementary information or references
 related to the main text content.
 
 
+===== Range of semantic functions
+
+* Annotation markers are routinely conflated with grouping markers, which enclose, separate, or highlight specific text elements.
+
 ==== Parenthetical annotation
+
+===== Primary function and purpose
+
+This function is represented in Metanorma i18n files as `punct.open-paren` and `punct.close-paren`.
+
+// Parenthetical information:::
+// Marks that enclose supplementary or explanatory information.
+
 
 [cols="2,2,2,3"]
 |===
@@ -909,6 +1175,20 @@ related to the main text content.
 | 이것은 문장입니다 (추가 정보 포함).
 
 |===
+
+
+==== Bracket
+
+==== Brace
+
+==== Angle bracket
+
+
+
+
+
+
+
 
 ==== Footnote/superscript annotation
 
@@ -1012,7 +1292,14 @@ NN: Japanese uses『...』(double quotes) for book titles.
 
 NN: Western quotes are unofficially used in press for titles in Traditional Chinese, Japanese, and Korean.
 
+NN: Double quotes are also used for book titles.
+
 ==== Title mark
+
+
+// Title marking:::
+// Specialized marks for book titles, article titles, and similar works.
+
 
 [cols="2,2,2,3"]
 |===
@@ -1044,6 +1331,20 @@ NN: Western quotes are unofficially used in press for titles in Traditional Chin
 |나는 『홍루몽』을 읽었습니다。
 
 |===
+
+// |Title marking +
+// 書名號/书名号/書名符號/책이름표
+// |"..." or _..._ +
+// (quotation/italics)
+// |﹏...﹏/《...》 +
+// (書名號)
+// |《...》 +
+// (书名号)
+// |『...』 +
+// (鉤括弧)
+// |『...』 +
+// (책이름표)
+
 
 ==== Title delimiter
 
@@ -1113,6 +1414,17 @@ NN: Western quotes are unofficially used in press for titles in Traditional Chin
 
 |===
 
+=== Miscellaneous
+
+
+This function is represented in Metanorma i18n files as `punct.ellipse`.
+
+NN: Ellipsis in CJK languages can be three dots or six dots. In horizontal text, it can be baseline or centered. In vertical text, it is centered. The six-dot form uses twice U+22EF as explicit centered markup, or twice U+2026 where centering is inexplicit.
+
+
+
+
+
 == Whitespace handling
 
 NN: CJK full-width space (U+3000) is rare and meaningful. It is used in specific contexts, for example as an honorific spacing for certain names (e.g., Chang Kai-shek in Chinese text).
@@ -1127,11 +1439,10 @@ NN: In Japanese, a single space is used at the start of paragraphs in text with 
 
 NN: Japanese can use U+3000 (full-width space) in text with little Kanji for better readability and disambiguation.
 
-NN: Ellipsis in CJK languages can be three dots or six dots. In horizontal text, it can be baseline or centered. In vertical text, it is centered. The six-dot form uses twice U+22EF as explicit centered markup, or twice U+2026 where centering is inexplicit.
 
-NN: French colons
+This function is represented in Metanorma i18n files as `punct.cjk-latin-separator`.
 
-== Implementation
+== Metanorma Implementation
 
 === Three classes of punctuation translation
 
@@ -1208,6 +1519,8 @@ NN: A subset of the foregoing will be translated from Roman punctuation in autot
 * open-nested-quote: `'`
 * close-nested-quote: `'`
 * ellipse: `…`
+
+NN: Add the relaton-render q-mark qq-mark, and move it to punct
 
 NN: Enum comma is not to be supported in l10n() directly. It is already handled with explicit support through the `multiple_and` i18n YAML value.
 
