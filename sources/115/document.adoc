@@ -962,6 +962,7 @@ A single initial marker used to represent one turn in an alternation of direct s
 [example]
 ====
 ― O saints above! Miss Douce said, sighed above her jumping rose. I wished I hadn't laughed so much. I feel all wet.
+
 ― O Miss Douce! Miss Kennedy protested. You horrid thing!
 ====
 
@@ -1007,27 +1008,37 @@ is usually used.
 Connection indicators link related elements, show relationships between parts,
 or indicate continuation across boundaries.
 
+==== Range mark (_en-dash_)
 
+===== Primary function and purpose
 
-NN: Range between words uses en-dash, but can also be tilde or single em-dash in CJK languages.
+A marker between two items, used to convey a range between the two. The items can be verbal values (_Paris–New York–), 
+numerals (_3–5–), dates (Jan–Oct), quantities, etc.
+This function is represented in Metanorma i18n files as `punct.en-dash`.
 
-NN: Range between numbers uses wave dash U+301C in CJK, can also be U+FF5E, and can be en-dash.
+===== Range of semantic functions
 
-NN: In Japanese, wave dash is used for ranges, separation of title from subtitle (corresponding to English colon), and as subtitle delimiter.
+* The English nested paired quotation delimiters are often conflated with the apostrophe.
+* Latin script conflates the punctuation marks for verbal and numeric ranges. CJK uses distinct punctuation marks for
+verbal and numeric ranges. The latter function is represented in Metanorma i18n files as `punct.numeric-en-dash`.
 
-NN: Japanese uses double wave dash instead of dash or bracket in some contexts.
+===== Punctuation mark in scripts, languages, and locales
 
-NN: Korean uses wave dash for numeric ranges, though en-dash is also allowed.
+* Latin, Cyrillic: In good typography, EN DASH '<–>` (U+2013) is used. Informal use typically uses the hyphen.
+* Traditional Chinese, Simplified Chinese, Japanese, Korean: EN DASH '<–>` (U+2013), WAVE DASH `<〜>` (U+301C),
+FULLWIDTH TILDE `<～>` (U+FF5E)
 
-NN: Some Japanese academic writing uses colons, though this is not universal.
+===== Spacing rules
 
-NN: Simplified Chinese often uses `*` for multiplication instead of traditional symbols.
+* Typically in Latin script there is no spacing around the en-dash. This differentiates it from the clause stop
+use of the en-dash.
 
-NN: The Japanese interpunct (Katakana middle dot `・`) is used for decimal points in Chinese numbers. For example, "3.14" becomes "三・一四".
+===== Special handling
 
-NN: In Traditional Chinese, U+2027 is used for decimal point in Chinese numbers. For example, "3.5" becomes "三‧五".
+* In CJK, verbal range is conveyed through en-dash. Tilde and single em-dash can also be used for verbal range.
+* Numeric range is normally wave dash.
+Some Japanese academic writing uses colons instead of wave dash, though this is not universal.
 
-NN: The interpunct is used instead of hyphen, dash, or colon in Japanese vertical text.
 
 // Range indication:::
 // Marks that show spans between values, dates, or quantities.
@@ -1080,6 +1091,25 @@ NN: The interpunct is used instead of hyphen, dash, or colon in Japanese vertica
 // |N/A
 // |===
 
+
+==== Name separator
+
+NN: In Japanese, wave dash is used for ranges, separation of title from subtitle (corresponding to English colon), and as subtitle delimiter.
+// Name component separation:::
+// Marks that separate parts of compound names or terms.
+
+==== Title separator
+
+NN: In Japanese, wave dash is used for ranges, separation of title from subtitle (corresponding to English colon), and as subtitle delimiter.
+
+
+==== Word divider
+// Word division:::
+// Marks that divide words at line breaks or indicate compound structures.
+en-dash for second level of division
+NN: The interpunct is used instead of hyphen, dash, or colon in Japanese vertical text.
+
+==== Hyphen
 
 === Emphasis markers
 
@@ -1307,6 +1337,10 @@ NN: Western quotes are unofficially used in press for titles in Traditional Chin
 
 NN: Double quotes are also used for book titles.
 
+Apostrophe markers
+
+Number markers
+
 ==== Title mark
 
 
@@ -1427,6 +1461,36 @@ NN: Double quotes are also used for book titles.
 
 |===
 
+
+=== Numeric punctuation
+
+==== General
+
+Punctuation used to convey different types of number overlaps with other punctuation discussed here, but it not
+in scope of this discussion, and Metanorma handles it with distinct mechanisms. It is briefly outlined here for
+completeness, and to identify potential points of ambiguity.
+
+The punctuation used to convey different types of number also overlaps with some  symbols for mathematical functions
+(notably plus and minus signs); mathematical functions are out of scope.
+
+
+The semantic functions
+
+==== Decimal point (_decimal point_)
+
+
+
+
+NN: Simplified Chinese often uses `*` for multiplication instead of traditional symbols.
+
+NN: The Japanese interpunct (Katakana middle dot `・`) is used for decimal points in Chinese numbers. For example, "3.14" becomes "三・一四".
+
+NN: In Traditional Chinese, U+2027 is used for decimal point in Chinese numbers. For example, "3.5" becomes "三‧五".
+
+
+
+
+
 === Miscellaneous
 
 
@@ -1460,6 +1524,8 @@ This function is represented in Metanorma i18n files as `punct.cjk-latin-separat
 === Three classes of punctuation translation
 
 NN: There are three classes of punctuation translation/localisation in the Metanorma system:
+
+add smart quotes. Add number marks
 
 ==== Bibliographic punctuation
 
