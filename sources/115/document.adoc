@@ -69,15 +69,29 @@ This document defines a framework for semantic punctuation usage across multiple
 languages and writing systems. It also outlines how that framework is realised
 in Metanorma implementation, and how its configuration can be updated.
 
-NOTE: following linguistic practice, and to avoid confusion with quotations, individual
-characters are cited in angle practice, and where necessary following by Unicode codepoint, and
-preceded by Unicode name; e.g.`<，>`;  `<，>` (U+FF0C); FULLWIDTH COMMA `<，>` (U+FF0C).
+Examples and discussion about specific writing systems are as of this writing limited
+to CJK and Latin; but the document is intended to be generally applicable.
 
+Mathematical symbols are out of scope of this document. Numeric punctuation is in scope,
+but it is not discussed in detail, as it is handled in Metanorma by distinct mechanisms.
+
+[NOTE]
+--
+Following linguistic practice, and to avoid confusion with quotations, individual
+characters are cited in angle practice, and where necessary following by Unicode codepoint, and
+preceded by Unicode name; e.g.
+
+* `<，>`
+* `<，>` (U+FF0C)
+* FULLWIDTH COMMA `<，>` (U+FF0C).
+--
+
+[bibliography]
 == Normative references
 
 * [[[MN112,MN 112]]], MN 112: _Label Auto-assignment Definition Language (LADL) specification_
 * [[[ISO10646,ISO/IEC 10646:2020]]]
-* [[[Unicode15,Unicode 15.1]]]
+* [[[Unicode15,Unicode 15.1]]] _Unicode_ Edition 15.1. https://www.unicode.org
 
 
 == Terms and definitions
@@ -271,7 +285,7 @@ Each usage category and each individual function defines one of more of the foll
 * Common punctuation mark variations across languages for each function
 * Spacing requirements
 * Special handling rules
-* Integration with auto-numbering systems
+
 
 
 === Sentence stops
@@ -300,15 +314,18 @@ width does not look obtrusive.
 * Some desktop publishing applications in Japanese and CJK OpenType fonts allow switching contextually 
 between full-width and half-width punctuation (欧文混在時の約物処理 "treat punctuation when mixed with Western text"). 
 
+[[sentence-stop-spacing]]
 ===== Spacing rules 
 
 * Latin and Cyrillic require space after sentence stops as delimiters between sentences, as does Korean.
 * Writing systems do not use space after the final sentence stop in a paragraph.
 * Chinese and Japanese by default do not use space after sentence stops. 
 * None of these writing systems has space before sentence stops. 
-* In French in France, Switzerland and Belgium, question mark and exclamation mark 
-is preceded by a non-breaking thin space (U+202F).
+* In French in France, Switzerland and Belgium, some punctuation marks, including
+some sentence stops,
+are preceded by a non-breaking thin space (U+202F) ("French spacing").
 In common practice, a full non-breaking space (U+00A0) is used instead.
+French spacing is not used for most punctuation marks in Canada for French.
 
 ==== Declarative stop (_period_)
 
@@ -438,7 +455,9 @@ Traditional Chinese: the ideographic question mark in 這是問題嗎？
 |===
 ////
 
+===== Spacing rules
 
+* French spacing applies (<<sentence-stop-spacing>>).
 
 
 ===== Special handling
@@ -510,7 +529,9 @@ Traditional Chinese: the ideographic exclamation mark in 多麼美好的一天�
 |===
 ////
 
+===== Spacing rules
 
+* French spacing applies (<<sentence-stop-spacing>>).
 
 ===== Special handling
  
@@ -638,11 +659,9 @@ minor break (comma).
 * Japanese: FULLWIDTH SEMICOLON `<；>` (U+FF1B)
 * Korean: SEMICOLON `<;>` (U+002C)
 
-====== Spacing rules
+===== Spacing rules
 
-* In French in France, Switzerland and Belgium, semicolon 
-is preceded by a non-breaking thin space (U+202F).
-In common practice, a full non-breaking space (U+00A0) is used instead.
+* French spacing applies (<<sentence-stop-spacing>>).
 
 
 ===== Special handling
@@ -674,9 +693,13 @@ This function is represented in Metanorma i18n files as `punct.colon`.
 ====== Spacing rules
 
 * In French, colon is preceded by a non-breaking space. There is more variation
-by locale of this spacing rule than for other punctuation marks. In Switzerland,
-it is thin space (U+202F). In Canada, colon is the only punctuation mark where spacing 
-is expected, and it is a full space (U+00A0). In France, a full space (U+00A0) is usual.
+by locale of this spacing rule than for other punctuation marks, for which
+French spacing applies (<<sentence-stop-spacing>>). 
+** In Switzerland,
+it is thin space (U+202F). 
+** In Canada, colon is the only punctuation mark where French spacing 
+is expected, and it is a full space (U+00A0). 
+** In France, a full space (U+00A0) is usual.
 
 
 
@@ -748,6 +771,10 @@ This function is represented in Metanorma i18n files as `punct.enum-comma`.
 
 In CJK, both comma-like punctuation marks and interpuncts are used as enumeration delimiters.
 There is no consistent semantic distinction between the two, so no such distinction is made here.
+
+[example]
+Japanese: 小・中学校 or  小、中学校 "elementary, [and] middle school"
+
 
 ===== Range of semantic functions
 
@@ -826,6 +853,17 @@ Quotation markers indicate that a span of text constitutes direct speech, or oth
 attribute it to  some third party. 
 
 
+===== Spacing rules
+
+* In French in France, Switzerland and Belgium, for paired quotation delimiters,
+the opening delimiter (left guillemet, left single guillemet) 
+is followed by a non-breaking thin space (U+202F), 
+as an instance of French spacing (<<sentence-stop-spacing>>); the closing delimiter
+(right guillemet, right single guillemet) 
+is preceded by a non-breaking thin space, as the mirror counterpart of French spacing.
+As with other French spacing, in common practice, a full non-breaking space (U+00A0) 
+is used instead.
+
 
 ==== Paired quotation delimiters (_double quotes_)
 ===== Primary function and purpose
@@ -858,14 +896,7 @@ LEFT DOUBLE ANGLE BRACKET `<《>` (U+300A) and RIGHT DOUBLE ANGLE BRACKET `<》>
 ** Corner brackets and white corner brackets are often used in practice.
 
 
-===== Spacing rules
 
-* In French in France, Switzerland and Belgium, the opening paired quotation delimiter,
-the left guillemet 
-is followed by a non-breaking thin space (U+202F); 
-the right guillemet
-is preceded by a non-breaking thin space.
-In common practice, a full non-breaking space (U+00A0) is used instead.
 
 ===== Special handling
 
@@ -874,7 +905,7 @@ different Unicode codepoints, so the browser/operating system is assumed to hand
 (While there is e.g. a PRESENTATION FORM FOR VERTICAL LEFT CORNER BRACKET `<﹁>` (U+FE41) and
 PRESENTATION FORM FOR VERTICAL RIGHT CORNER BRACKET `<﹂>` (U+FE42), these are only
 included in Unicode as a compatibility character.)
-* Quotation marks in English are routinely typed as straight quotes, QUOTATION MARK `<\">` (U+0022),
+* Quotation marks in English are routinely typed as straight quotes, QUOTATION MARK `<">` (U+0022),
 with the expectation that software will transform them contextually into paired quotation marks
 ("smart quotes").
 +
@@ -925,14 +956,6 @@ LEFT DOUBLE ANGLE BRACKET `<《>` (U+300A) and RIGHT DOUBLE ANGLE BRACKET `<》>
 ** Corner brackets and white corner brackets are often used in practice.
 
 
-===== Spacing rules
-
-* In French in France, Switzerland and Belgium, the opening nested paired quotation delimiter,
-the left single guillemet 
-is followed by a non-breaking thin space (U+202F); 
-the right single guillemet
-is preceded by a non-breaking thin space.
-In common practice, a full non-breaking space (U+00A0) is used instead.
 
 ===== Special handling
 
@@ -941,7 +964,7 @@ different Unicode codepoints, so the browser/operating system is assumed to hand
 (While there is e.g. a PRESENTATION FORM FOR VERTICAL LEFT WHITE CORNER BRACKET `<﹃>` (U+FE43) and
 PRESENTATION FORM FOR VERTICAL RIGHT WHITE CORNER BRACKET `<﹄>` (U+FE44), these are only
 included in Unicode as a compatibility character.)
-* Nested quotation marks in English are routinely typed as straight quotes, APOSTROPHE `<\'>` (U+0027),
+* Nested quotation marks in English are routinely typed as straight quotes, APOSTROPHE `<'>` (U+0027),
 with the expectation that software will transform them contextually into paired quotation marks
 ("smart quotes").
 +
@@ -1013,7 +1036,7 @@ or indicate continuation across boundaries.
 ===== Primary function and purpose
 
 A marker between two items, used to convey a range between the two. The items can be verbal values (_Paris–New York–), 
-numerals (_3–5–), dates (Jan–Oct), quantities, etc.
+numerals (_3–5_), dates (_Jan–Oct_), quantities, etc.
 This function is represented in Metanorma i18n files as `punct.en-dash`.
 
 ===== Range of semantic functions
@@ -1039,9 +1062,6 @@ use of the en-dash.
 * Numeric range is normally wave dash.
 Some Japanese academic writing uses colons instead of wave dash, though this is not universal.
 
-
-// Range indication:::
-// Marks that show spans between values, dates, or quantities.
 
 // Name component separation:::
 // Marks that separate parts of compound names or terms.
@@ -1094,20 +1114,56 @@ Some Japanese academic writing uses colons instead of wave dash, though this is 
 
 ==== Name separator
 
-NN: In Japanese, wave dash is used for ranges, separation of title from subtitle (corresponding to English colon), and as subtitle delimiter.
-// Name component separation:::
-// Marks that separate parts of compound names or terms.
+===== Primary function and purpose
 
-==== Title separator
+In CJK, components of a name are separated from each other using a punctuation mark where necessary
+for clarity.
+This applies to names in the broadest sense, including personal names (particularly foreign names),
+professional titles and positions next to names, and
+names of pieces of writing (i.e. titles, separating the title from the subtitle).
 
-NN: In Japanese, wave dash is used for ranges, separation of title from subtitle (corresponding to English colon), and as subtitle delimiter.
+[example]
+Simplified Chinese: 李奧納多·達·文西 "Leonardo·da·Vinci"
 
+[example]
+Japanese: 部長補佐・鈴木 (Assistant Department Head·Suzuki)
+
+===== Range of semantic functions
+* There is a continuity of function between the name separator and the word divider in CJK,
+particularly as CJK uses ideographs for words (so words are not consistently broken down), 
+and uses word dividers only sparingly; name separators then become the primary instance of
+* The following are the more refined classes of name separator; because of their large number,
+and the fluidity of classes, they are enumerated here rather than being broken down into separate
+functions in the framework.
+** Components of foreign names (Chinese, Japanese)
+
+
+ which get treated separately in different CJK
+languages; these are discussed below.
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin, Cyrillic: In Western scripts, this function is conflated, with the normal word delimiter
+(space), with clause stops (comma by default, colon for title/subtitle), or with word divider
+(hyphen, used in personal names).
+* CJK: Various forms of interpunct: MIDDLE DOT `<·>` (U+OOB7) in China, HYPHENATION POINT `<‧>` (U+2027) in Taiwan,
+KATAKANA MIDDLE DOT `<・>` (U+30FB) to separate Katakana words in Japanese.
+
+
+===== Special handling
+* The interpunct is half-width in Chinese in print, but full-width in online material.
 
 ==== Word divider
 // Word division:::
 // Marks that divide words at line breaks or indicate compound structures.
 en-dash for second level of division
 NN: The interpunct is used instead of hyphen, dash, or colon in Japanese vertical text.
+
+
+commonality with decimal point (interpunct in Chinese)
+
+Interpunct: Japanese: Separating Japanese words where the intended meaning would be unclear if the characters were written side-by-side
+
 
 ==== Hyphen
 
@@ -1177,6 +1233,9 @@ related to the main text content.
 ===== Range of semantic functions
 
 * Annotation markers are routinely conflated with grouping markers, which enclose, separate, or highlight specific text elements.
+
+
+Leiden illustration
 
 ==== Parenthetical annotation
 
@@ -1545,6 +1604,10 @@ NN: Auto-text is restricted in what it should be called on to represent; ellipse
 
 NN: Building text directly from i18n configuration values is also supported. It is not yet clear whether this will replace l10n() entirely, but it won't in the immediate term.
 
+* Integration with auto-numbering systems
+
+Markup of delimiter types
+
 === Configurable punctuation marks
 
 NN: Most punctuation has variability and needs to be configurable. All punctuation will be configured in the i18n YAML files.
@@ -1607,13 +1670,6 @@ NN: The input to l10n() needs to be unambiguous. In particular, the default quot
 
 === Self-references in YAML configuration
 
-NN: The system needs to embed i18n YAML values within other i18n YAML values. For example:
-
-[source,yaml]
-----
-multiple_and: "%1#{ self["punct"]["enum-comma"] }%2"
-----
-
 NN: Self-references in the YAML are realized as `#{ self.label }`, for example referencing the current enum-comma:
 
 [source,yaml]
@@ -1633,6 +1689,7 @@ NN: A fourth optional parameter is added to l10n(), alongside locale, for writin
 
 NN: This allows differentiation of punctuation based on text direction, which is necessary for some CJK languages where punctuation changes between horizontal and vertical text layouts.
 
+[bibliography]
 == Bibliography
 
 * [[[re_PunctuationMarks,GB/T 15834-2011]]]
