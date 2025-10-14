@@ -686,6 +686,19 @@ Mark that delimits phrases within a sentence, where the first phrase
 introduces the second.
 This function is represented in Metanorma i18n files as `punct.colon`.
 
+===== Range of semantic functions
+
+* Occasionally punctuation is used to separate a term from a description in a definition list,
+although the default is to use only indented space. This function can be regarded as an extension
+of the introductory phrase separator. 
+In Metanorma Presentation XML, this is notated as `<span class="fmt-dt-delim">`.
+
+====
+Framework:: basic structure underlying a system, concept, or text
+
+Framework: basic structure underlying a system, concept, or text
+====
+
 ===== Punctuation mark in scripts, languages, and locales
 
 * Latin: COLON `<:>` (U+003A)
@@ -781,7 +794,8 @@ which can include articles, adjectives, and quantifiers)
 ===== Primary function and purpose
 
 The enumeration delimiter separates items in a list.
-This function is represented in Metanorma i18n files as `punct.enum-comma`.
+This function is represented in Metanorma i18n files as `punct.enum-comma`,
+and in Metanorma Presentation XML as `<span class="fmt-enum-comma">`.
 
 In CJK, both comma-like punctuation marks and interpuncts are used as enumeration delimiters.
 There is no consistent semantic distinction between the two, so no such distinction is made here.
@@ -1130,13 +1144,13 @@ Some Japanese academic writing uses colons instead of wave dash, though this is 
 // |N/A
 // |===
 
-
+[[name-separator]]
 ==== Name separator
 
 ===== Primary function and purpose
 
-In CJK, components of a name are separated from each other using a punctuation mark where necessary
-for clarity.
+Particularly in CJK, components of a name are separated from each other using a punctuation mark where 
+necessary for clarity.
 This applies to names in the broadest sense, including personal names (particularly foreign names),
 professional titles and positions next to names, and
 names of pieces of writing (i.e. titles, separating the title from the subtitle).
@@ -1157,7 +1171,8 @@ functions in the framework.
 ** Components of foreign names (Chinese, Japanese)
 ** Title and subtitle of a work
 ** Professional title, professional position, personal name
-
+** Hierarchical components of cross-reference to entity in a document (e.g. _Clause 5, Note 1_).
+In Metanorma Presentation XML, this is notated as `<span class="fmt-comma">`.
 
 
 
@@ -1177,6 +1192,8 @@ KATAKANA MIDDLE DOT `<・>` (U+30FB) to separate Katakana words in Japanese.
 in the function of separating single components of a Western name. That function occasionally uses the interpunct instead.
 More rarely, the double hyphen also is used instead of the interpunct to delimit names and titles in Western names, 
 e.g. サー゠アーサー゠コナン゠ドイル "Sir=Arthur=Conan=Doyle"
+** Japanese occasionally uses the interpunct for Japanese names, particularly when there would otherwise be 
+confusion as to where one name ends and another begins.
 
 ===== Special handling
 * The interpunct is half-width in Chinese in print, but full-width in online material.
@@ -1198,6 +1215,10 @@ applied universally as a word separator.
   did not use word separators. (The latter practice is known as _scriptio continua_, "continuous writing")
 * CJK by contrast defaults to not using word separators, outside of special contexts (here considered as name separators).
 CJK therefore has _scriptio continua_.
+* There are circumstances in which a word separator is necessary in careful text in CJK.
+Japanese specifically uses the interpunct to separate ordinary Japanese words, outside of the special cases of 
+name separators (<<name_separator>>), where the intended meaning would be unclear if the characters were written side-by-side.
+It is more commonly used to separate foreign words and names when written in kana: パーソナル・コンピューター (personal computer). 
 
 
 
@@ -1206,34 +1227,134 @@ CJK therefore has _scriptio continua_.
 
 ===== Primary function and purpose
 
+The word divider indicates the compound structure of a word, dividing it into pieces smaller than a word.
+
 ===== Range of semantic functions
 * The word divider differs from the name separator in scope: name dividers operate on groupings of words, the word divider
 operates within a word. 
+* The hyphen is a special case of the word divider.
+* The divisions that a word divider makes can vary in scope. What is divided up may be a compound consisting of meaningful units: 
+independent words, or morphemes
+(e.g. prefixes: _de-emphasise_). Or, what is divided up may be a single meaningful unit, broken up into phonetic units (syllables, or letters:
+syllabification or spelling out of a word).
+* The extent to which the word divider isused in compound words varies by language and by style. The use of hyphen to indicate
+compound words (e.g. _pigeon-hole_, _craftily-constructed chair_) is on the decline in English.
+* There may be two levels of division represented, with different dividers used to differentiate between them.
+
+.Meaningful units
+[example]
+post-war
+Indo-European
+
+.Phonetic units
+[example]
+R-E-S-P-E-C-T (spelling out)
+in-cre-di-ble (syllabification)
+
+.Two levels of division
+[example]
+Pre–Indo-European
 
 
-// Word division:::
-// Marks that divide words at line breaks or indicate compound structures.
-en-dash for second level of division
-NN: The interpunct is used instead of hyphen, dash, or colon in Japanese vertical text.
+===== Punctuation mark in scripts, languages, and locales
+
+* In Latin and Cyrillic, the default word divider is the hyphen, HYPHEN-MINUS `<->` (U+002D).
+Unicode also has HYPHEN `<‐>` (U+2010) to disambiguate it from the minus sign, but "Unicode hyphen"
+is little used, and fine typography prefers to use the distinct MINUS SIGN `<−>` (U+2212) 
+in mathematical use.
+* The EN DASH `<–>` (U+2013) is used as a higher level of division (_Pre–Indo-European_,
+_San Francisco–area residents_; the latter uses en dash because it joins a noun consisting of two words with a space, to a third word).
+* In lexicography, interpunct is also used for syllabification.
 
 
-commonality with decimal point (interpunct in Chinese)
+===== Spacing rules
 
-Interpunct: Japanese: Separating Japanese words where the intended meaning would be unclear if the characters were written side-by-side
+Space is not meant to appear after word dividers normally, as any word separators would contradict the intent 
+of the word divider as showing divisions within a single word.
 
-To separate foreign words and names when written in kana: パーソナル・コンピューター (personal computer), and occasionally for Japanese names, particularly when there would otherwise be confusion as to where one name ends and another begins.
+
+===== Special handling
+
+There are cases of word divider which are not meant to be conflated with the hyphen, and for which a line break
+between word divisions is inappropriate. For such cases, NON-BREAKING HYPHEN `<‑>` (U+2011) is used.
+
+
+==== Hyphen
+===== Primary function and purpose
+
+The hyphen is a special case of Word Divider. It is used to divide a word at a line-break,
+so that the amount of space in a line is reduced.
+
+===== Punctuation mark in scripts, languages, and locales
+
+* The hyphen is in routine use in Latin and Cyrillic.
+* The word delimiter is alien to CJK; accordingly, the hyphen is alien to CJK.
+
+===== Spacing rules
+
+The hyphen is only meaningful in that function at the end of a line, and no characters are meant to appear
+after it.
+
+===== Special handling
+
+* An optional hyphen, SOFT HYPHEN (U+00AD) is often used in word processing, which is only rendered when near a line break.
+
 
 ==== Identifier divider
 
 ===== Primary function and purpose
 
+The identifier divider is used to break up a token that is not a linguistic expression.
+
+[example]
+====
+Phone number: _555-8787_ +
+Date: _2000-01-01 +
+Document identifier: _ISO 639-2_
+====
+
 ===== Range of semantic functions
-* The function of the identifier dividier and the word divider are quite similar: breaking up a token and showing
-its internal structure. 
+* The function of the identifier dividier and the word divider are quite similar: they both are breaking up a token and showing
+its internal structure, but differ in that one divides a linguistic word, and the other divides a non-linguistic token.
 * The function of the identifier dividier is also similar to the decimal point, as a number token divider; however
 decimal points are dealt with separetely, as numeric formatting.
+* Identifier dividers can apply to numbers as identifiers, but are distinct from decimal points in that they don't have an arithmetic
+function. So when separating groups of digits in a phone number or a date, the hyphen is distinct from a decimal point.
+* The components of a numeric date are also split by identifier divider.
+* In the case of hierarchical identifiers of entities in a document, such as clauses,
+Metanorma Presentation XML notates this as `<span class="fmt-autonum-delim">`.
 
-==== Hyphen
+===== Punctuation mark in scripts, languages, and locales
+
+* The usual identifier divider is the hyphen. Period, slash, and colon are also used idiosyncratically.
+
+==== Identifier delimiter
+
+===== Primary function and purpose
+
+The identifier divider is used to separate an identifier from surrounding text, whether at the start,
+the end, or both.
+
+[example]
+====
+Formula (1)
+Figure 1 a)
+====
+
+===== Range of semantic functions
+* Identifier delimiters distinct from word delimiters are very rare. The most common use of them
+is in structured documents such as under Metanorma, for subfigures and formulas. Whether an
+identifier delimiter is used is a matter of style convention.
+* The identifier delimiter is similar in function to title marks and emphasis marks.
+* Metanorma Presentation XML currently notates this function as `<span class="fmt-autonum-delim">`,
+although this is properly the notation for identifier dividers.
+
+===== Punctuation mark in scripts, languages, and locales
+
+* The usual identifier delimiter is the close parenthesis, or surrounding parentheses.
+
+
+
 
 
 === Caption marks
@@ -1273,6 +1394,7 @@ Closing parentheses are common for ordered list items.
 
 If the number of the entity appears together with a caption or title, giving more information about the entity, 
 puncutation is usually used to separate the two. 
+In Metanorma Presentation XML, this is notated as `<span class="fmt-caption-delim">`
 
 [example]
 Table 1. Distribution of rice yields
@@ -1313,10 +1435,30 @@ NOT: Table 1.: Distribution of rice yields
 colon, comma, em-dash, period
 
 
-===== Special handling
-* XXX
+==== Caption stop
 
-TODO: What other delimiters have been highlighted in Metanorma Presentation XML
+
+===== Primary function and purpose
+
+The caption or title of an entity in a document may be terminated with a punctuation mark. 
+In Metanorma Presentation XML, this is notated as `<span class="fmt-label-delim">`
+
+===== Range of semantic functions
+
+* This function is an extension of the sentence stop, since captions can be seen as
+sentences. Whether it is used or not depends on the publisher's style conventions.
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1373,6 +1515,8 @@ NN: Emphasis marking will need to be implemented as a separate i18n function, in
 
 
 ==== Italics (TBD)
+
+quotative
 
 
 === Annotation markers
