@@ -1477,7 +1477,8 @@ related to the main text content.
 
 ===== Range of semantic functions
 
-* Annotation markers are routinely conflated with grouping markers, which enclose, separate, or highlight specific text elements.
+* Annotation markers are routinely conflated with grouping markers, which enclose, separate, or highlight 
+specific text elements.
 
 
 Japanese: In pairs, in place of dashes or brackets: 〜〜答え〜〜
@@ -1538,11 +1539,6 @@ This function is represented in Metanorma i18n files as `punct.open-paren` and `
 |===
 
 
-==== Bracket
-
-==== Brace
-
-==== Angle bracket
 
 
 
@@ -1636,6 +1632,17 @@ as superscript.
 // |footnotes/superscript +
 // (방주)
 // |===
+
+=== Grouping markers
+
+==== Bracket
+
+==== Brace
+
+==== Angle bracket
+
+
+
 
 === Semantic identification
 
@@ -1788,6 +1795,8 @@ Japanese: To mark subtitles: 〜概要〜
 
 
 === Emphasis markers
+
+==== General
 
 ===== Primary function and purpose
 
