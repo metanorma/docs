@@ -1187,7 +1187,7 @@ functions in the framework.
 ** Professional title, professional position, personal name
 ** Hierarchical components of cross-reference to entity in a document (e.g. _Clause 5, Note 1_).
 In Metanorma Presentation XML, this is notated as `<span class="fmt-comma">`.
-
+** Components of a bibliographic reference entry (e.g. _Smith, J. 1989. The passage of time. New York: Wiley._)
 
 
 ===== Punctuation mark in scripts, languages, and locales
@@ -1231,7 +1231,7 @@ applied universally as a word separator.
 CJK therefore has _scriptio continua_.
 * There are circumstances in which a word separator is necessary in careful text in CJK.
 Japanese specifically uses the interpunct to separate ordinary Japanese words, outside of the special cases of 
-name separators (<<name_separator>>), where the intended meaning would be unclear if the characters were written side-by-side.
+name separators (<<name-separator>>), where the intended meaning would be unclear if the characters were written side-by-side.
 It is more commonly used to separate foreign words and names when written in kana: パーソナル・コンピューター (personal computer). 
 
 
@@ -1550,6 +1550,7 @@ and RIGHT PARENTHESIS `<)>` (U+0029)
 * Paired em dashes are used within a sentence, when the parenthetic annotation can be presented as a sentence break and
 resumption. This is associated with less formal style.
 * CJK: CJK uses FULLWIDTH LEFT PARENTHESIS `<（>` (U+FF08) and  FULLWIDTH RIGHT PARENTHESIS `<）>` (U+FF09)
+  * Use of a paired em dash equivalent is rare in CJK.
 * Japanese: Japanese in addition uses double wavy dash:
 +
 ====
@@ -1746,7 +1747,7 @@ floor brackets (`<⌊ ⌋>`) are out of scope of this document.
 
 * Grouping markers overlap with parenthetical annotations.
 * Grouping markers are used to indicate editorial interventions in text; the Leiden conventions
-<<leiden>> are a very formalised equivalent of the less granular conventions expressed by
+(<<leiden>>) are a very formalised equivalent of the less granular conventions expressed by
 grouping markers. Editorial interventions are not here treated as a distinct semantic function.
 
 ==== Bracket
@@ -1805,44 +1806,117 @@ instead.
 MATHEMATICAL RIGHT ANGLE BRACKET `< ⟩ >` (U+27E9) for mathematical and normal text usage.
 In informal usage, and in many formal notation schemes such as computer programming,
 LESS-THAN SIGN `<&lt;>` (U+003C) and GREATER-THAN SIGN `<&gt;>` (U+003E) are used instead.
-* CJK: LEFT ANGLE BRACKETSIGN `<〈 >` (U+3008), RIGHT ANGLE BRACKET `< ⟩ >` (U+3009)  
+* CJK: LEFT ANGLE BRACKET `<〈 >` (U+3008), RIGHT ANGLE BRACKET `< ⟩ >` (U+3009)  
 
 
 === Semantic identification
 
 ==== General
 
-Traditional marks that identify names and titles in classical texts.
+===== Primary function and purpose
 
-NN: Title marks are to be handled in relaton-render as bibliographic punctuation, not in general l10n translation.
+Semantic identification punctuation identifies a span of text as conveying a specific semantics,
+as distinct from the structural information conveyed by punctuation marks in the foregoing.
 
-NN: Traditional Chinese uses wavy underline U+FE4F as official title markup. Square brackets 【】and double quotation marks『』are also used. Single title marks 〈...〉are used for article and chapter titles.
+===== Range of semantic functions
 
-NN: Simplified Chinese uses《...》for titles, with inner marks 〈...〉for article and chapter titles. Square brackets【】and double quotation marks『』are also used for song titles.
+* Semantic identification overlaps routinely with emphasis markers, and with quotation markers.
 
-NN: Japanese uses『...』(double quotes) for book titles.
+===== Punctuation mark in scripts, languages, and locales
+* Latin, Cyrillic: Punctuation marks for most semantic identification, other than abbreviation marks,
+are not used in contemporary Latin and Cyrillic practice, although number marks were commonplace 
+in ancient and mediaeval versions of those writing systems. 
 
-NN: Western quotes are unofficially used in press for titles in Traditional Chinese, Japanese, and Korean.
+==== Abbreviation mark
 
-NN: Double quotes are also used for book titles.
+===== Primary function and purpose
 
-Apostrophe markers
+Abbreviation marks are used to indicate that a word is an abbreviation of another word, and is to be
+understood as such rather than as a phonetically read word.
 
-Number markers
+===== Punctuation mark in scripts, languages, and locales
+* Latin, Cyrillic: the usual abbreviation mark is the period.
+* CJK: while CJK languages do form truncated expressions (e.g. _Běidà_ 北大 for _Běijīng Dàxué_ 北京大学 "Peking University"),
+abbreviation marks are not used explicitly.
+
+===== Spacing rules
+* There is variation as to whether an abbreviation of a multi-word phrase retains the spaces of its source phrase
+(_U. S._ vs _U.S._).
+
+===== Special handling
+* There is variation by language, style, and instance as to when to use the abbreviation mark, and whether
+to use abbreviation marks within an acronym (_N.A.T.O._ vs _NATO_, _etc._ vs _etc_).
 
 
+==== Number mark
+===== Primary function and purpose
 
+In writing systems where number symbols are ambiguous with letters of the script, it was routine to highlight the
+numeric use of letters to prevent ambiguity.
+
+[example]
+====
+Latin _VI_ "by power" +
+Roman numeral _V͞I_ "6"
+====
+
+===== Punctuation mark in scripts, languages, and locales
+* Hebrew and Greek have distinct number marks (gershayim and geresh in Hebrew, keraia in Greek), including 
+disambiguating marks for counts of thousands (quote mark in Hebrew, lower keraia in Greek) and for reciprocal
+fractions (double keraia in Greek).
+* Roman numbers used an overbar in antiquity to indicate that they were numbers; as it happens, an overbar (_vinculum_)
+was also used in the same period, to indicate that the number was to be multiplied by a thousand (so _V͞I_ was used for
+both "6" and "6,000"). The number mark is rare in contemporary usage of Roman numbers.
 
 ==== Title mark
+===== Primary function and purpose
+The title mark is used to indicate the title of a document. This is a core function in bibliographic rendering,
+but it is also applied outside of formal bibliographic rendering, in running text.
+
+===== Punctuation mark in scripts, languages, and locales
+* Latin, Cyrillic: this is by default handled through italics rather than a punctuation mark. Quotation marks are often
+used instead, although in more formal referencing, quotation marks are used as secondary title marks instead.
+* Traditional Chinese: WAVY LOW LINE (U+FE4F) is used as official title markup, particularly in texts that also use the
+proper name mark.
+  * Square brackets 【】and double quotation marks『』are also used. 
+* Simplified Chinese: uses《...》for titles. 
+  * Square brackets【】and double quotation marks『』are also used for song titles.
+* Japanese: 『...』(double quotes) are used for book titles.
+  * Western quotes are unofficially used in press for titles in Traditional Chinese, Japanese, and Korean.
 
 
-// Title marking:::
-// Specialized marks for book titles, article titles, and similar works.
+===== Special handling
 
-Japanese: To mark subtitles: 〜概要〜
+* The title mark is associated with the name separator (<<name-separator>>), 
+to separate components of a bibliographic reference entry.
+
+==== Subsidiary title mark
+===== Primary function and purpose
+
+The subsidiary title mark is used to indicate the subtitle of a document.
+
+===== Range of semantic functions
+
+* The title mark is associated with the name separator (<<name-separator>>), to delimit titles from subtitles.
+
+===== Punctuation mark in scripts, languages, and locales
+* Latin, Cyrillic: subtitles are not marked up as a separate span from titles, and Western script referencing
+relies instead on the name separator to differentiate titles from subtitles.
+* Japanese: Wavy dash can be used to mark subtitles: 〜概要〜
+
+==== Secondary title mark
+===== Primary function and purpose
+The secondary title mark is used to indicate the title of a subsidiary document in more formal referencing.
+This applies to article and chapter titles, as distinct from book and journal titles.
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin, Cyrillic: this is by default handled through quotation marks.
+* Traditional Chinese, Simplified Chinese: Single title marks 〈...〉are used for article and chapter titles.
 
 
 
+////
 [cols="2,2,2,3"]
 |===
 |Language |Name of Mark |Symbol |Example
@@ -1873,6 +1947,7 @@ Japanese: To mark subtitles: 〜概要〜
 |나는 『홍루몽』을 읽었습니다。
 
 |===
+////
 
 // |Title marking +
 // 書名號/书名号/書名符號/책이름표
@@ -1887,7 +1962,7 @@ Japanese: To mark subtitles: 〜概要〜
 // |『...』 +
 // (책이름표)
 
-
+////
 ==== Title delimiter
 
 [cols="2,2,2,3"]
@@ -1920,11 +1995,23 @@ Japanese: To mark subtitles: 〜概要〜
 |『노자．도덕경』
 
 |===
-
+////
 
 
 ==== Proper name mark
+===== General
 
+The proper name mark is used to indicate a proper name within a document.
+
+===== Range of semantic functions
+* Writing systems can use the name separator instead (<<name-separator>>), to differentiate names from surrounding text.
+
+
+===== Punctuation mark in scripts, languages, and locales
+* Traditional Chinese: an underline is occasionally used, in didactic and ambiguous contexts
+(teaching materials, movie subtitles).
+
+////
 [cols="2,2,2,3"]
 |===
 |Language |Name of Mark |Symbol |Example
@@ -1955,25 +2042,25 @@ Japanese: To mark subtitles: 〜概要〜
 |?
 
 |===
+////
 
 
-
-=== Emphasis markers
+=== Highlight markers
 
 ==== General
 
 ===== Primary function and purpose
 
-Emphasis markers highlight and draw attention to specific text elements through visual modification or
+Highlight markers highlight and draw attention to specific text elements through visual modification or
 annotation, for a range of functions.
 
 ===== Range of semantic functions
 
-* The range of functions for which emphasis markers are used is open-ended, and often overlaps with other
-semantic functions. This includes emphasis proper,  on the part of the author; emphasis on the part of a speaker
+* The range of functions for which highlight markers are used is open-ended, and often overlaps with other
+semantic functions. This includes emphasis on the part of the author; emphasis on the part of a speaker
 in direct speech; use-mention distinction (so citation of words as subjects of
 discussion, as opposed to use of words in language); titles and names of entities; and foreign words.
-* The extent of use of emphasis markers varies by language and style.
+* The extent of use of highlight markers varies by language and style.
 
 ===== Punctuation mark in scripts, languages, and locales
 
@@ -1981,7 +2068,7 @@ discussion, as opposed to use of words in language); titles and names of entitie
 including italics, boldface, and underlining. These are not in scope of this framework, except where Metanorma
 needs to alternate between typographical styling in Latin/Cyrillic, and punctuation marks in CJK. 
   * While some documents make meaningful distinctions between italics, boldface, and underlining, they are
-idiosyncratic to the document, and cannot be generalised readily. Italics is the default emphasis marking device in
+idiosyncratic to the document, and cannot be generalised readily. Italics is the default highlight marking device in
 English.
 * CJK does not use italics, although it does use boldface.
   * Instead of italics, CJK uses a range of explicit punctuation, including single or double quotes, brackets,
@@ -2049,17 +2136,20 @@ NN: In Traditional Chinese, U+2027 is used for decimal point in Chinese numbers.
 
 === Miscellaneous
 
+==== Ellipse
 
 This function is represented in Metanorma i18n files as `punct.ellipse`.
 
 NN: Ellipsis in CJK languages can be three dots or six dots. In horizontal text, it can be baseline or centered. In vertical text, it is centered. The six-dot form uses twice U+22EF as explicit centered markup, or twice U+2026 where centering is inexplicit.
 
-
+==== Slash
 slash
 
+==== Ampersand
 Ampersand
 
-
+==== Apostrophe
+plural marker, making it a kind of word divider
 
 
 == Whitespace handling
@@ -2168,6 +2258,8 @@ NN: A subset of the foregoing will be translated from Roman punctuation in autot
 * ellipse: `…`
 
 NN: Add the relaton-render q-mark qq-mark, and move it to punct
+
+
 
 NN: Enum comma is not to be supported in l10n() directly. It is already handled with explicit support through the `multiple_and` i18n YAML value.
 
