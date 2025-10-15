@@ -1243,12 +1243,12 @@ compound words (e.g. _pigeon-hole_, _craftily-constructed chair_) is on the decl
 
 .Meaningful units
 [example]
-post-war
+post-war +
 Indo-European
 
 .Phonetic units
 [example]
-R-E-S-P-E-C-T (spelling out)
+R-E-S-P-E-C-T (spelling out) +
 in-cre-di-ble (syllabification)
 
 .Two levels of division
@@ -1310,7 +1310,7 @@ The identifier divider is used to break up a token that is not a linguistic expr
 ====
 Phone number: _555-8787_ +
 Date: _2000-01-01 +
-Document identifier: _ISO 639-2_
+Document identifier: __ISO 639-2__
 ====
 
 ===== Range of semantic functions
@@ -1337,7 +1337,7 @@ the end, or both.
 
 [example]
 ====
-Formula (1)
+Formula (1) +
 Figure 1 a)
 ====
 
@@ -1357,7 +1357,7 @@ although this is properly the notation for identifier dividers.
 
 
 
-=== Caption marks
+=== Caption markers
 ==== General
 
 ==== Primary function and purpose
@@ -1376,7 +1376,7 @@ The identifier of the entity may be signalled with punctuation acting as a delim
 Table 1.
 
 [example]
-3\)
+3)
 
 ===== Range of semantic functions
 * Different kinds of entity can take different punctuation. Ordered list items are commonly delimited with a closing
@@ -1448,75 +1448,66 @@ In Metanorma Presentation XML, this is notated as `<span class="fmt-label-delim"
 * This function is an extension of the sentence stop, since captions can be seen as
 sentences. Whether it is used or not depends on the publisher's style conventions.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 === Emphasis markers
 
 ==== General
 
-Emphasis markers highlight specific text elements through visual modification or
-annotation.
+===== Primary function and purpose
 
-// Marks that highlight or draw attention to specific content.
+Emphasis markers highlight and draw attention to specific text elements through visual modification or
+annotation, for a range of functions.
 
-NN: Italics are not used in CJK languages. Instead, single or double quotes or brackets are used for emphasis, or emphasis marks are applied.
+===== Range of semantic functions
 
-NN: Emphasis marks (underdot in Chinese, various forms in Japanese) are used instead of italics. These are rare online and unsupported in many Word processors, but can be achieved using CSS text-emphasis-style.
+* The range of functions for which emphasis markers are used is open-ended, and often overlaps with other
+semantic functions. This includes emphasis proper,  on the part of the author; emphasis on the part of a speaker
+in direct speech; use-mention distinction (so citation of words as subjects of
+discussion, as opposed to use of words in language); titles and names of entities; and foreign words.
+* The extent of use of emphasis markers varies by language and style.
 
-NN: Japanese emphasis marks include a wide range: filled or hollow dot, circle, double circle, triangle, and "sesame" marks.
+===== Punctuation mark in scripts, languages, and locales
 
-NN: Emphasis marking will need to be implemented as a separate i18n function, invoked discretionarily for `<em>` spans, with a configurable emphasis mark.
+* Latin and Cyrillic do not use punctuation in this function, and resort instead to typographical styling,
+including italics, boldface, and underlining. These are not in scope of this framework, except where Metanorma
+needs to alternate between typographical styling in Latin/Cyrillic, and punctuation marks in CJK. 
+  * While some documents make meaningful distinctions between italics, boldface, and underlining, they are
+idiosyncratic to the document, and cannot be generalised readily. Italics is the default emphasis marking device in
+English.
+* CJK does not use italics, although it does use boldface.
+  * Instead of italics, CJK uses a range of explicit punctuation, including single or double quotes, brackets,
+or emphasis marks.
+  * CJK emphasis marks are a diacritic applied to every character in the text span to be emphasised. 
+Chinese is usually restricted to using an underdot. Japanese uses a much wider range of emphasis marks:
+filled or hollow dot, circle, double circle, triangle, and "sesame" marks.
 
-==== Stress emphasis
+===== Special handling
 
-[cols="2,2,2,3"]
-|===
-|Language |Name of Mark |Symbol |Example
+* While the underdot emphasis mark could be realised as a distinct Unicode character, CJK emphasis marks have been
+treated in computer typesetting as markup. They are realised in CSS using the `text-emphasis-style` attribute.
+This means that Western and CJK emphasis marks are both treated as markup rather than as punctuation.
+* CJK emphasis marks are rare online and unsupported in many Word processors. (Microsoft Word also supports a
+smaller range of emphasis marks in Japanese than does HTML CSS or XSL:FO.)
 
-|English
-|stress emphasis
-| *bold* or _italic_
-| This is *important* text, and this is _emphasized_ text.
-
-|Traditional Chinese
-|着重號
-|`‥‥‥`
-| 這是‥‥‥重要的文字。
-
-|Simplified Chinese
-|着重号
-|`‥‥‥`
-| 这是‥‥‥重要的文字。
-
-|Japanese
-|圏点
-|`‥‥‥`
-| これは‥‥‥重要な文章です。
-
-|Korean
-|방점
-| *bold* or _italic_
-| 이것은 *중요한* 글자입니다.
-|===
+[TIP]
+--
+Metanorma does not currently support emphasis marks. When it does, it will be as a discretionary expansion
+of `<em>` markup in Semantic Metanorma XML.
+--
 
 
-==== Italics (TBD)
 
-quotative
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 === Annotation markers
