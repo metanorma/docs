@@ -30,7 +30,9 @@ it will add to the text it composes, and to provide well-governed rendering of t
 in the languages it supports.
 
 This document defines a framework for semantic punctuation usage across multiple
-languages and writing systems.
+languages and writing systems, to be drawn from in the generation of punctuated text based on
+semanticly marked up text. This framework is *not* intended to supplant the punctuation provided
+by authors in originally authored texts in components.
 
 The document covers the following languages and writing systems:
 
@@ -73,7 +75,9 @@ in Metanorma implementation, and how its configuration can be updated.
 Examples and discussion about specific writing systems are as of this writing limited
 to CJK and Latin; but the document is intended to be generally applicable.
 
-Mathematical symbols are out of scope of this document. Numeric punctuation is in scope,
+Formal notation systems that use punctuation in ways divergent from normal language,
+such as mathematical notation, chemical notation, and computer programming,
+are out of scope of this document. Numeric punctuation is in scope,
 but it is not discussed in detail, as it is handled in Metanorma by distinct mechanisms.
 
 [NOTE]
@@ -288,6 +292,15 @@ Each usage category and each individual function defines one of more of the foll
 * Common punctuation mark variations across languages for each function
 * Spacing requirements
 * Special handling rules
+
+The semantic functions described here reflect usage, and punctuation usage does not
+follow rigorously differentiated functions: similar functions are routinely conflated
+in punctuation marks, and the same function is routinely represented by different
+punctuation marks, with little rigour. This framework is limited to contexts
+where the intended meaning of punctuation can be controlled by the publishing system,
+in deriving punctuated, template-generated text from underlying semantic markup.
+Such templates can specify the intended function of punctuation more rigorously than
+it is reasonable to expect of a human author.
 
 == Functions: phrase-level structure
 
@@ -924,7 +937,7 @@ LEFT DOUBLE ANGLE BRACKET `<《>` (U+300A) and RIGHT DOUBLE ANGLE BRACKET `<》>
 ** Corner brackets and white corner brackets are often used in practice.
 
 
-
+TODO: Are lenticular brackets quotation markers, title markers, or both?
 
 ===== Special handling
 
@@ -1364,14 +1377,15 @@ although this is properly the notation for identifier dividers.
 ===== Primary function and purpose
 
 In formal documents (particularly the standards in scope of Metanorma), titles of cross-referencable entities
-within the document (figures, tables, lists, list items, clauses, etc.) are labelled in such a way as to
-isolate the identifier of the entity, which is used in cross-referencing
+within the document (figures, tables, lists, list items, footnotes, clauses, etc.) are labelled in such a way as to
+isolate the identifier of the entity, which is used both in labelling the entity, and in cross-referencing that entity.
 
 ==== Caption number delimiter
 ===== Primary function and purpose
 
 
-The identifier of the entity may be signalled with punctuation acting as a delimiter
+The identifier of the entity may be signalled with punctuation acting as a delimiter.
+In Metanorma Presentation XML, this is notated as `<span class="fmt-label-delim">`.
 
 [example]
 Table 1.
@@ -1386,7 +1400,7 @@ parenthesis instead of a period.
 ===== Punctuation mark in scripts, languages, and locales
 
 * Latin, Cyrillic: Period is the most common caption number delimiter, if a delimiter is used at all.
-Closing parentheses are common for ordered list items.
+Closing parentheses are common for ordered list items and footnotes.
 
 ==== Caption number separator
 
@@ -1396,6 +1410,8 @@ Closing parentheses are common for ordered list items.
 If the number of the entity appears together with a caption or title, giving more information about the entity, 
 puncutation is usually used to separate the two. 
 In Metanorma Presentation XML, this is notated as `<span class="fmt-caption-delim">`
+
+
 
 [example]
 Table 1. Distribution of rice yields
@@ -1443,25 +1459,20 @@ colon, comma, em-dash, period
 
 The caption or title of an entity in a document may be terminated with a punctuation mark. 
 In Metanorma Presentation XML, this is notated as `<span class="fmt-label-delim">`
+(conflating it with the Caption number delimiter.)
+
+====
+Table 1: Distribution of rice yields.
+====
 
 ===== Range of semantic functions
 
 * This function is an extension of the sentence stop, since captions can be seen as
 sentences. Whether it is used or not depends on the publisher's style conventions.
 
+===== Punctuation mark in scripts, languages, and locales
 
-
-
-
-
-
-
-
-
-
-
-
-
+* Latin, Cyrillic: if a caption stop is provided, it is a period.
 
 == Functions: adding meaning
 
@@ -1471,42 +1482,96 @@ sentences. Whether it is used or not depends on the publisher's style convention
 
 ===== Primary function and purpose
 
-Text annotation markers provide supplementary information or references
+Annotation markers provide supplementary information or references
 related to the main text content.
-
 
 ===== Range of semantic functions
 
 * Annotation markers are routinely conflated with grouping markers, which enclose, separate, or highlight 
 specific text elements.
+* Different kinds of annotation are indicated by different punctuation conventions, as described below,
+but these are usually not rigorously differentiated.
 
-
-Japanese: In pairs, in place of dashes or brackets: 〜〜答え〜〜
-
-
-* The Leiden conventions for classical inscriptions and papyri use a wide range of brackets with quite distinct meanings,
+[[leiden]]
+====
+The Leiden conventions for publishing ancient inscriptions and papyri use a wide range of brackets 
+with quite distinct meanings,
 in order to convey editorial approaches to a text. (They are a form of machine readable text changes.) 
 This is the upper limit of distinct semantic functions in annotation
 markers, and most use of annotation markers is semantically much more ad hoc:
-** ạḅ: letter is unclear in original
-** [abc]: letters missing from original (because text is broken off), restored by editor
-** ⟨abc⟩: letters left out from original text (because the scribe never wrote them), restored by editor
-** a(bc): abbreviation in original, letters expanded by editor
-** {abc}: letters written in the original by the scribe, deleted as errors by the editor
-** ⟦abc⟧: letters deleted in the original by the scribe, restored by the editor
-** \abc/: letters interpolated in the original by the scribe (typically between lines)
+
+* ạḅ: letter is unclear in original
+* [abc]: letters missing from original (because text is broken off), restored by editor
+* ⸤ abc⸥ : letters missing from original, but restored from another source, e.g. a mediaeval manuscript
+of the same text
+* ⟨abc⟩: letters left out from original text (because the scribe never wrote them), restored by editor
+* a(bc): abbreviation in original, letters expanded by editor
+* {abc}: letters written in the original by the scribe, deleted as errors by the editor
+* ⟦abc⟧: letters deleted in the original by the scribe, restored by the editor
+* \abc/: letters interpolated in the original by the scribe (typically between lines)
+====
 
 
-==== Parenthetical annotation
+==== Parenthetical annotation  (_parentheses_)
 
 ===== Primary function and purpose
 
+Parenthetical annotation marks enclose supplementary or explanatory information.
 This function is represented in Metanorma i18n files as `punct.open-paren` and `punct.close-paren`.
 
-// Parenthetical information:::
-// Marks that enclose supplementary or explanatory information.
+===== Range of semantic functions
 
+* Parenthetical annotations can appear either within a sentence, or as a group of one or more sentences between sentences.
+* Parenthetical annotations can be conflated with grouping markers, although they are less common in that function
+than other paired punctuation marks.
+* As an extension of their role, parenthetical annotations can also occur within a word, to indicate
+that a part of the word is optional in some sense. This is a special case of a word divider.
+Examples include indication of singular and plural, or masculine and plural, both applying, by
+giving the letter distinguishing those grammatical categories in parentheses:
++
+====
+(s)he
+plan(s)
+====
+* Within a sentence, paired breaking phrase (em dashes) separators can overlap in function with parenthetical annotations: 
+the parenthetical information is presented as a break from the main sentence, and another breaking phrase separators
+resumes the main sentence.
++
+====
+The red-nosed reindeer (Rudolph was his name) had a very shiny nose.
 
+The red-nosed reindeer—Rudolph was his name—had a very shiny nose.
+====
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin, Cyrillic: By default, parenthetical annotations are rendered as LEFT PARENTHESIS `<(>` (U+0028)
+and RIGHT PARENTHESIS `<)>` (U+0029)
+* Paired em dashes are used within a sentence, when the parenthetic annotation can be presented as a sentence break and
+resumption. This is associated with less formal style.
+* CJK: CJK uses FULLWIDTH LEFT PARENTHESIS `<（>` (U+FF08) and  FULLWIDTH RIGHT PARENTHESIS `<）>` (U+FF09)
+* Japanese: Japanese in addition uses double wavy dash:
++
+====
+〜〜答え〜〜
+====
+
+===== Special handling
+* Languages differ as to whether parentheses enclosing italicised text should themselves be
+in italics. In German, they is expected to; in English, they are expected not to.
+* Parenthetical annotations can be nested within other parenthetical annotations. In informal
+writing, parentheses are used for both nesting and nested annotations. In formal writing, concern
+for ambiguity drives many style guides to require that the nested annotation be in brackets instead
+of parentheses, and that any third level of nesting be in curly brackets.
++
+====
+From Wikipedia: Parentheses may be nested (generally with one set (such as this) inside another set). 
+This is not commonly used in formal writing (though sometimes other brackets [especially square brackets] 
+will be used for one or more inner set of parentheses [in other words, secondary {or even tertiary} 
+phrases can be found within the main parenthetical sentence]).
+====
+
+////
 [cols="2,2,2,3"]
 |===
 |Language |Name of Mark |Symbol |Example
@@ -1537,21 +1602,51 @@ This function is represented in Metanorma i18n files as `punct.open-paren` and `
 | 이것은 문장입니다 (추가 정보 포함).
 
 |===
+////
 
 
 
+==== Footnote annotations (_footnote marks_)
+
+===== Primary function and purpose
+
+Footnote annotations are text annotation marks that provide supplementary information or references
+related to the main text content, like parenthetical annotations. Unlike parenthetical annotations,
+the annotation does not appear inline with the text it is annotation, but in a separate place,
+either the bottom of a page (footnote), the end of a chapter or book (endnote), or, in older practice,
+the margin of a text (marginalia). A footnote mark is used to cross-reference the place annotated
+in the text (where it is a footnote reference), to the annotation content (where it is a
+footnote label).
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin, Cyrillic: there are two repertoires of marks drawn on for footnote marks
+  * Where a small repertoire of footnote marks is required (e.g. footnotes are cycled through for each page), 
+  and in older practice, footnote marks are drawn from a set of typographical symbols, in the traditional
+  order `<* † ‡ § ‖ ¶>`, supplemented in ad hoc function by other symbols.
+  * Where a large repertoire of footnote marks is required (e.g. footnotes are cycled through once per chapter
+  or document), and in newer practice, footnote marks are drawn from an ordered sequence of numerals or letters.
+  Arabic numbers are the most commonly used, but Roman numbers and letters of the alphabet also appear.
+
+===== Spacing rules
+
+* There is normally no space between text being annotated and the footnote reference.
+* There may be space between the footnote label and the annotation
+
+===== Special handling
+
+* Footnote marks are normally superscripts, both as footnote references and as footnote labels.
+* Footnote references normally appear after sentence and phrasal stops.
+* There are different conventions on whether the repertoire of footnote symbols is cycled through
+(i.e. restarted from `1` or `*`) each page, each chapter, or once in a document.
+* There may be a caption number delimiter after the footnote mark. Documents may differ in whether
+they place a caption number delimiter after footnote references and after footnote labels.
+* In some documents, a distinction is made between different footnote mark sequences.
 
 
 
-
-
-
-
-==== Footnote/superscript annotation
-
-Text annotation marks that provide supplementary information or references
-related to the main text content, typically placed at the bottom of the page or
-as superscript.
+////
+TODO: footnote marker delimiters
 
 [cols="2,2,2,3"]
 |===
@@ -1583,6 +1678,7 @@ as superscript.
 | 이것은 각주가 있는 문장입니다.
 
 |===
+////
 
 // Annotation emphasis:::
 // Marks that add supplementary information above or alongside text.
@@ -1635,13 +1731,81 @@ as superscript.
 
 === Grouping markers
 
+==== General
+
+Grouping markers include a range of paired punctuation markers, used to indicate that the enclosed
+items or word belong together in some sense. While grouping markers have some semantic functions 
+associated with editorial interventions, the association is loose, 
+and the markers are instead differentiated by visual form.
+
+The listing of grouping markers here is limited to those in use in normal language. Grouping
+markers that only appear in formal notation systems, e.g. double brackets (`<⟦ ⟧>`) and 
+floor brackets (`<⌊ ⌋>`) are out of scope of this document.
+
+===== Range of semantic functions
+
+* Grouping markers overlap with parenthetical annotations.
+* Grouping markers are used to indicate editorial interventions in text; the Leiden conventions
+<<leiden>> are a very formalised equivalent of the less granular conventions expressed by
+grouping markers. Editorial interventions are not here treated as a distinct semantic function.
+
 ==== Bracket
+
+===== Range of semantic functions
+
+* Brackets can be used to insert explanatory material, instead of parentheses. The implication
+is typically that the brackets represent an editorial intervention, rather than the authorial
+voice.
+
+.Use of brackets to indicate editorial change of a text's case
+=====
+[m]y cause is just
+=====
+
+.Use of brackets to indicate an editorial explanatory interpolation
+====
+I appreciate it [the honor], but I must refuse
+====
+
+.Use of brackets to interpolate the original language word in a translation
+====
+He is trained in the way of the open hand [_karate_].
+====
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin, Cyrillic: LEFT SQUARE BRACKET `<[>` (U+005B), RIGHT SQUARE BRACKET `<]>` (U+005D)
+* CJK: FULLWIDTH RIGHT SQUARE BRACKET `<［>` (U+FF3B), FULLWIDTH RIGHT SQUARE BRACKET `<］>` (U+FF3D)  
 
 ==== Brace
 
+===== Range of semantic functions
+
+* The main use of braces in English normal text is to indicate editorial additions and interpolations.
+They are overwhelmingly used in formal notation systems
+instead.
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin, Cyrillic: LEFT CURLY BRACKET `<{>` (U+007B), RIGHT CURLY BRACKET `<}>` (U+007D)
+* CJK: FULLWIDTH RIGHT CURLY BRACKET `<｛ >` (U+FF5B), FULLWIDTH RIGHT CURLY BRACKET `<｝>` (U+FF5D)  
+
+
+
 ==== Angle bracket
 
+===== Range of semantic functions
 
+* Angle brackets have limited use to indicate editorial interpolation, or to indicate that a text
+was thought by a character instead of spoken. They are overwhelmingly used in formal notation systems
+instead.
+
+===== Punctuation mark in scripts, languages, and locales
+* Latin, Cyrillic: Good typography expects MATHEMATICAL LEFT ANGLE BRACKET `<⟨>` (U+27E8),
+MATHEMATICAL RIGHT ANGLE BRACKET `< ⟩ >` (U+27E9) for mathematical and normal text usage.
+In informal usage, and in many formal notation schemes such as computer programming,
+LESS-THAN SIGN `<&lt;>` (U+003C) and GREATER-THAN SIGN `<&gt;>` (U+003E) are used instead.
+* CJK: LEFT ANGLE BRACKETSIGN `<〈 >` (U+3008), RIGHT ANGLE BRACKET `< ⟩ >` (U+3009)  
 
 
 === Semantic identification
@@ -1821,7 +1985,9 @@ idiosyncratic to the document, and cannot be generalised readily. Italics is the
 English.
 * CJK does not use italics, although it does use boldface.
   * Instead of italics, CJK uses a range of explicit punctuation, including single or double quotes, brackets,
-or emphasis marks.
+lenticular brackets, or emphasis marks.
+  * For example,  Japanese uses lenticular brackets in dictionaries for quoting Chinese characters 
+  and Sino-Japanese loanwords.
 
 
 ==== Emphasis marks
@@ -1888,6 +2054,10 @@ This function is represented in Metanorma i18n files as `punct.ellipse`.
 
 NN: Ellipsis in CJK languages can be three dots or six dots. In horizontal text, it can be baseline or centered. In vertical text, it is centered. The six-dot form uses twice U+22EF as explicit centered markup, or twice U+2026 where centering is inexplicit.
 
+
+slash
+
+Ampersand
 
 
 
