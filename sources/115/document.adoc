@@ -169,6 +169,8 @@ meaningful grouping of words, that is smaller than a sentence
 
 == Framework
 
+=== General
+
 This framework provides guidelines for the consistent application of punctuation
 marks across different languages and writing systems. It aims to ensure that
 punctuation usage aligns with semantic meaning and cultural conventions.
@@ -267,7 +269,7 @@ that suits the target audience can be achieved—provided that the needed punctu
 rules can be automated.
 
 
-== Punctuation semantic functions
+=== Punctuation semantic functions
 
 Punctuation marks are classified into semantic function categories by their
 primary functional usage rather than their linguistic origin.
