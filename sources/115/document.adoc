@@ -227,14 +227,21 @@ of semantic function to punctuation mark is many-to-many.
 +
 [example]
 ====
-In English, a period can be used as a sentence delimiter, but also as an abbreviation
-marker (_Bros._, _p.m._). So English period is a punctuation mark fulfilling two semantic
-functions. In Hebrew, there are two abbreviation markers, 
+In English, a period can be used as a declarative sentence stop (<<declarative-sentence-stop>>), 
+but also as an abbreviation mark (<<abbreviation-mark>>) (_Bros._, _p.m._). 
+So English period is a punctuation mark fulfilling two semantic
+functions. In Hebrew, there are two abbreviation marks, 
+
+
+
+
 _geresh_ `<׳>` (U+05F3) for a single word (ר׳ "r." = רבי rabbi), and _gershayim_ `<״>` (U+05F4) 
 for multi-word phrases (ארה״ב "U.S." =  ארצות הברית "United States"); these are
-distinct from the sentence delimiter:  
-ר׳  יעקב גר בארה״ב. וגם אני, "R(abbi) Yaakov lives in the U.S. And so do I".
-So the mapping of abbreviation marker function is conflated with the sentence delimiter 
+distinct from the sentence delimiter:
+
+> ר׳  יעקב גר בארה״ב. וגם אני, "R(abbi) Yaakov lives in the U.S. And so do I".
+
+So the mapping of abbreviation mark function is conflated with the sentence delimiter 
 function as the period punctuation mark in English, but is split into a single-word and 
 a multi-word punctuation mark in Hebrew. 
 
@@ -343,6 +350,7 @@ are preceded by a non-breaking thin space (U+202F) ("French spacing").
 In common practice, a full non-breaking space (U+00A0) is used instead.
 French spacing is not used for most punctuation marks in Canada for French.
 
+[[declarative-sentence-stop]]
 ==== Declarative stop (_period_)
 
 ===== Primary function and purpose
@@ -745,7 +753,7 @@ included in Unicode as a compatibility character.)
 
 The interpunct is used instead of hyphen, dash, or colon in Japanese vertical text.
 
-
+[[breaking-phrase-separator]]
 ==== Breaking phrase separator (_em-dash_)
 
 ===== Primary function and purpose
@@ -753,6 +761,7 @@ The interpunct is used instead of hyphen, dash, or colon in Japanese vertical te
 Mark that delimits phrases within a sentence, where there is a conceptual break of some short
 between the first phrase and the second.
 This function is represented in Metanorma i18n files as `punct.em-dash`.
+
 
 ===== Punctuation mark in scripts, languages, and locales
 
@@ -779,6 +788,69 @@ included in Unicode as a compatibility character.)
 
 The interpunct is used instead of hyphen, dash, or colon in Japanese vertical text.
 
+==== Hesitancy phrase separator (_em-dash_)
+
+===== Primary function and purpose
+
+Mark that delimits phrases within a sentence, where there is some sort of hesitation
+between them.
+
+===== Range of semantic functions
+* The hesitancy phrase separator is closely related to the breaking phrase separator,
+and in past practice was conflated with it.
+* The hesitancy phrase separator is routinely conflated with the missing text mark (<<missing-text-mark>>),
+but the two interact differently with other punctuation.
+* "Hesitancy" is to be broadly understood, and it includes pauses, interruption, speechlessness, 
+deliberate silence, longing, and
+surprise. Different languages place different expectations on the punctuation mark.
+* The hesitancy phrase separator is associated with emotion, and is therefore avoided
+in formal writing, such as is in scope of Metanorma. The missing text mark, on the other hand,
+is entirely consistent with formal writing.
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin, Cyrillic: in fine typography, a single HORIZONTAL ELLIPSIS `<…>` (U+2026) is used.
+In informal practice, three periods in succession are used as well.
+  * In some practice, the em dash for the breaking phrase separator is used instead.
+  * In some practice, the three periods are interpolated with non-breaking spaces, or thin non-breaking spaces. 
+* CJK: the ellipse can be presented as three dots, or six dots.
+  * The six dot form is entered as twice the full-width three-dot form.
+  * The CJK form is either MIDLINE HORIZONTAL ELLIPSIS `<⋯>` (U+22EF), as explicit centered markup, 
+  or the half-width HORIZONTAL ELLIPSIS (U+2026) where centering is inexplicit, rendered in CJK fonts
+  as full-width.
+  * Japanese rarely also uses a two-dot ellipse (_rīdā_).
+
+====== Spacing rules
+
+* Languages and style guides vary as to whether they put spaces before or after the hesitancy phrase separator
+or between the ellipse dots within the hesitancy phrase separator, and when.
+For example, the Modern Language Association styleguide has recently changed its recommendation from
+space before in all contexts, to no space before in the phrase separator function.
+* In French, French spacing applies (<<sentence-stop-spacing>>).
+
+===== Special handling
+
+* If the hesitation follows the final phrase in a sentence, some practice has the hesitancy mark replace
+the sentence stop (e.g. common British English practice). 
+Other practice appends the sentence stop to the hesitancy mark, as a fourth dot
+(e.g. Chicago Manual of Style).
++
+====
+I like traffic lights… +
+I like traffic lights… .
+====
+* Russian combines not only declarative but interrogative and exclamatory sentence stops with the
+hesitancy mark and missing text mark: `<?..>`, `<!..>`.
+* Unlike other stops, the hesitation phrase separator can appear at the start of a sentence.
+* In horizontal directonality in Traditional Chinese and Japanese, the ellipse is vertically centered; in vertical directionality, it is
+horizontally centered.
+* In Simplified Chinese, the ellipse is usually aligned to the baseline in horizontal directionality;
+in vertical directionality, it is still horizontally centered.
+* In vertical directionality in CJK, Unicode has a codepoint for 
+VERTICAL ELLIPSIS  `<⋮>` (U+22EE), and it is not designated as a compatibility character. 
+However as with other punctuation,
+the browser/operating system is assumed to handle positioning appropriately, so MIDLINE HORIZONTAL ELLIPSIS
+would still be expected to be entered.
 
 === Listing stops
 
@@ -1185,10 +1257,9 @@ functions in the framework.
 ** Components of foreign names (Chinese, Japanese)
 ** Title and subtitle of a work
 ** Professional title, professional position, personal name
-** Hierarchical components of cross-reference to entity in a document (e.g. _Clause 5, Note 1_).
-In Metanorma Presentation XML, this is notated as `<span class="fmt-comma">`.
 ** Components of a bibliographic reference entry (e.g. _Smith, J. 1989. The passage of time. New York: Wiley._)
-
+* Caption markers (<<caption-markers>>) include a subset of name separators, but these are discussed separately,
+as a core concern of Metanorma configuration. 
 
 ===== Punctuation mark in scripts, languages, and locales
 
@@ -1236,7 +1307,7 @@ It is more commonly used to separate foreign words and names when written in kan
 
 
 
-
+[[word-dividier]]
 ==== Word divider
 
 ===== Primary function and purpose
@@ -1273,9 +1344,8 @@ Pre–Indo-European
 ===== Punctuation mark in scripts, languages, and locales
 
 * In Latin and Cyrillic, the default word divider is the hyphen, HYPHEN-MINUS `<->` (U+002D).
-Unicode also has HYPHEN `<‐>` (U+2010) to disambiguate it from the minus sign, but "Unicode hyphen"
-is little used, and fine typography prefers to use the distinct MINUS SIGN `<−>` (U+2212) 
-in mathematical use.
+Unicode also has HYPHEN `<‐>` (U+2010) to disambiguate it from the minus sign (<<minus-sign>>), but "Unicode hyphen"
+is little used.
 * The EN DASH `<–>` (U+2013) is used as a higher level of division (_Pre–Indo-European_,
 _San Francisco–area residents_; the latter uses en dash because it joins a noun consisting of two words with a space, to a third word).
 * In lexicography, interpunct is also used for syllabification.
@@ -1313,7 +1383,7 @@ after it.
 
 * An optional hyphen, SOFT HYPHEN (U+00AD) is often used in word processing, which is only rendered when near a line break.
 
-
+[[identifier-divider]]
 ==== Identifier divider
 
 ===== Primary function and purpose
@@ -1370,7 +1440,7 @@ although this is properly the notation for identifier dividers.
 
 
 
-
+[[caption-markers]]
 === Caption markers
 ==== General
 
@@ -1511,6 +1581,26 @@ of the same text
 * \abc/: letters interpolated in the original by the scribe (typically between lines)
 ====
 
+==== Hierarchical caption separator
+
+
+===== Primary function and purpose
+
+The hierarchical caption separator separates hierarchical components of a 
+cross-reference to entity in a document (e.g. _Clause 5, Note 1_). This is used when the entity cross-reference
+by itself is ambiguous (e.g. note numbering restarts each clause, so "Note 1" on its own is ambiguous between
+the first note of clause 4 and of clause 5.)
+In Metanorma Presentation XML, this is notated as `<span class="fmt-comma">`.
+
+===== Range of semantic functions
+
+* This is a special case of a name separator (<<name-separator>>), and shares punctuation with it: comma in Latin script.
+
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin, Cyrillic: if a caption stop is provided, it is a period.
+* In some languages and styles, this function is conveyed by linguistic words instead of punctuation;
+e.g. in Japanese, the particle の "of" is used instead.
 
 ==== Parenthetical annotation  (_parentheses_)
 
@@ -1750,6 +1840,7 @@ floor brackets (`<⌊ ⌋>`) are out of scope of this document.
 (<<leiden>>) are a very formalised equivalent of the less granular conventions expressed by
 grouping markers. Editorial interventions are not here treated as a distinct semantic function.
 
+[[bracket]]
 ==== Bracket
 
 ===== Range of semantic functions
@@ -1827,6 +1918,7 @@ as distinct from the structural information conveyed by punctuation marks in the
 are not used in contemporary Latin and Cyrillic practice, although number marks were commonplace 
 in ancient and mediaeval versions of those writing systems. 
 
+[[abbreviation-mark]]
 ==== Abbreviation mark
 
 ===== Primary function and purpose
@@ -1836,6 +1928,8 @@ understood as such rather than as a phonetically read word.
 
 ===== Punctuation mark in scripts, languages, and locales
 * Latin, Cyrillic: the usual abbreviation mark is the period.
+  * The ambiguity of abbreviatin mark and declarative sentence stop is particularly pernicious, and is a pressing
+  issue for Metanorma converting between Latin and CJK punctuation.
 * CJK: while CJK languages do form truncated expressions (e.g. _Běidà_ 北大 for _Běijīng Dàxué_ 北京大学 "Peking University"),
 abbreviation marks are not used explicitly.
 
@@ -2109,56 +2203,138 @@ of `<em>` markup in Semantic Metanorma XML.
 ==== General
 
 Punctuation used to convey different types of number overlaps with other punctuation discussed here, but it not
-in scope of this discussion, and Metanorma handles it with distinct mechanisms. It is briefly outlined here for
-completeness, and to identify potential points of ambiguity.
+in scope of this discussion, and Metanorma handles it with distinct mechanisms (document attributes and `number:[]` macro
+parameters: see https://www.metanorma.org/author/topics/inline_markup/semantic-elements/#encoding-numbers-as-formulas[Metanorma documentation]). 
+It is briefly outlined here for completeness, and to identify potential points of ambiguity.
 
 The punctuation used to convey different types of number also overlaps with some  symbols for mathematical functions
 (notably plus and minus signs); mathematical functions are out of scope.
 
 
-The semantic functions
+==== Decimal point 
 
-==== Decimal point (_decimal point_)
+===== Primary function and purpose
 
+The decimal point delimits integer and decimal portions of a number.
 
+===== Range of semantic functions
 
-
-NN: Simplified Chinese often uses `*` for multiplication instead of traditional symbols.
-
-NN: The Japanese interpunct (Katakana middle dot `・`) is used for decimal points in Chinese numbers. 
-For example, "3.14" becomes "三・一四".
-
-NN: In Traditional Chinese, U+2027 is used for decimal point in Chinese numbers. For example, "3.5" becomes "三‧五".
+* The decimal point is a special case of an identifier divider (<<identifier-divider>>).
 
 
 
+===== Punctuation mark in scripts, languages, and locales
+
+* Latin, Cyrillic: there is variation among Western script languages: the Anglosphere uses a period,
+while Continental Europe uses a comma. In the case of ISO, even English-language texts adhere to Continental
+norms in using comma as a decimal point.
+* Traditional Chinese: the interpunct (U+2027) is used as a decimal point in Chinese numbers:  三‧五 "3.5".
+* Japanese: the same practice is followed, using the Japanese version of the interpunct,
+KATAKANA MIDDLE DOT  `<・>` (U+30FB): 三・一四 "3.14".
+
+
+==== Minus sign
+
+===== Primary function and purpose
+
+The minus sign indicates negative numbers.
+
+===== Range of semantic functions
+
+* The same sign is used for negative numbers and for the arithmetic subtraction operator; the former is in scope
+of this framework, as negative numbers can appear outside the context of mathematical typesetting, inserted into
+normal text.
+
+===== Punctuation mark in scripts, languages, and locales
+* Fine typography prefers to use the distinct MINUS SIGN `<−>` (U+2212) in mathematical use. Informal use uses
+HYPHEN-MINUS `<->` (U+002D), as a case of an identifier divider (<<identifier-divider>>).
 
 
 === Miscellaneous
 
-==== Ellipse
-
+[[missing-text-mark]]
+==== Missing text mark
+===== Primary function and purpose
+The missing text mark represents omitted text. 
 This function is represented in Metanorma i18n files as `punct.ellipse`.
 
-NN: Ellipsis in CJK languages can be three dots or six dots. In horizontal text, it can be baseline or centered. In vertical text, it is centered. The six-dot form uses twice U+22EF as explicit centered markup, or twice U+2026 where centering is inexplicit.
+===== Range of semantic functions
+
+* The ellipse is conflated with the hesitancy phrase separator (<<hesitancy-phrase-stop>>),
+but the two interact differently with other punctuation.
+
+===== Punctuation mark in scripts, languages, and locales
+* The same mark is used as for the hesitancy phrase separator.
+  * Occasionally triple asterisks, `<* * *>` or `<***>`, are used as an explicit missing tetx mark.
+  This is done in some legal writing in English.
+
+===== Spacing rules
+* The missing text mark is usually treated  for spacing as a separate word,
+rather than as punctuation, because the missing text mark represents one or more missing words.
+Therefore unlike hesitancy phrase separator, the missing text mark has preceding space as a word separator, 
+just as a word would. This extends to treating the missing text mark as a distinct sentence.
+So British practice, as reflcted in the Oxford Style Guide, has the hesitancy mark replace
+the sentence stop, but the missing text mark appear after a sentence stop. It also has space before
+both the missing text mark and the hesitancy mark.
++
+====
+The ... fox jumps ...
+The quick brown fox jumps over the lazy dog. ... And if they have not died, they are still alive today.
+It is not cold ... it is freezing cold.
+====
+* But as an illustration of the flux around spacing rules: the University of Oxford Style Guide
+(which applies to the university rather than to the commercial printer) requires no space around
+the missing text mark, and space after and not before the hesitancy mark:
++
+====
+The...fox jumps...
+The quick brown fox jumps over the lazy dog...And if they have not died, they are still alive today.
+It is not cold... it is freezing cold.
+====
+
+===== Special handling
+* The same special handling applies as for the hesitancy phrase separator.
+* As a sign of editorial intervention, the missing text mark is often put inside brackets (<<bracket>>) in English, 
+to make the editorial intervention explicit, and to disambiguate it from the hesitancy phrase separator. In Spanish,
+parentheses are preferred in that role.
++
+====
+Original text: The President said that, for as long as this situation continued, he would not be satisfied +
+Reported text: The President said that [...] he would not be satisfied 
+====
+
 
 ==== Slash
-slash
+===== Primary function and purpose
+===== Range of semantic functions
+===== Punctuation mark in scripts, languages, and locales
+
 
 ==== Ampersand
-Ampersand
+===== Primary function and purpose
+===== Range of semantic functions
+===== Punctuation mark in scripts, languages, and locales
+
 
 ==== Apostrophe
+===== Primary function and purpose
+===== Range of semantic functions
+===== Punctuation mark in scripts, languages, and locales
+
+
 plural marker, making it a kind of word divider
 
 
 == Whitespace handling
 
-NN: CJK full-width space (U+3000) is rare and meaningful. It is used in specific contexts, for example as an honorific spacing for certain names (e.g., Chang Kai-shek in Chinese text).
+NN: CJK full-width space (U+3000) is rare and meaningful. It is used in specific contexts, for example as an honorific spacing 
+for certain names (e.g., Chang Kai-shek in Chinese text).
 
-NN: Japanese requires a quarter-em space (U+2005) between Japanese text and Latin characters. This applies to the transition between Japanese characters and any Latin text.
+NN: Japanese requires a quarter-em space (U+2005) between Japanese text and Latin characters. 
+This applies to the transition between Japanese characters and any Latin text.
 
-NN: There is an open question about whether the quarter-em space rule should apply between Japanese and numbers. Currently implemented to apply between Japanese and all Latin characters including numbers.
+NN: There is an open question about whether the quarter-em space rule should apply between Japanese and numbers. 
+Currently implemented to apply between Japanese and all Latin characters including numbers.
 
 NN: Japanese also requires space after non-Japanese punctuation marks, such as exclamation marks and question marks.
 
