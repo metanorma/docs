@@ -812,7 +812,7 @@ He was the miracle ingredient Z-147. He was— +
 "Crazy!"
 ====
 
-
+[[hesitancy-phrase-separator]]
 ==== Hesitancy phrase separator (_em-dash_)
 
 ===== Primary function and purpose
@@ -1496,7 +1496,7 @@ The attribution mark is used  to delimit a quotation from its source.
 ====
 
 ===== Range of semantic functions
-* The attribution mark is comparable to the <<caption-separator>> and the <<breaking phrase stop>>.
+* The attribution mark is comparable to the <<caption-separator>> and the <<breaking-phrase-separator>>.
 It accordingly shares punctuation with them.
 
 ===== Punctuation mark in scripts, languages, and locales
@@ -2540,7 +2540,7 @@ norms in using comma as a decimal point.
 * Japanese: the same practice is followed, using the Japanese version of the interpunct,
 KATAKANA MIDDLE DOT  `<・>` (U+30FB): 三・一四 "3.14".
 
-
+[[minus-sign]]
 ==== Minus sign
 
 ===== Primary function and purpose
@@ -2598,7 +2598,7 @@ This function is represented in Metanorma i18n files as `punct.ellipse`.
 
 ===== Range of semantic functions
 
-* The ellipse is conflated with the hesitancy phrase separator (<<hesitancy-phrase-stop>>),
+* The ellipse is conflated with the hesitancy phrase separator (<<hesitancy-phrase-separator>>),
 but the two interact differently with other punctuation.
 
 ===== Punctuation mark in scripts, languages, and locales
