@@ -762,11 +762,29 @@ Mark that delimits phrases within a sentence, where there is a conceptual break 
 between the first phrase and the second.
 This function is represented in Metanorma i18n files as `punct.em-dash`.
 
+===== Range of semantic functions
+* An interrupted ending to a sentence can be indicated by a breaking phrase separator.
+Similarly, a sentence start which counts as a resumption from a previous interruption
+can be indicated by a breaking phrase separator.
++
+====
+He was the miracle ingredient Z-147. He was— +
+"Crazy!" Clevinger interrupted, shrieking. "That's what you are! Crazy!" +
+"—immense. I'm a real, slam-bang, honest-to-goodness, three-fisted humdinger. I'm a bona fide supraman."
+—  Joseph Heller, _Catch-22_
+====
+** Interrupted and resumed sentences are characteristic of literary prose, but not formal prose,
+such as is in scope of Metanorma.
 
 ===== Punctuation mark in scripts, languages, and locales
 
 * Latin, Cyrillic: EM DASH `<—>` (U+2014)
 ** The EN DASH `<–>` (U+2013) is also used in this function
+** Double and triple hyphens are typewriter approximations of em-dashes, and are commonly used in word processing
+as easy ways to data enter em-dashes through auto-text; they are not normally expected to display as such in finished documents,
+although they remain a convention of comic strips.
+** In some style guides (e.g. the Australian Government Style Manual), interrupted and resumed sentence
+breaks are notated with two em-dashes, as a distinct function from the breaking phrase separator. 
 * Traditional Chinese: TWO EM DASH `<⸺>` (U+2E3A)
 * Simplified Chinese: TWO EM DASH `<⸺>` (U+2E3A)
 * Japanese: TWO EM DASH `<⸺>` (U+2E3A)
@@ -781,12 +799,19 @@ for em dash. The spaces are thin spaces in fine typography, but may be normal sp
 
 ===== Special handling
 
-The placement of colon in CJK is different by directionality, but this does not involve 
+* The placement of colon in CJK is different by directionality, but this does not involve 
 different Unicode codepoints, so the browser/operating system is assumed to handle positioning appropriately.
 (While there is a PRESENTATION FORM FOR VERTICAL EM DASH `<︱>` (U+FE31), this is only
 included in Unicode as a compatibility character.)
+* The interpunct is used instead of hyphen, dash, or colon in Japanese vertical text.
+* An interrupted ending to a sentence can be indicated by a breaking phrase separator.
+In that case, the breaking phrase separator replaces the sentence stop.
++
+====
+He was the miracle ingredient Z-147. He was— +
+"Crazy!"
+====
 
-The interpunct is used instead of hyphen, dash, or colon in Japanese vertical text.
 
 ==== Hesitancy phrase separator (_em-dash_)
 
@@ -851,6 +876,73 @@ VERTICAL ELLIPSIS  `<⋮>` (U+22EE), and it is not designated as a compatibility
 However as with other punctuation,
 the browser/operating system is assumed to handle positioning appropriately, so MIDLINE HORIZONTAL ELLIPSIS
 would still be expected to be entered.
+
+==== Verse separator
+
+===== Primary function and purpose
+
+Mark that delimits verses in poetic writing
+
+
+===== Punctuation mark in scripts, languages, and locales
+
+* In poetic practice globally in modern times, verses are separated by line breaks, which are not regarded as
+punctuation.
+* In prose transcription of poetry, verses are often separated by a slash.
+  * There is some usage of pipe `|` instead.
+
+.Poetic typesetting
+====
+[align=left]
+To be, or not to be, that is the question: +
+Whether 'tis Nobler in the mind to suffer +
+The Slings and Arrows of outrageous Fortune, +
+Or to take Arms against a Sea of troubles, +
+And by opposing end them...
+====
+
+.Prose typesetting
+====
+To be, or not to be, that is the question: / Whether 'tis nobler in the mind to suffer / The slings and arrows of outrageous Fortune, / Or to take arms against a sea of troubles, / And by opposing end them..
+====
+
+===== Spacing rule
+
+* When slash is used to separate verses, there is a space either side of the slash.
+
+===== Special handling
+
+In poetic practice, separate verses must not be right-justified at the line-break.
+
+[[section-separator]]
+==== Section separator
+===== Primary function and purpose
+The section separator includes a break in a document, at a higher level than a sentence or paragraph.
+
+===== Range of semantic functions
+* In formal documents of the type considered by Metanorma, the only permitted breaks at a document level higher
+than a paragraph are clauses, and new clauses are explicitly indicated by clause headings. Section separators
+are characteristic of extended literary prose, such as novels; even though novels have chapters, they do not 
+have subchapters, and breaks in a chapter are indicated by a section separator instead.
+  * In such literary use, the section separator is intended to convey a logical or emotional break.
+* There is overlap between the section separator and the missing text mark (<<missing-text-mark>>),
+when the scope of the missing text mark is at the paragraph level.
+
+===== Punctuation mark in scripts, languages, and locales
+* The cover term for the traditional punctuation mark for a section separator, used in literary writing, is 
+the dinkus. The usual contemporary form of the dinkus is three asterisks or three bullets in a row, with space between them.
+  * Older practice used other decorative symbols, including ASTERISM `<⁂>` (U+2042) and various fleurons—such as
+ROTATED FLORAL HEART BULLET `<❧>` (U+2767) and NORTH WEST POINTING LEAF `<🙐>` (U+1F650).
+* In word processing and HTML documents, this function is conveyed by the horizontal rule (`<hr/>`),
+which is not regarded as punctuation.
+
+===== Spacing rule
+
+* The dinkus typically appears centrally aligned, on a line of its own, with vertical spacing before and after it.
+
+===== Special handling
+* In contemporary practice, the dinkus is mutually exclusive with clause headings; in older usage a dinkus
+can appear before a new clause heading, especially when it conveys an emotional break.
 
 === Listing stops
 
@@ -954,6 +1046,34 @@ while maintaining readability.
 
 |===
 ////
+
+==== List itemisation mark
+===== Primary function and purpose
+List itemisation marks are used at the start of list items, when they are rendered as 
+distinct lines in a list paragraph. 
+
+List items may be ordered or unordered; if they are ordered, the list itemisation mark is an
+ordered numeral or letter, optionally followed by a caption number delimiter (<<caption-number-delimiter>>).
+In the case of unordered lists, a single typographic symbol is used.
+
+
+===== Punctuation mark in scripts, languages, and locales
+* The default list itemisation mark for unordered list items is BULLET `<•>` (U+2022).
+Alternatives include the em dash, en dash, and WHITE BULLET `<◦>` (U+25E6).
+
+===== Spacing rules
+* List items of different levels in a list are typically indented to differing degrees,
+so as to indicate that level.
+* The list itemisation mark is typically separated from the list item content by a tab
+(a horizontal space of consistent width between different list items).
+* List items are typically rendered with hanging indentation, so that their list itemisation
+marks and content lines up across multiple-line list items.
+
+===== Special handling
+* In word processing and HTML, list itemisation marks are not entered directly by the author,
+but are indicated to be rendered via list markup. The selection of list itemisation mark
+in unordered lists is almost never specified in markup, but in the document configuration/document stylesheet.
+
 
 === Quotation markers
 
@@ -1149,6 +1269,71 @@ There is a thin space after the quotation dash.
 Connection indicators link related elements, show relationships between parts,
 or indicate continuation across boundaries.
 
+
+==== Conjunctive mark
+===== Primary function and purpose
+
+The conjunctive mark presents two or more words or morphemes as both applicable.
+It is a punctuation counterpart to "and".
+
+===== Range of semantic functions
+* In formal usage, ampersand is restricted to citations of multiple authors,
+and to disambiguate scope of conjunction
+(items in a list joined by "and", some of which are themselves joined by "and")/
++
+====
+Jones & Jones (2005) +
+Rock, pop, rhythm & blues and hip hop
+====
+
+===== Punctuation mark in scripts, languages, and locales
+* In Latin script, the default conjunctive mark is AMPERSAND `<&>` (U+0026).
+  * In Irish and Scots Gaelic, TIRONIAN SIGN ET `<⁊>` (U+204A) is used traditionally.
+  * In Swedish, underlined _o_ is also used.
+  * In informal usage, the plus sign may be used.
+
+===== Spacing rules
+* By default the ampersand is consider to stand in for "and" as a word, and is spaced
+either side as a word. It is printed without spaces when it is part of an acronym,
+e.g. _R&D_ = "Research and Development".
+
+
+==== Disjunctive mark
+===== Primary function and purpose
+
+The disjunctive mark presents two or more words or morphemes as alternatives.
+It is a punctuation counterpart to "or".
+
+====
+Iran/Persia (place may be designated as either) +
+is/are +
+he/she +
+s/he (truncated version of _she/he_)
+====
+
+===== Range of semantic functions
+* The disjunctive mark can be used to express inclusive "or", or "and"; in that case it overlaps
+with the conjunctive mark and the range mark.
+* English uses both a disjunctive mark and range mark to express points on an itinerary; e.g.
+_Shanghai/Nanjing/Wuhan/Chongqing_ or _Shanghai–Nanjing–Wuhan–Chongqing_
+
+===== Punctuation mark in scripts, languages, and locales
+
+* In English, the expression of the disjunctive mark is the slash, SOLIDUS `</>` (U+002F).
+  
+===== Spacing rules
+
+* Normally there is no space either side of the slash. Some style guides require space when the
+phrase being joined contains a space:
++
+====
+and/or
+New Zealand / Western Australia
+====
+
+
+
+
 ==== Range mark (_en-dash_)
 
 ===== Primary function and purpose
@@ -1162,24 +1347,33 @@ This function is represented in Metanorma i18n files as `punct.en-dash`.
 * The English nested paired quotation delimiters are often conflated with the apostrophe.
 * Latin script conflates the punctuation marks for verbal and numeric ranges. CJK uses distinct punctuation marks for
 verbal and numeric ranges. The latter function is represented in Metanorma i18n files as `punct.numeric-en-dash`.
+* The range mark is also used to contrast two items, or convey a relationship between them: 
+_Mother–daughter relationship_, 
 
 ===== Punctuation mark in scripts, languages, and locales
 
-* Latin, Cyrillic: In good typography, EN DASH '<–>` (U+2013) is used. Informal use typically uses the hyphen.
+* Latin, Cyrillic: In good typography, EN DASH '<–>` (U+2013) is used. Informal use typically uses the hyphen,
+and some style guides prescribing formal use prefer the hyphen when conveying a relationship, as a word divider.
+  * In French, TILDE `<~>` (U+007E) is used.
 * Traditional Chinese, Simplified Chinese, Japanese, Korean: EN DASH '<–>` (U+2013), WAVE DASH `<〜>` (U+301C),
 FULLWIDTH TILDE `<～>` (U+FF5E)
 
 ===== Spacing rules
 
 * Typically in Latin script there is no spacing around the en-dash. 
-This differentiates it from the phrase stop
-use of the en-dash.
+This differentiates it from the phrase stop use of the en-dash.
+Some style guides recommend spacing where it would avoid ambiguity in scope, e.g. _12 June – 3 July_;
+others do not, e.g. _12 June–3 July_.
 
 ===== Special handling
 
+* In French, the range mark can be open on either side of the interval: _~3_ means "up to 3", _100~_ means "100 or more".
 * In CJK, verbal range is conveyed through en-dash. Tilde and single em-dash can also be used for verbal range.
 * Numeric range is normally wave dash.
 Some Japanese academic writing uses colons instead of wave dash, though this is not universal.
+
+
+
 
 
 // Name component separation:::
@@ -1286,6 +1480,37 @@ confusion as to where one name ends and another begins.
 
 
 
+==== Attribution mark 
+===== Primary function and purpose
+
+The attribution mark is used  to delimit a quotation from its source.
+
+====
+> To be or not to be, that is the question.
+
+— William Shakespeare
+====
+
+====
+"To be or not to be, that is the question" — William Shakespeare
+====
+
+===== Range of semantic functions
+* The attribution mark is comparable to the <<caption-separator>> and the <<breaking phrase stop>>.
+It accordingly shares punctuation with them.
+
+===== Punctuation mark in scripts, languages, and locales
+* The em-dash is typically used. In less formal writing, the colon and the comma are also used.
+
+===== Spacing rules
+
+* When applied to a block quote, the attribution starts on a separate line, with the attribution mark dash.
+The separate line is typically indented.
+* When used inline, the attribution mark dash follows the quotation directly.
+
+
+
+
 ==== Word separator (_space_)
 
 ===== Primary function and purpose
@@ -1346,8 +1571,9 @@ Pre–Indo-European
 * In Latin and Cyrillic, the default word divider is the hyphen, HYPHEN-MINUS `<->` (U+002D).
 Unicode also has HYPHEN `<‐>` (U+2010) to disambiguate it from the minus sign (<<minus-sign>>), but "Unicode hyphen"
 is little used.
-* The EN DASH `<–>` (U+2013) is used as a higher level of division (_Pre–Indo-European_,
-_San Francisco–area residents_; the latter uses en dash because it joins a noun consisting of two words with a space, to a third word).
+* The EN DASH `<–>` (U+2013) is used as a higher level of division in careful typesetting
+(_Pre–Indo-European_, _San Francisco–area residents_; the latter uses en dash because it joins a noun consisting 
+of two words with a space, to a third word).
 * In lexicography, interpunct is also used for syllabification.
 
 
@@ -1410,7 +1636,11 @@ Metanorma Presentation XML notates this as `<span class="fmt-autonum-delim">`.
 
 ===== Punctuation mark in scripts, languages, and locales
 
-* The usual identifier divider is the hyphen. Period, slash, and colon are also used idiosyncratically.
+* The usual identifier divider is the hyphen. In Unicode, the identifier divider function is properly indicated with
+FIGURE DASH `<‒>` (U+2012), as that symbol is designed to have the same width as Arabic numerals.
+* Period, slash, and colon are also used idiosyncratically,
+through analogy with their core meanings (hyphen as a word divider; sentence stop as delimiter of a meaningful unit; 
+slash as a disjunctive mark; colon as an introductory stop).
 
 ==== Identifier delimiter
 
@@ -1450,6 +1680,7 @@ In formal documents (particularly the standards in scope of Metanorma), titles o
 within the document (figures, tables, lists, list items, footnotes, clauses, etc.) are labelled in such a way as to
 isolate the identifier of the entity, which is used both in labelling the entity, and in cross-referencing that entity.
 
+[[caption-number-delimiter]]
 ==== Caption number delimiter
 ===== Primary function and purpose
 
@@ -1472,7 +1703,8 @@ parenthesis instead of a period.
 * Latin, Cyrillic: Period is the most common caption number delimiter, if a delimiter is used at all.
 Closing parentheses are common for ordered list items and footnotes.
 
-==== Caption number separator
+[[caption-separator]]
+==== Caption separator
 
 
 ===== Primary function and purpose
@@ -1493,22 +1725,22 @@ Table 1. Distribution of rice yields
 ===== Range of semantic functions
 * Different kinds of entity can take different punctuation. For example, a document may use period as a caption
 separator for clauses, but dash for tables and figures.
-* This function overlaps with the caption number delimiter. If a caption number delimiter is used, a distinct
+* This function overlaps with the caption separator. If a caption number delimiter is used, a distinct
 separator is usually not used after it. The following illustrates different possible configurations.
 +
-.No caption number delimiter, colon as caption number separator
+.No caption number delimiter, colon as caption separator
 ====
 Table 1
 Table 1: Distribution of rice yields
 ====
 +
-.No caption number delimiter, period as caption number separator
+.No caption number delimiter, period as caption separator
 ====
 Table 1
 Table 1. Distribution of rice yields
 ====
 +
-.Period as caption number delimiter, caption delimiter blocks distinct caption number separator
+.Period as caption number delimiter, caption delimiter blocks distinct caption separator
 ====
 Table 1.
 Table 1. Distribution of rice yields
@@ -1930,6 +2162,8 @@ understood as such rather than as a phonetically read word.
 * Latin, Cyrillic: the usual abbreviation mark is the period.
   * The ambiguity of abbreviatin mark and declarative sentence stop is particularly pernicious, and is a pressing
   issue for Metanorma converting between Latin and CJK punctuation.
+  * The slash is used for some abbreviations in English, especially involving initials of separate words or morphemes
+  (_w/o_ = "**w**ith**o**ut")
 * CJK: while CJK languages do form truncated expressions (e.g. _Běidà_ 北大 for _Běijīng Dàxué_ 北京大学 "Peking University"),
 abbreviation marks are not used explicitly.
 
@@ -1942,11 +2176,11 @@ abbreviation marks are not used explicitly.
 to use abbreviation marks within an acronym (_N.A.T.O._ vs _NATO_, _etc._ vs _etc_).
 
 
-==== Number mark
+==== Cardinal number mark
 ===== Primary function and purpose
 
 In writing systems where number symbols are ambiguous with letters of the script, it was routine to highlight the
-numeric use of letters to prevent ambiguity.
+numeric use of letters to prevent ambiguity, through a cardinal number mark.
 
 [example]
 ====
@@ -1955,12 +2189,45 @@ Roman numeral _V͞I_ "6"
 ====
 
 ===== Punctuation mark in scripts, languages, and locales
-* Hebrew and Greek have distinct number marks (gershayim and geresh in Hebrew, keraia in Greek), including 
+* Hebrew and Greek have distinct cardinal number marks (gershayim and geresh in Hebrew, keraia in Greek), including 
 disambiguating marks for counts of thousands (quote mark in Hebrew, lower keraia in Greek) and for reciprocal
 fractions (double keraia in Greek).
++
+.Greek numerals
+====
+δʹ "4" (Greek letter delta, used as a number) +
+͵δ "4000" +
+δ″ "1/4"
+====
+
 * Roman numbers used an overbar in antiquity to indicate that they were numbers; as it happens, an overbar (_vinculum_)
 was also used in the same period, to indicate that the number was to be multiplied by a thousand (so _V͞I_ was used for
 both "6" and "6,000"). The number mark is rare in contemporary usage of Roman numbers.
+
+==== Ordinal number mark
+===== Primary function and purpose
+In some languages, ordinal numbers are preceded by a mark indicating that this is an ordinal, and often derived
+from the spoken word for "number".
+
+====
+№ 29 Acacia Rd +
+#29 Acadia Rd
+====
+
+===== Punctuation mark in scripts, languages, and locales
+* In Romance languages such as French and Spanish, an abbreviation of a word for "number" is used,
+usually an abbreviation of Italian _numero_. In French and Spanish, this is _n^o^_, with the _o_ superscript. 
+In British English, _No._ is used. In German, _Nr._ is used. Such abbreviations are not to be regarded as punctuation.
+** In informal use in the French- and Spanish-speaking world, DEGREE SIGN `<°>` (U+00B0) is used, as a truncation of _n^o^_.
+**  Some languages, such as Portuguese and Italian, use the masculine ordinal indicator `<º>` (U+00BA) instead of a superscript _o_.
+* The number sign NUMERO SIGN `<№>` (U+2116) is very common in use in Russian and Bulgarian; it is derived
+from the Latin script abbrevation.
+* In American English, NUMBER SIGN `<#>` (U+0023) (hash) is used. 
+
+===== Spacing rules
+* The abbreviations of "number" and their derivatives, including the Numero sign, are followed by space.
+* The number sign (hash) is not followed by a space.
+
 
 ==== Title mark
 ===== Primary function and purpose
@@ -2093,7 +2360,7 @@ This applies to article and chapter titles, as distinct from book and journal ti
 
 
 ==== Proper name mark
-===== General
+===== Primary function and purpose
 
 The proper name mark is used to indicate a proper name within a document.
 
@@ -2137,6 +2404,47 @@ The proper name mark is used to indicate a proper name within a document.
 
 |===
 ////
+
+==== Clause mark
+===== Primary function and purpose
+
+A clause mark is used to indicate that an identifier is a cross-reference to a clause in a document.
+
+===== Range of semantic functions
+* Use of the clause mark is now infrequent outside of legal documents, with the word for "clause"
+typically supplied instead. In ISO documents, a dot-delimited numeral on its own is understood to be
+a clause reference, without an explicit indication of the cross-reference scope.
+
+===== Punctuation mark in scripts, languages, and locales
+* Latin: SECTION SIGN `<§>` (U+00A7) 
+
+===== Spacing rules
+* The clause mark is linked to the following identifier with a non-breaking space.
+
+===== Special handling
+* When multiple clauses are referenced, the section sign may be duplicated: "§§ 13–21".
+This is analogous to cross-reference abbreviations, such as "pp." for "pages".
+
+==== Paragraph mark
+===== Primary function and purpose
+
+A paragraph mark is used to indicate that an identifier is a cross-reference to a paragraph in a document.
+
+====
+17 U.S.C. § 411 ¶ 5 "Title 17 of the United States Code, section 411, paragraph 5"
+
+===== Range of semantic functions
+* Use of the paragraph mark is infrequent outside of legal documents, with the word for "paragraph"
+typically supplied instead.
+* There is limited use of the paragraph mark to represent carriage return at the end of a paragraph, 
+or the concept of a paragraph; that use however is not properly punctuation.
+
+===== Punctuation mark in scripts, languages, and locales
+* Latin: PILCROW SIGN `<¶>` (U+00B6) 
+
+===== Spacing rules
+* The paragraph mark is linked to the following identifier with a non-breaking space.
+
 
 
 === Highlight markers
@@ -2249,6 +2557,36 @@ normal text.
 * Fine typography prefers to use the distinct MINUS SIGN `<−>` (U+2212) in mathematical use. Informal use uses
 HYPHEN-MINUS `<->` (U+002D), as a case of an identifier divider (<<identifier-divider>>).
 
+==== Ratio sign
+
+===== Primary function and purpose
+
+Indicates a ratio or proportion of two numbers.
+
+===== Range of semantic functions
+* The ratio function is a generalisation of both the fraction sign and the division sign in mathematics.
+* Proportions can include a proportion of completion, e.g. _Page 17/35_, indicating how many pages have been
+traversed out of a total of 35.
+
+===== Punctuation mark in scripts, languages, and locales
+* In English, both colon and slash are used: _1:7_, _1/7_.
+  * Unicode differentiates the FRACTION SLASH `<⁄>` (U+2044), the division sign DIVISION SLASH `<∕>` (U+2215),
+  and the non-mathmetical use of slash.
+
+[[approximation-sign]]
+==== Approximation sign
+
+===== Primary function and purpose
+
+Indicates that a numeric value is approximate.
+
+====
+~40 metres
+====
+
+===== Punctuation mark in scripts, languages, and locales
+* TILDE `<~>` (U+007E) is used by default
+  * Some languages such as French also use ALMOST EQUAL TO `<≈>` (U+2248).
 
 === Miscellaneous
 
@@ -2264,22 +2602,38 @@ This function is represented in Metanorma i18n files as `punct.ellipse`.
 but the two interact differently with other punctuation.
 
 ===== Punctuation mark in scripts, languages, and locales
-* The same mark is used as for the hesitancy phrase separator.
-  * Occasionally triple asterisks, `<* * *>` or `<***>`, are used as an explicit missing tetx mark.
-  This is done in some legal writing in English.
+* The same mark, the elllipse, is used as for the hesitancy phrase separator.
+  * Occasionally triple asterisks, `<* * *>` or `<***>`, are used as an explicit missing text mark.
+  This is done in some legal writing in English. In this regard, the missing text mark usually has scope
+  at paragraph-level rather than sentence-level, and it is a variant of the section separator (<<section-separator>>).
+* When the omitted material is part of a word, e.g. out of religious or politeness taboo, or anonymisation,
+one or two em dashes are used traditionally. For taboo deletion, asterisk is also used.
++
+====
+It was alleged that D—— had been threatened with blackmail.
+====
+*
+====
+In the name of G–d
+====
+*
+====
+You are a f—— c—— +
+You are a f*cking c*nt
+====
 
 ===== Spacing rules
-* The missing text mark is usually treated  for spacing as a separate word,
-rather than as punctuation, because the missing text mark represents one or more missing words.
-Therefore unlike hesitancy phrase separator, the missing text mark has preceding space as a word separator, 
+* When the missing text mark represents one or more missing words,  it is usually treated for spacing as a separate word,
+rather than as punctuation.
+Therefore unlike the hesitancy phrase separator, the missing text mark has preceding space as a word separator, 
 just as a word would. This extends to treating the missing text mark as a distinct sentence.
 So British practice, as reflcted in the Oxford Style Guide, has the hesitancy mark replace
 the sentence stop, but the missing text mark appear after a sentence stop. It also has space before
 both the missing text mark and the hesitancy mark.
 +
 ====
-The ... fox jumps ...
-The quick brown fox jumps over the lazy dog. ... And if they have not died, they are still alive today.
+The ... fox jumps ... +
+The quick brown fox jumps over the lazy dog. ... And if they have not died, they are still alive today. +
 It is not cold ... it is freezing cold.
 ====
 * But as an illustration of the flux around spacing rules: the University of Oxford Style Guide
@@ -2287,8 +2641,8 @@ It is not cold ... it is freezing cold.
 the missing text mark, and space after and not before the hesitancy mark:
 +
 ====
-The...fox jumps...
-The quick brown fox jumps over the lazy dog...And if they have not died, they are still alive today.
+The...fox jumps... +
+The quick brown fox jumps over the lazy dog...And if they have not died, they are still alive today. +
 It is not cold... it is freezing cold.
 ====
 
@@ -2303,18 +2657,57 @@ Original text: The President said that, for as long as this situation continued,
 Reported text: The President said that [...] he would not be satisfied 
 ====
 
-
-==== Slash
+==== Repetition mark
 ===== Primary function and purpose
+The repetition mark indicates a place where text is repeated from a previous passage,
+and it is obvious visually what the repeated text is.
+
 ===== Range of semantic functions
+* Repetition marks are infrequent in contemporary use outside of specific contexts, to avoid ambiguity.
+Space saving is not now as pressing a concern as it was in the past in texts.
+
 ===== Punctuation mark in scripts, languages, and locales
+* English traditionally uses a ditto mark under each word to be repeated from a previous line;
+these can take the form of straight quotes, right smart quotes, or apostrophe.
++
+====
+....
+Black pens, box of twenty ... $2.10
+Blue  "     "   "  "      ... $2.35
+....
+====
+** In Quebec French and Greek, a right guillemet is used. In other European languages (e.g. Italian), a double prime is used;
+the English use of apostrophes is an approximation of this. In yet others (e.g. Swedish), the double prime ditto mark
+is set on the baseline, and surrounded by em-dashes.
+** In CJK, DITTO MARK `<〃>` (U+3003) is  used.
+* In some citation conventions, if two consecutive reference entries in a bibliography have the same
+author(s), a repetition mark is used instead of repeating the author, consisting of two or three  em-dashes.
++
+====
+Smith, J. & J. Doe. 1990. _The elements of style_. New York: Wiley. +
+——— 1991. _The rudiments of style_. New York: Wiley.
+====
 
-
-==== Ampersand
+==== Iteration mark
 ===== Primary function and purpose
-===== Range of semantic functions
+The iteration mark indicates the repetition of a word or a component of a word.
 ===== Punctuation mark in scripts, languages, and locales
-
+* In Chinese, IDEOGRAPHIC ITERATION MARK `<々>` (U+3005) is used in casual usage to repeat a character, 
+but is no longer used in formal usage.
+* In Japanese, IDEOGRAPHIC ITERATION MARK `<々>` (U+3005) remains in common use for repeating a single kanji,
+and follows different norms from the Chinese instance of the punctuation mark.
+Hiragana and Katakana have distinct iteration marks, although they are no longer in common use.
+  * Japanese also has repeat marks for repeating the preceding word or phrase of two or more characters:
+  VERTICAL KANA REPEAT MARK `<〱>` (U+3031) for exact repetition, VERTICAL KANA REPEAT WITH VOICED SOUND MARK
+  `<〲>` (U+3032) for repetition with the first letter voiced. The repeat marks are restricted to vertical directionality,
+  and are no longer in common use.
+  +
+  ====
+  ところ _tokoro_ +
+  ところ〲; +tokorodokoro_
+  ====
+* Among Latin-script languages, a normal or superscript number `<2>` is used as an iteration mark in
+Filipino, Malay, and Indonesian, although in Indonesian this is no longer official practice.
 
 ==== Apostrophe
 ===== Primary function and purpose
