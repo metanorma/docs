@@ -2432,6 +2432,7 @@ A paragraph mark is used to indicate that an identifier is a cross-reference to 
 
 ====
 17 U.S.C. § 411 ¶ 5 "Title 17 of the United States Code, section 411, paragraph 5"
+====
 
 ===== Range of semantic functions
 * Use of the paragraph mark is infrequent outside of legal documents, with the word for "paragraph"
@@ -2612,11 +2613,11 @@ one or two em dashes are used traditionally. For taboo deletion, asterisk is als
 ====
 It was alleged that D—— had been threatened with blackmail.
 ====
-*
++
 ====
 In the name of G–d
 ====
-*
++
 ====
 You are a f—— c—— +
 You are a f*cking c*nt
@@ -2697,15 +2698,15 @@ but is no longer used in formal usage.
 * In Japanese, IDEOGRAPHIC ITERATION MARK `<々>` (U+3005) remains in common use for repeating a single kanji,
 and follows different norms from the Chinese instance of the punctuation mark.
 Hiragana and Katakana have distinct iteration marks, although they are no longer in common use.
-  * Japanese also has repeat marks for repeating the preceding word or phrase of two or more characters:
-  VERTICAL KANA REPEAT MARK `<〱>` (U+3031) for exact repetition, VERTICAL KANA REPEAT WITH VOICED SOUND MARK
-  `<〲>` (U+3032) for repetition with the first letter voiced. The repeat marks are restricted to vertical directionality,
-  and are no longer in common use.
-  +
-  ====
-  ところ _tokoro_ +
-  ところ〲; +tokorodokoro_
-  ====
+** Japanese also has repeat marks for repeating the preceding word or phrase of two or more characters:
+VERTICAL KANA REPEAT MARK `<〱>` (U+3031) for exact repetition, VERTICAL KANA REPEAT WITH VOICED SOUND MARK
+`<〲>` (U+3032) for repetition with the first letter voiced. The repeat marks are restricted to vertical directionality,
+and are no longer in common use.
++
+====
+ところ _tokoro_ +
+ところ〲; +tokorodokoro_
+====
 * Among Latin-script languages, a normal or superscript number `<2>` is used as an iteration mark in
 Filipino, Malay, and Indonesian, although in Indonesian this is no longer official practice.
 
