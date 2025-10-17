@@ -434,7 +434,7 @@ the period appears below and to the right of the character.
 * In Traditional Chinese, the period appears at mid-height in both horizontal and vertical text orientations.
 
 
-
+[[interrogative-stop]]
 ==== Interrogative stop (_question mark_)
 
 ===== Primary function and purpose
@@ -507,7 +507,7 @@ optionally.
 
 TIP: Metanorma does not currently implement inverted question marks.
 
-
+[[exclamatory-stop]]
 ==== Exclamatory stop (_exclamation mark_)
 
 ===== Primary function and purpose
@@ -582,7 +582,7 @@ TIP: Metanorma does not currently implement inverted exclamation marks.
 
 Phrase stops delimit phrases within a sentence.
 
-
+[[minor-phrase-separator]]
 ==== Minor phrase separator (_comma_)
 
 ===== Primary function and purpose
@@ -670,7 +670,7 @@ the comma appears below and to the right of the character.
 
 
 
-
+[[major-phrase-separator]]
 ==== Major phrase separator (_semicolon_)
 
 ===== Primary function and purpose
@@ -712,7 +712,7 @@ different Unicode codepoints, so the browser/operating system is assumed to hand
 (While there is a PRESENTATION FORM FOR VERTICAL SEMICOLON `<︔ >` (U+FE14), this is only
 included in Unicode as a compatibility character.)
 
-
+[[introductory-phrase-separator]]
 ==== Introductory phrase separator (_colon_)
 
 ===== Primary function and purpose
@@ -902,7 +902,7 @@ Mark that delimits verses in poetic writing
 * In poetic practice globally in modern times, verses are separated by line breaks, which are not regarded as
 punctuation.
 * In prose transcription of poetry, verses are often separated by a slash.
-  * There is some usage of pipe `|` instead.
+  * There is some usage of pipe `<|>` instead.
 
 .Poetic typesetting
 ====
@@ -916,7 +916,7 @@ And by opposing end them...
 
 .Prose typesetting
 ====
-To be, or not to be, that is the question: / Whether 'tis nobler in the mind to suffer / The slings and arrows of outrageous Fortune, / Or to take arms against a sea of troubles, / And by opposing end them..
+To be, or not to be, that is the question: / Whether 'tis nobler in the mind to suffer / The slings and arrows of outrageous Fortune, / Or to take arms against a sea of troubles, / And by opposing end them...
 ====
 
 ===== Spacing rule
@@ -948,6 +948,8 @@ the dinkus. The usual contemporary form of the dinkus is three asterisks or thre
 ROTATED FLORAL HEART BULLET `<❧>` (U+2767) and NORTH WEST POINTING LEAF `<🙐>` (U+1F650).
 * In word processing and HTML documents, this function is conveyed by the horizontal rule (`<hr/>`),
 which is not regarded as punctuation.
+* The Japanese PART ALTERNATION MARK `<〽>` (U+303D) has narrower application, being used in the Renga genre of poetry
+to indicate the start of a song. The opening square quotation mark `<「>` may also be used.
 
 ===== Spacing rule
 
@@ -980,6 +982,7 @@ _I bought some beans, cheese, and a nice bottle of Chianti_: comma as listing st
 which can include articles, adjectives, and quantifiers)
 ====
 
+[[enumeration-delimiter]]
 ==== Enumeration delimiter (_enumeration comma_)
 
 ===== Primary function and purpose
@@ -1110,7 +1113,7 @@ is preceded by a non-breaking thin space, as the mirror counterpart of French sp
 As with other French spacing, in common practice, a full non-breaking space (U+00A0) 
 is used instead.
 
-
+[[paired-quotation-delimiter]]
 ==== Paired quotation delimiters (_double quotes_)
 ===== Primary function and purpose
 Paired quotation delimiters indicate the start and end of quoted text.
@@ -1118,12 +1121,12 @@ This function is represented in Metanorma i18n files as `punct.open-quote` and `
 
 ===== Range of semantic functions
 
-* Paired quotation markers are often conflated with title markers.
+* Paired quotation markers are often conflated with title marks.
 
 ===== Punctuation mark in scripts, languages, and locales
 
 * Latin, Cyrillic: There is significant variation among Latin and Cyrillic script languages on their
-choice of paired quotation delimiter, and different languages and locales draw from 15 Unicode codepoints.
+choice of paired quotation delimiter and their orientation, and different languages and locales draw from 15 Unicode codepoints.
 ** In American English, good typographical practice uses LEFT DOUBLE QUOTATION MARK `<“>` (U+201C) and 
   RIGHT DOUBLE QUOTATION MARK `<”>` (U+201D). In British English, some publishers use double quotation marks,
   and others use single quotation marks, LEFT SINGLE QUOTATION MARK `<‘>` (U+2018) and 
@@ -1142,7 +1145,7 @@ LEFT DOUBLE ANGLE BRACKET `<《>` (U+300A) and RIGHT DOUBLE ANGLE BRACKET `<》>
 ** Corner brackets and white corner brackets are often used in practice.
 
 
-TODO: Are lenticular brackets quotation markers, title markers, or both?
+TODO: Are lenticular brackets quotation markers, title marks, or both?
 
 ===== Special handling
 
@@ -1241,6 +1244,8 @@ A single initial marker used to represent one turn in an alternation of direct s
 is usually used.
   * The quotation dash is almost unknown in English, but is commonplace in other European languages,
   such as French.
+* The Japanese PART ALTERNATION MARK `<〽>` (U+303D) has narrower application, being used in Noh drama
+to indicate the start of a speaker's or the chorus' part. The opening square quotation mark `<「>` may also be used.
 
 ===== Spacing rules
 
@@ -1346,7 +1351,7 @@ New Zealand / Western Australia
 
 
 
-
+[[range-mark]]
 ==== Range mark (_en-dash_)
 
 ===== Primary function and purpose
@@ -1461,6 +1466,7 @@ and uses word dividers only sparingly; name separators then become the primary i
 they are enumerated here rather than being broken down into separate
 functions in the framework.
 ** Components of foreign names (Chinese, Japanese)
+** Components of an organsiation name
 ** Title and subtitle of a work
 ** Professional title, professional position, personal name
 ** Components of a bibliographic reference entry (e.g. _Smith, J. 1989. The passage of time. New York: Wiley._)
@@ -1470,9 +1476,10 @@ as a core concern of Metanorma configuration.
 ===== Punctuation mark in scripts, languages, and locales
 
 * Latin, Cyrillic: In Western scripts, this function is conflated, with the normal word delimiter
-(space), with phrase stops (comma by default, colon for title/subtitle), or with word divider
-(hyphen, used in personal names).
-** The colon or em-dash is used for title/subtitle: _Star Trek V: The Final Frontier_
+(space), with phrase stops (comma by default, colon for title/subtitle, both for organisation names), 
+or with word divider (hyphen, used in personal names).
+** The colon or em-dash is used for title/subtitle: _Star Trek V: The Final Frontier_, _Star Trek V—The Final Frontier_
+** The comma, colon, or em-dash is used for organsiation name: _Yamato Bank: Osaka Branch_
 ** The hyphen is used within a single component of a personal name, a surname or a given name, 
 e.g. _Jean-Jacques_, _Zeta-Jones_ 
 * CJK: Various forms of interpunct: MIDDLE DOT `<·>` (U+OOB7) in China, HYPHENATION POINT `<‧>` (U+2027) in Taiwan,
@@ -1485,6 +1492,8 @@ More rarely, the double hyphen also is used instead of the interpunct to delimit
 e.g. サー゠アーサー゠コナン゠ドイル "Sir=Arthur=Conan=Doyle"
 ** Japanese occasionally uses the interpunct for Japanese names, particularly when there would otherwise be 
 confusion as to where one name ends and another begins.
+** Japanese can use ideographic space to delimit components of an organisation name: 
+大和銀行　大阪支店 (Yamato Bank, Osaka Branch)
 
 ===== Special handling
 * The interpunct is half-width in Chinese in print, but full-width in online material.
@@ -1712,7 +1721,7 @@ The identifier divider is used to break up a token that is not a linguistic expr
 [example]
 ====
 Phone number: _555-8787_ +
-Date: _2000-01-01 +
+Date: _2000-01-01_ +
 Document identifier: __ISO 639-2__
 ====
 
@@ -1927,6 +1936,7 @@ In Metanorma Presentation XML, this is notated as `<span class="fmt-comma">`.
 * In some languages and styles, this function is conveyed by linguistic words instead of punctuation;
 e.g. in Japanese, the particle の "of" is used instead.
 
+[[parenthetical-annotation]]
 ==== Parenthetical annotation  (_parentheses_)
 
 ===== Primary function and purpose
@@ -2382,11 +2392,12 @@ from the Latin script abbrevation.
 * The abbreviations of "number" and their derivatives, including the Numero sign, are followed by space.
 * The number sign (hash) is not followed by a space.
 
-
+[[title-mark]]
 ==== Title mark
 ===== Primary function and purpose
 The title mark is used to indicate the title of a document. This is a core function in bibliographic rendering,
 but it is also applied outside of formal bibliographic rendering, in running text.
+This function is represented in Metanorma i18n files as `punct.open-title` and `punct.close-title`.
 
 ===== Punctuation mark in scripts, languages, and locales
 * Latin, Cyrillic: this is by default handled through italics rather than a punctuation mark. Quotation marks are often
@@ -2410,6 +2421,7 @@ to separate components of a bibliographic reference entry.
 
 The subsidiary title mark is used to indicate the subtitle of a document.
 
+
 ===== Range of semantic functions
 
 * The title mark is associated with the name separator (<<name-separator>>), to delimit titles from subtitles.
@@ -2419,10 +2431,12 @@ The subsidiary title mark is used to indicate the subtitle of a document.
 relies instead on the name separator to differentiate titles from subtitles.
 * Japanese: Wavy dash can be used to mark subtitles: 〜概要〜
 
+[[secondary-title-mark]]
 ==== Secondary title mark
 ===== Primary function and purpose
 The secondary title mark is used to indicate the title of a subsidiary document in more formal referencing.
 This applies to article and chapter titles, as distinct from book and journal titles.
+This function is represented in Metanorma i18n files as `punct.open-secondary-title` and `punct.close-secondary-title`.
 
 ===== Punctuation mark in scripts, languages, and locales
 
@@ -2633,7 +2647,7 @@ lenticular brackets, or emphasis marks.
   * For example,  Japanese uses lenticular brackets in dictionaries for quoting Chinese characters 
   and Sino-Japanese loanwords.
 
-
+[[emphasis-mark]]
 ==== Emphasis marks
 
 
@@ -2661,6 +2675,7 @@ of `<em>` markup in Semantic Metanorma XML.
 
 == Functions: other
 
+[[numeric-punctuation]]
 === Numeric punctuation
 
 ==== General
@@ -2758,23 +2773,26 @@ but the two interact differently with other punctuation.
 
 ===== Punctuation mark in scripts, languages, and locales
 * The same mark, the elllipse, is used as for the hesitancy phrase separator.
-  * Occasionally triple asterisks, `<* * *>` or `<***>`, are used as an explicit missing text mark.
+  * Occasionally triple asterisks, `<* * *&#x200c;>` or `<&#x200c;***>`, are used as an explicit missing text mark.
   This is done in some legal writing in English. In this regard, the missing text mark usually has scope
   at paragraph-level rather than sentence-level, and it is a variant of the section separator (<<section-separator>>).
-* When the omitted material is part of a word, e.g. out of religious or politeness taboo, or anonymisation,
+* When the omitted material is part of a word, e.g. out of religious or social taboo, or anonymisation,
 one or two em dashes are used traditionally. For taboo deletion, asterisk is also used.
 +
+.Anonymisation
 ====
 It was alleged that D—— had been threatened with blackmail.
 ====
 +
+.Religious taboo
 ====
 In the name of G–d
 ====
 +
+.Social taboo
 ====
-You are a f—— c—— +
-You are a f*cking c*nt
+F—— you! +
+F*ck you!
 ====
 
 ===== Spacing rules
@@ -2859,103 +2877,219 @@ VERTICAL KANA REPEAT MARK `<〱>` (U+3031) for exact repetition, VERTICAL KANA R
 and are no longer in common use.
 +
 ====
-ところ _tokoro_ +
-ところ〲; +tokorodokoro_
+ところ _tokoro_ "place" +
+ところ〲; _tokorodokoro_ "in places"
 ====
+
 * Among Latin-script languages, a normal or superscript number `<2>` is used as an iteration mark in
 Filipino, Malay, and Indonesian, although in Indonesian this is no longer official practice.
 
 
 == Whitespace handling
 
-NN: CJK full-width space (U+3000) is rare and meaningful. It is used in specific contexts, for example as an honorific spacing 
-for certain names (e.g., Chang Kai-shek in Chinese text).
+=== General
 
-NN: Japanese requires a quarter-em space (U+2005) between Japanese text and Latin characters. 
-This applies to the transition between Japanese characters and any Latin text.
+Rules about whitespace handling specific to various punctuation marks have already been given inline
+in the foregoing discussion. The following is general discussion about whitespace handling
+in paragraphs, and specific to CJK writing systems—which are in _scriptio continua_, and rarely use whitespace
+at all typographically.
 
-NN: There is an open question about whether the quarter-em space rule should apply between Japanese and numbers. 
-Currently implemented to apply between Japanese and all Latin characters including numbers.
+===== Paragraphing
 
-NN: Japanese also requires space after non-Japanese punctuation marks, such as exclamation marks and question marks.
+Paragraphs may be indented in Western typography. If they are, this done both in
+word processing and HTML as document configuration, setting the indentation of the
+first line in a paragraph, rather than by inserting a spacing character.
 
-NN: In Japanese, a single space is used at the start of paragraphs in text with little Kanji for disambiguation purposes.
+In Japanese, it is common to indent the first line of a paragraph using a full-width space (U+3000).
 
-NN: Japanese can use U+3000 (full-width space) in text with little Kanji for better readability and disambiguation.
+===== Alternation between scripts
+When alternating between CJK and Latin scripts, Chinese does not insert space at the boundary: 
+it preserves the non-spacing nature of CJK. The word delimiter within spans of Latin text is
+still preserved. The same applies to Korean.
 
+====
+她唱的I dreamed a dream(我曾有夢)，唱得肝腸寸斷 "She sang _I dreamed a dream_, so heartbreakingly"
+====
 
-This function is represented in Metanorma i18n files as `punct.cjk-latin-separator`.
+In Japanese, however, spacing is required at the boundary between Japanese text and Latin characters in fine typography.
+This takes the form of a quarter-em space (U+2005), and it applies to any Latin characters, including
+numbers, and even full-width punctuation marks that are not Japanese in origin, such as exclamation marks and question marks.
+
+The whitespace to be applied between runs of CJK and Latin text can be customised in in Metanorma i18n files,
+as `punct.cjk-latin-separator`. In Chinese and Korean, it is set to `""`. In Japanese, it is set to `\u2005`.
+
+===== CJK use of whitespace
+In Chinese, use of full-width space (U+3000) is very rare, and is only used in specific contexts.
+For example, it is used as an honorific spacing preceding certain names (such as that of Chang Kai-shek in Taiwan).
+
+Japanese uses full-width space (U+3000) more commonly, as an optional disambiguating word divider, especially in text that mostly consists of hiragana or katakana and not kanji.
+There is also some usage of full-width space as a name separator (<<name-separator>>).
+
 
 == Metanorma Implementation
 
-=== Three classes of punctuation translation
+=== Classes of punctuation localisation
 
-NN: There are three classes of punctuation translation/localisation in the Metanorma system:
+Metanorma applies different types of punctuation localisation in different contexts,
+which provide different levels of semantic context for the punctuation to be applied;
+the implemented approaches are described here. The approaches are liable to change
+in the near future, and this document was authored in order to provide a framework
+for such changes, improving the quality and consistency of punctuation localisation.
 
-add smart quotes. Add number marks
+The different approaches are, in order of increasing semantic context:
 
-==== Bibliographic punctuation
+* Smart quotes translation
+* Auto-text punctuation translation
+* Direct i18n configuration values
+* Number localisation
+* Bibliographic punctuation
 
-NN: Bibliographic punctuation is distinct from auto-text punctuation and is already catered for in the relaton-render gem. This class of punctuation does not need to be considered in isodoc-i18n, as it will be delegated to that gem.
 
-NN: Title marks and subtitle delimiters (such as the Japanese use of wave dash) are to be handled in relaton-render as bibliographic punctuation.
+==== Smart quotes translation
 
-This is going to change 
+Like other word processing systems, Metanorma translates ASCII-based input of
+punctuation marks to Unicode-based punctuation marks as a post-processing step.
+While Metanorma input uses Asciidoctor, Metanorma does not use the native capability
+of Asciidoctor to do smart quotes translation; it instead does so at the end of
+Semantic XML processing, using the https://github.com/pbhogan/sterile[sterile] gem. 
+This translation step is applied to all user-provided text in the document.
+
+The main class of punctuation handled in this way is quotation marks; sterile
+has contextual mechanisms to differentiate between apostrophe as quotation mark
+and apostrophe as elision mark (left curly vs right curly single quote at the start
+of a word), and Metanorma adds to the configurated contexts for translation.
+
+Metanorma implements the English smart quotes equivalents to the straight quotes `'` and `"`; for
+other languages, users are expected to enter the correct Unicode punctuation marks
+directly in the document, rather than expect Metanorma to translate the straight quotes
+correctly.
 
 ==== Auto-text punctuation via l10n()
 
-NN: Auto-text punctuation translation through the l10n() function will continue to be supported. This mechanism translates Latin punctuation in automatically generated text to the appropriate target language punctuation.
+Metanorma implements a generic mechanism for translating text with English
+punctuation and spacing into other languages and scripts; as of this writing,
+it supports Simplified Chinese, Traditional Chinese, Korean, and French. This
+translation is done in the `Isodoc::I18n::l10n()` function, implemented in the
+isodoc-i18n gem.
 
-NN: The input to l10n() will continue to be Latin punctuation where possible, but some distinctions are not possible with Latin as a starting point.
+The `l10n()` function performs the following conversions:
 
-NN: Auto-text is restricted in what it should be called on to represent; ellipses are supported but not anticipated in common use.
+* Introduce French spacing for French punctuation.
+* Translate Latin punctuation to full-width CJK punctuation.
+* Remove spacing between CJK characters. 
+* Introduce space between CJK and Latin text in Japanese.
 
-This is going to change
+The text passed to `l10n()` is automatically generated text in Metanorma: this is
+mostly document element captions and cross-references, such as
+"Figure 1", "Table 2", "Section 3.4", etc. Bibliographic entries are also passed
+to `l10n()`, to normalise their punctuation to language expectations. Such text
+is typically generated by templates, with Latin word delimiters and punctuation between template slots. Rather than define distinct templates for English, French, 
+Chinese and Japanese, the `l10n()` allows the one template for auto-text to be
+applied to multiple languages.
 
-==== Direct i18n config values
+The text passed to `l10n()` can be a string of text, or a fragment of XML.
+If it is a fragment of XML, `l10n()` is able to traverse the XML tree, and identify
+preceding and following context in adjacent nodes, for the purposes of punctuation
+and spacing localisation. For example, in a fragment like 
 
-NN: Building text directly from i18n configuration values is also supported. It is not yet clear whether this will replace l10n() entirely, but it won't in the immediate term.
+====
+[source,xml]
+----
+<p><strong>你想</strong> <strong>去吗</strong>
+<strong>Do you want</strong> <strong>to go</strong></p>
+----
+====
 
-* Integration with auto-numbering systems
+the method will work out that the first space occurs between two spans of CJK text,
+despite them being inside XML elements, and will delete the first space; it will leave
+the second space alone, because it will have worked out that it occurs in a Latin
+text context.
 
-Markup of delimiter types
+It is often the case that the text entered into the template cells for the
+automatically generated text is in Latin script, and must not be subject to the
+same localisation as the surrounding template; for example, a Japanese bibliographic
+citation may contain a Latin script author, whose punctuation should not be
+translated into Japanese. (The particular problem with authors is the use of period
+as an abbreviation mark for initials, which should not be conflated with the sentence
+stop, and translated into fullwidth period: _Simpson, W._ should not become
+_Simpson、W。_ in Japanese bibliographic entries.) In order to prevent
+translation in a subspan of the string, that subspan is passed wrapped in `<esc></esc>`.
 
-=== Configurable punctuation marks
+While this approach works some of the time, the ambiguity of English punctuation,
+well-documented in this framework, limits the accuracy of such mappings;
+occurrences of period, as noted, are particularly fraught. The punctuation of normal
+English text will not always contain distinctions needed in other languages: the
+English comma, for instance, conflates the Chinese enumeration delimiter and the Chinese
+minor phrase separator.
 
-NN: Most punctuation has variability and needs to be configurable. All punctuation will be configured in the i18n YAML files.
+This issue will be addressed in two ways:
 
-NN: One configuration value for punctuation per document will be used. The system cannot flip between different punctuation styles within a language and a document.
+* Use of `l10n()` for punctuation translation will be reduced, in favour of the more well-controlled direct use of i18n configuration values: the correct punctuation for
+the language will where practical be looked up and inserted into the input string,
+so that the role of `l10n()` is reduced to dealing with spacing rules.
+* `l10n()` will reduce the ambiguity of its input by assigning only one semantic
+function to input punctuation. (So `,` will never be interpreted as an enumeration
+delimiter.) Disambiguating punctuation markup may also be introduced.
 
-NN: Punctuation configuration will be set in i18n YAML, which will be per language in isodoc-i18n, overridable per flavour/language, and then overridable again per document.
 
-NN: The following is the set of configurable punctuation marks in isodoc-i18n:
+==== Direct i18n configuration values
 
-* colon
-* comma
-* enum-comma
-* semicolon
-* period
-* close-paren
-* open-paren
-* close-bracket
-* open-bracket
-* question-mark
-* exclamation-mark
-* emphasis-mark
-* em-dash
-* en-dash
-* number-en-dash
-* open-quote
-* close-quote
-* open-nested-quote
-* close-nested-quote
-* ellipse
+===== General
 
-NN: A subset of the foregoing will be translated from Roman punctuation in autotext via l10n():
+The internationalisation configuration files for Metanorma, managed in YAML format,
+include configuration values for punctuation marks. These values can be invoked
+directly in the templates for automatically generated text, and filled in with
+language-specific values, matching the requested semantic function.
+
+The configuration files are set globally per language in the `isodoc` gem; 
+their values are overridden in the configuration for a Metanorma flavour (and/or a Metanorma taste),
+and can be optionally overridden further in a configuration file supplied with the document.
+There is no mechanism for providing multiple configuration values for a document, and selecting
+which of them to apply: once the overrides have been worked out, there is one configuration
+value applied per punctuation mark per document.
+
+The overrides per flavour allow Metanorma to deal with SDO-specific alterations in punctuation;
+JIS for example uses punctuation more closely aligned with Western practice, whereas Plateau
+uses more traditional Japanese punctuation.
+
+
+===== Configurable punctuation marks
+
+As of this writing, the following punctuation values can be configured in internationalisation files.
+While the names correspond to English punctuation marks, the intention of the configuration is
+to support punctuation semantic functions; the specific semantic functions involves are named in the
+foregoing.
+
+* colon (<<introductory-phrase-separator>>)
+* comma (<<minor-phrase-separator>>)
+* enum-comma (<<enumeration-delimiter>>)
+* semicolon (<<major-phrase-separator>>)
+* period (<<declarative-sentence-stop>>)
+* close-paren (<<parenthetical-annotation>>)
+* open-paren (<<parenthetical-annotation>>)
+* close-bracket (<<bracket>>)
+* open-bracket (<<bracket>>)
+* question-mark (<<interrogative-stop>>)
+* exclamation-mark (<<exclamatory-stop>>)
+* emphasis-mark (<<emphasis-mark>>)
+* em-dash (<<breaking-phrase-separator>>)
+* en-dash (<<range-mark>>)
+* number-en-dash (<<range-mark>>)
+* open-quote (<<paired-quotation-delimiter>>)
+* close-quote (<<paired-quotation-delimiter>>)
+* open-nested-quote (<<single-quotes>>)
+* close-nested-quote (<<single-quotes>>)
+* ellipse (<<missing-text-mark>>)
+* open-title (<<title-mark>>)
+* close-title (<<title-mark>>)
+* open-secondary-title (<<secondary-title-mark>>)
+* close-secondary-title (<<secondary-title-mark>>)
+
+A subset of the foregoing is be translated from Latin punctuation in automatically generated text,
+via `l10n()``:
 
 * colon: `:`
 * comma: `,`
-* enum-comma (contextual)
 * semicolon: `;`
 * period: `.`
 * close-paren: `)`
@@ -2964,44 +3098,79 @@ NN: A subset of the foregoing will be translated from Roman punctuation in autot
 * open-bracket: `[`
 * question-mark: `?`
 * exclamation-mark: `!`
-* emphasis-mark (contextual)
 * em-dash: `—`
 * en-dash: `–`
 * number-en-dash: `–` (invoked depending on context - both surrounding characters need to be Unicode numbers)
 * open-quote: `"`
 * close-quote: `"`
-* open-nested-quote: `'`
-* close-nested-quote: `'`
 * ellipse: `…`
 
-NN: Add the relaton-render q-mark qq-mark, and move it to punct
+In this list,
+
+* Quotation marks are out of scope, because of the ambiguity of apostrophe, and the high variability of quotation marks between
+languages of `l10n()` translation.
+* Enumeration delimiters are not supported directly in `l10n()`, because of the ambiguity of the comma.
+They are handled instead through the `multiple_and` i18n YAML value.
+* Title marks require explicit semantics to drive them, which are not available in the `l10n()` context,
+and introducing them is deferred to bibliographic processing.
 
 
 
-NN: Enum comma is not to be supported in l10n() directly. It is already handled with explicit support through the `multiple_and` i18n YAML value.
 
-NN: The input to l10n() needs to be unambiguous. In particular, the default quotation uses `" "`. Nested quotes use `' '` in templated auto-text, reserving `'` for apostrophe. Ellipse uses the single character `…`.
+===== Self-references in YAML configuration
 
-=== Self-references in YAML configuration
-
-NN: Self-references in the YAML are realized as `#{ self.label }`, for example referencing the current enum-comma:
+Values in the internationalisation configuration files can reference other entries in the configuration (including values
+overridden downstream), using the Ruby-derived syntax `#{ self.label }`, where `label` is the key of the value to be referenced.
+These values can include punctuation. For example, the following is how a YAML configuration value references the 
+current rendering of the enumeration comma:
 
 [source,yaml]
 ----
 #{ self["punct"]["enum-comma"] }
 ----
 
-NN: Liquid syntax is not used because Liquid is already being used to pass external variables into i18n, and Liquid needs to be unprocessed in such i18n entries.
+
+==== Number localisation
+
+Punctuation associated with numerals (<<numeric-punctuation>>) is handled separately from other punctuation,
+as part of the localisation of numbers in Metanorma, which separates the semantic value of the number from how it is rendered.
+This currently allows the decimal point to be configured.
+
+.Document attributes specifying decimal point and minus sign choices
+====
+[source,asciidoctor]
+----
+:number-presentation-profile: notation=scientific,exponent_sign=nil,decimal=","
+----
+====
+
+.Configuration of number rendering inline
+====
+[source,asciidoctor]
+----
+number:327428.7432878432992[decimal=".",notation=exponential]
+----
+====
+
+==== Bibliographic punctuation
+
+Bibliographic punctuation is distinct from auto-text punctuation, and is already catered for in the relaton-render gem. 
+The relaton-render gem is passed full details of the bibliographic entry to be rendered, including what the primary and
+secondary title are, and therefore is the right place for title marks to be rendered, whether as punctuation or as
+italics.
+
+NOTE: The handling of punctuation will be overhauled in relaton-render. In particular, the use of punctuation to separate
+bibliographic fields will cease being treated as sentence and phrase stops, since they are handled in CJK as tabs instead.
 
 === Writing mode parameterization
 
-NN: Script directionality has no standard code comparable to ISO 15924. The online assumption has been to use the CSS `writing-mode` style to convey directionality, as it is considered a presentation concern.
+Punctuation in CJK is handled differently in vertical and horizontal directionality. Currently there is no provision for
+different punctuation configuration for vertical and horizontal: the same punctuation is used in both cases, and rotating
+the punctuation glyphs as required is left up to the rendering engine. 
 
-NN: RFC 5646 combines language, script, and locale, none of which are related to directionality. It is further extensible, but the IANA Registry does not cater for script directionality.
-
-NN: A fourth optional parameter is added to l10n(), alongside locale, for writing_mode: `vertical-rl`, `vertical-lr`, `horizontal-tb`.
-
-NN: This allows differentiation of punctuation based on text direction, which is necessary for some CJK languages where punctuation changes between horizontal and vertical text layouts.
+If it turns out that this is not adequate, and separate configuration is needed for vertical directionality, directionality
+will be a separate parameter passed to `l10n()`; we propose to use the CSS `writing-mode` style values,
+`vertical-rl`, `vertical-lr`, `horizontal-tb`. (There is no standard encoding of directionality.)
 
 [bibliography]
 == Bibliography
