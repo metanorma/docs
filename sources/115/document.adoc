@@ -309,6 +309,19 @@ in deriving punctuated, template-generated text from underlying semantic markup.
 Such templates can specify the intended function of punctuation more rigorously than
 it is reasonable to expect of a human author.
 
+The mapping of semantic functions to punctuation marks is often idiosyncratic, regional,
+and subject to fads and fashions, as well as to disagreements between authorities
+as the mappings change. This is particularly notable with ongoing changes in English punctuation
+noted in this document, as well as with the differences between American English and British
+English practice.
+
+Differences in practice between languages often reflect lags in change;
+for instance, Greek uses the same ditto mark as Quebec French (<<repetition-mark>>), not because
+Greece was in contact with Canada, but because both have preserved older France French
+practice, which has since been abandoned in France itself. This is also reflected in the
+practice of French spacing, and in Japanese matching Traditional Chinese practice rather
+than Simplified Chinese practice.
+
 == Functions: phrase-level structure
 
 === Sentence stops
@@ -1152,7 +1165,7 @@ DOUBLE PRIME QUOTATION MARK `<〞>` (U+301E))
 LEFT WHITE CORNER BRACKET `<『>` (U+300E) and RIGHT WHITE CORNER BRACKET `< 』>` (U+300F).
 
 
-
+[[single-quotes]]
 ==== Nested paired quotation delimiters (_single quotes_)
 
 ===== Primary function and purpose
@@ -1165,7 +1178,7 @@ This function is represented in Metanorma i18n files as `punct.open-nested-quote
 
 ===== Range of semantic functions
 
-* The English nested paired quotation delimiters are often conflated with the apostrophe.
+* The English nested paired quotation delimiters are often conflated with the elision mark (<<elision-mark>>).
 
 ===== Punctuation mark in scripts, languages, and locales
 
@@ -1344,7 +1357,6 @@ This function is represented in Metanorma i18n files as `punct.en-dash`.
 
 ===== Range of semantic functions
 
-* The English nested paired quotation delimiters are often conflated with the apostrophe.
 * Latin script conflates the punctuation marks for verbal and numeric ranges. CJK uses distinct punctuation marks for
 verbal and numeric ranges. The latter function is represented in Metanorma i18n files as `punct.numeric-en-dash`.
 * The range mark is also used to contrast two items, or convey a relationship between them: 
@@ -1543,6 +1555,7 @@ The word divider indicates the compound structure of a word, dividing it into pi
 * The word divider differs from the name separator in scope: name dividers operate on groupings of words, the word divider
 operates within a word. 
 * The hyphen is a special case of the word divider.
+* The grammatical word divider is a special case of the word divider.
 * The divisions that a word divider makes can vary in scope. What is divided up may be a compound consisting of meaningful units: 
 independent words, or morphemes
 (e.g. prefixes: _de-emphasise_). Or, what is divided up may be a single meaningful unit, broken up into phonetic units (syllables, or letters:
@@ -1550,17 +1563,17 @@ syllabification or spelling out of a word).
 * The extent to which the word divider isused in compound words varies by language and by style. The use of hyphen to indicate
 compound words (e.g. _pigeon-hole_, _craftily-constructed chair_) is on the decline in English.
 * There may be two levels of division represented, with different dividers used to differentiate between them.
-
++
 .Meaningful units
 [example]
 post-war +
 Indo-European
-
++
 .Phonetic units
 [example]
 R-E-S-P-E-C-T (spelling out) +
 in-cre-di-ble (syllabification)
-
++
 .Two levels of division
 [example]
 Pre–Indo-European
@@ -1571,11 +1584,18 @@ Pre–Indo-European
 * In Latin and Cyrillic, the default word divider is the hyphen, HYPHEN-MINUS `<->` (U+002D).
 Unicode also has HYPHEN `<‐>` (U+2010) to disambiguate it from the minus sign (<<minus-sign>>), but "Unicode hyphen"
 is little used.
-* The EN DASH `<–>` (U+2013) is used as a higher level of division in careful typesetting
+** The EN DASH `<–>` (U+2013) is used as a higher level of division in careful typesetting
 (_Pre–Indo-European_, _San Francisco–area residents_; the latter uses en dash because it joins a noun consisting 
 of two words with a space, to a third word).
-* In lexicography, interpunct is also used for syllabification.
-
+** In lexicography, interpunct is also used for syllabification.
+** In some transcription practice, e.g. for Arabic and Japanese Chinese  into English.
+the apostrophe is used to indicate syllabification, as disambiguation
+(مصحف
+transcribed as _mus'haf_, to avoid the pronunciation "moo-shaf"; しんいち
+transcribed as _Shin'ichi_ to indicate the syllabification is "Shi-n-i-chi" rather than
+"Shi-ni-chi").
+** This is also done in Pinyin: _Xi'an_ is two syllables, _Xīān_, whereas _xian_ would be read
+as a single syllable. 
 
 ===== Spacing rules
 
@@ -1587,6 +1607,79 @@ of the word divider as showing divisions within a single word.
 
 There are cases of word divider which are not meant to be conflated with the hyphen, and for which a line break
 between word divisions is inappropriate. For such cases, NON-BREAKING HYPHEN `<‑>` (U+2011) is used.
+
+==== Grammatical word divider
+
+
+
+===== Primary function and purpose
+
+The grammatical word divider, like the word divider, indicates the compound structure of a word, 
+dividing it into pieces smaller than a word. 
+
+The word divider can indicate the compound structure
+of any compound word, and is not a normal part of conventional orthography. The grammatical word
+divider is used to designate specific grammatical functions of morphemes, and is part of the conventional
+orthography of a language.
+
+===== Range of semantic functions
+* The use of a  grammatical word divider distinct from the general word divider is idiosyncratic,
+and inconsistent bewteen languages. 
+* The use of the grammatical word divider is also much less common than the elision mark, with which
+English conflates it: the apostrophe as an elision mark is very common, whereas it is more limited as a
+grammatical word divider. 
+  * Wikipedia lists instances in Danish, Estonian, Finnish, Polish, Turkish, and Welsh.
+In the first four it is restricted to foreign words, where the inflection would be hard to parse as
+distinct from the unfamiliar word; in Turkish it is restricted to proper nouns, for similar reasons;
+and in Welsh it is used to disambiguate infixed pronouns. None of them use it regularly for any instances
+of the grammatical function, the way English does for possessive _-’s_.
+** English attaches possessive _-s_ to nouns using a grammatical word divider. No other Germanic
+language does.
++
+====
+English: Julia's +
+German: Julias
+=====
+** Current practice in English uses a grammatical word divider for apostrophes, but a normal
+word divider for unexpected verb inflections:
++
+====
+Julia's +
+to-ing and fro-ing
+====
+** Practice in English is in flux for particular functions: unexpected plurals, and verb inflections after vowels, used to be
+separated by a grammatical word divider; increasingly, that is not used at all.
++
+.Older practice using grammatical word dividers
+====
+bastinado'd +
+KO'd +
+B's and C's
+====
++
+.Newer practice avoiding grammatical word dividers
+====
+bastinadoed +
+KOed +
+Bs and Cs
+====
+** Grammatical word dividers are also increasingly avoided in formal labels, such as geographical
+place names
++
+====
+Coffs Harbour (town in Australia, originally Korff's Harbour) +
+Earl's Court, Barons Court (adjacent London Underground stations)
+====
+
+===== Punctuation mark in scripts, languages, and locales
+* In Latin and Cyrillic, the grammatical word divider is usually the apostrophe.
+  * In fine typography, RIGHT SINGLE QUOTATION MARK `<’>` (U+2019) is used as the apostrophe. 
+  In typewriter usage, which is inherited in online usage,  APOSTROPHE `<'>` (+0027) is used.
+
+
+===== Special handling
+The grammatical word divider function of the apostrophe has the same special handling as the 
+elision mark function (<<elision-mark>>).
 
 
 ==== Hyphen
@@ -2164,6 +2257,7 @@ understood as such rather than as a phonetically read word.
   issue for Metanorma converting between Latin and CJK punctuation.
   * The slash is used for some abbreviations in English, especially involving initials of separate words or morphemes
   (_w/o_ = "**w**ith**o**ut")
+  * The apostrophe, as an elision mark, is also used in some abbreviations: _gov't_ < _government_.
 * CJK: while CJK languages do form truncated expressions (e.g. _Běidà_ 北大 for _Běijīng Dàxué_ 北京大学 "Peking University"),
 abbreviation marks are not used explicitly.
 
@@ -2174,6 +2268,66 @@ abbreviation marks are not used explicitly.
 ===== Special handling
 * There is variation by language, style, and instance as to when to use the abbreviation mark, and whether
 to use abbreviation marks within an acronym (_N.A.T.O._ vs _NATO_, _etc._ vs _etc_).
+
+[[elision-mark]]
+==== Elision mark
+
+===== Primary function and purpose
+
+The elision mark is used to indicate that a word is derived from a word of the same meaning in an older, more formal
+or more standard version of the language, through the deletion of letters in the base form.
+
+===== Range of semantic functions
+* Letters may be deleted from the beginning, the middle, or the end of the base form.
++
+====
+’tis < it is
+shootin’ < shooting
+’n’ < and
+bo'sun < boatswain
+====
+* Letters may be deleted from a single word derived from a phrase; the resulting word is called a contraction.
++
+====
+isn't < is not
+won't < woll not (Middle English variant of will not)
+====
+* Elision marks often differentiate colloquial forms from formal forms, and therefore words using elision marks
+are often avoided in formal style.
+* Elision marks prioritise the formal form of a language, deriving elided forms from it; that can make its
+use politically contentious, if the prioritisation of that form becomes controversial. In the 19th century,
+Scots forms were derived from Standard English forms in spelling, using elision marks (e.g. _a' < all, gi'e < give_);
+this was rejected in the 20th century as Scots was regarded as a distinct language from English (with the words now
+spelled _aw, gie_), rather than as a corrupt form of London English; 
+the older use of the elision mark is dismissed as the "apologetic apostrophe". A similar backlash has occured in the
+Anglosphere to other such transcription of non-standard English ("eye dialect").
+
+===== Punctuation mark in scripts, languages, and locales
+* Latin, Cyrillic: in fine typography, RIGHT SINGLE QUOTATION MARK `<’>` (U+2019) is used as the elision mark.
+In typewriter usage, which is inherited in online usage,  APOSTROPHE `<'>` (+0027) is used.
+  * Both forms of the punctuation mark are called apostrophe.
+
+===== Spacing rules
+* There is variation as to whether an abbreviation of a multi-word phrase retains the spaces of its source phrase
+(_U. S._ vs _U.S._).
+
+===== Special handling
+* Data-entry of the straight APOSTROPHE character is automatically corrected by word processors to the curved
+RIGHT SINGLE QUOTATION MARK character. The conversion uses the identical mechanism as smart quotes for quotation
+marks (<<single-quotes>>).
+* The RIGHT SINGLE QUOTATION MARK punctuation mark is ambiguous between being a quotation mark and an elision mark,
+as indeed its Unicode name indicates. That means that initial elision marks are incorrectly corrected from the straight
+quote: it is treated as an initial quotation mark, and changed to LEFT SINGLE QUOTATION MARK, whereas 
+initial elision marks are always RIGHT SINGLE QUOTATION MARK.
++
+====
+`'n'` (data entry) +
+_’n’_ (correct rendering) +
+_‘n’_ (incorrect smart quotes conversion, treating elision mark as quotation mark)
+====
+
+
+
 
 
 ==== Cardinal number mark
@@ -2658,6 +2812,7 @@ Original text: The President said that, for as long as this situation continued,
 Reported text: The President said that [...] he would not be satisfied 
 ====
 
+[[repetition-mark]]
 ==== Repetition mark
 ===== Primary function and purpose
 The repetition mark indicates a place where text is repeated from a previous passage,
@@ -2709,14 +2864,6 @@ and are no longer in common use.
 ====
 * Among Latin-script languages, a normal or superscript number `<2>` is used as an iteration mark in
 Filipino, Malay, and Indonesian, although in Indonesian this is no longer official practice.
-
-==== Apostrophe
-===== Primary function and purpose
-===== Range of semantic functions
-===== Punctuation mark in scripts, languages, and locales
-
-
-plural marker, making it a kind of word divider
 
 
 == Whitespace handling
