@@ -318,9 +318,9 @@ English practice.
 Differences in practice between languages often reflect lags in change;
 for instance, Greek uses the same ditto mark as Quebec French (<<repetition-mark>>), not because
 Greece was in contact with Canada, but because both have preserved older France French
-practice, which has since been abandoned in France itself. This is also reflected in the
-practice of French spacing, and in Japanese matching Traditional Chinese practice rather
-than Simplified Chinese practice.
+practice, which has since been abandoned in France itself. This is also reflected in the formerly
+more widespread practice of French spacing (<<sentence-stop-spacing>>), and in Japanese matching 
+Traditional Chinese practice rather than Simplified Chinese practice.
 
 Not all semantic functions described here are expected in the kinds of documents that Metanorma processors,
 but they are included for completeness in presenting the framework. Semantic functions that are not expected
@@ -735,7 +735,7 @@ In Metanorma Presentation XML, this is notated as `<span class="fmt-dt-delim">`.
 ====
 Framework:: basic structure underlying a system, concept, or text
 
-Framework:&#zwnj;:: basic structure underlying a system, concept, or text
+Framework:&zwnj;:: basic structure underlying a system, concept, or text
 ====
 
 ===== Punctuation mark in scripts, languages, and locales
