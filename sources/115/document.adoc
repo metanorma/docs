@@ -322,6 +322,10 @@ practice, which has since been abandoned in France itself. This is also reflecte
 practice of French spacing, and in Japanese matching Traditional Chinese practice rather
 than Simplified Chinese practice.
 
+Not all semantic functions described here are expected in the kinds of documents that Metanorma processors,
+but they are included for completeness in presenting the framework. Semantic functions that are not expected
+to be supported by Metanorma are flagged in the following as "(out of scope)".
+
 == Functions: phrase-level structure
 
 === Sentence stops
@@ -508,7 +512,7 @@ optionally.
 TIP: Metanorma does not currently implement inverted question marks.
 
 [[exclamatory-stop]]
-==== Exclamatory stop (_exclamation mark_)
+==== Exclamatory stop (_exclamation mark_) (out of scope)
 
 ===== Primary function and purpose
 
@@ -826,7 +830,7 @@ He was the miracle ingredient Z-147. He was— +
 ====
 
 [[hesitancy-phrase-separator]]
-==== Hesitancy phrase separator (_em-dash_)
+==== Hesitancy phrase separator (_em-dash_) (out of scope)
 
 ===== Primary function and purpose
 
@@ -890,7 +894,7 @@ However as with other punctuation,
 the browser/operating system is assumed to handle positioning appropriately, so MIDLINE HORIZONTAL ELLIPSIS
 would still be expected to be entered.
 
-==== Verse separator
+==== Verse separator (out of scope)
 
 ===== Primary function and purpose
 
@@ -928,7 +932,7 @@ To be, or not to be, that is the question: / Whether 'tis nobler in the mind to 
 In poetic practice, separate verses must not be right-justified at the line-break.
 
 [[section-separator]]
-==== Section separator
+==== Section separator (out of scope)
 ===== Primary function and purpose
 The section separator includes a break in a document, at a higher level than a sentence or paragraph.
 
@@ -1225,7 +1229,7 @@ distinct codepoints
 * In vertical directionality, Traditional and Simplified Chinese use presentation variants of the codepoints
 LEFT CORNER BRACKET `<「>` (U+300C) and RIGHT CORNER BRACKET `<」>` (U+300D).
 
-==== Single quotation delimiters (_quotation dash_)
+==== Single quotation delimiters (_quotation dash_) (out of scope)
 
 ===== Primary function and purpose
 
@@ -1648,7 +1652,8 @@ language does.
 ====
 English: Julia's +
 German: Julias
-=====
+====
+
 ** Current practice in English uses a grammatical word divider for apostrophes, but a normal
 word divider for unexpected verb inflections:
 +
@@ -1656,6 +1661,7 @@ word divider for unexpected verb inflections:
 Julia's +
 to-ing and fro-ing
 ====
+
 ** Practice in English is in flux for particular functions: unexpected plurals, and verb inflections after vowels, used to be
 separated by a grammatical word divider; increasingly, that is not used at all.
 +
@@ -2340,7 +2346,7 @@ _‘n’_ (incorrect smart quotes conversion, treating elision mark as quotation
 
 
 
-==== Cardinal number mark
+==== Cardinal number mark (out of scope)
 ===== Primary function and purpose
 
 In writing systems where number symbols are ambiguous with letters of the script, it was routine to highlight the
@@ -2368,7 +2374,7 @@ fractions (double keraia in Greek).
 was also used in the same period, to indicate that the number was to be multiplied by a thousand (so _V͞I_ was used for
 both "6" and "6,000"). The number mark is rare in contemporary usage of Roman numbers.
 
-==== Ordinal number mark
+==== Ordinal number mark (out of scope)
 ===== Primary function and purpose
 In some languages, ordinal numbers are preceded by a mark indicating that this is an ordinal, and often derived
 from the spoken word for "number".
@@ -2573,7 +2579,7 @@ The proper name mark is used to indicate a proper name within a document.
 |===
 ////
 
-==== Clause mark
+==== Clause mark  (out of scope)
 ===== Primary function and purpose
 
 A clause mark is used to indicate that an identifier is a cross-reference to a clause in a document.
@@ -2593,7 +2599,7 @@ a clause reference, without an explicit indication of the cross-reference scope.
 * When multiple clauses are referenced, the section sign may be duplicated: "§§ 13–21".
 This is analogous to cross-reference abbreviations, such as "pp." for "pages".
 
-==== Paragraph mark
+==== Paragraph mark (out of scope)
 ===== Primary function and purpose
 
 A paragraph mark is used to indicate that an identifier is a cross-reference to a paragraph in a document.
@@ -2894,7 +2900,7 @@ in the foregoing discussion. The following is general discussion about whitespac
 in paragraphs, and specific to CJK writing systems—which are in _scriptio continua_, and rarely use whitespace
 at all typographically.
 
-===== Paragraphing
+=== Paragraphing
 
 Paragraphs may be indented in Western typography. If they are, this done both in
 word processing and HTML as document configuration, setting the indentation of the
@@ -2902,7 +2908,7 @@ first line in a paragraph, rather than by inserting a spacing character.
 
 In Japanese, it is common to indent the first line of a paragraph using a full-width space (U+3000).
 
-===== Alternation between scripts
+=== Alternation between scripts
 When alternating between CJK and Latin scripts, Chinese does not insert space at the boundary: 
 it preserves the non-spacing nature of CJK. The word delimiter within spans of Latin text is
 still preserved. The same applies to Korean.
@@ -2918,7 +2924,7 @@ numbers, and even full-width punctuation marks that are not Japanese in origin, 
 The whitespace to be applied between runs of CJK and Latin text can be customised in in Metanorma i18n files,
 as `punct.cjk-latin-separator`. In Chinese and Korean, it is set to `""`. In Japanese, it is set to `\u2005`.
 
-===== CJK use of whitespace
+=== CJK use of whitespace
 In Chinese, use of full-width space (U+3000) is very rare, and is only used in specific contexts.
 For example, it is used as an honorific spacing preceding certain names (such as that of Chang Kai-shek in Taiwan).
 
