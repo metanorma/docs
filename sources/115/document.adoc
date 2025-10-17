@@ -735,7 +735,7 @@ In Metanorma Presentation XML, this is notated as `<span class="fmt-dt-delim">`.
 ====
 Framework:: basic structure underlying a system, concept, or text
 
-Framework: basic structure underlying a system, concept, or text
+Framework:&#zwnj;:: basic structure underlying a system, concept, or text
 ====
 
 ===== Punctuation mark in scripts, languages, and locales
@@ -906,7 +906,7 @@ Mark that delimits verses in poetic writing
 * In poetic practice globally in modern times, verses are separated by line breaks, which are not regarded as
 punctuation.
 * In prose transcription of poetry, verses are often separated by a slash.
-  * There is some usage of pipe `<|>` instead.
+  * There is some usage of VERTICAL LINE `<|>` (U+007C) instead.
 
 .Poetic typesetting
 ====
@@ -981,7 +981,7 @@ separating noun phrases is considered listing stops, and not phrase stops.
 
 ====
 _I went to the market, and I bought some beans_: comma as phrase stop (it is separating two phrases that
-are complete sentences)
+are complete sentences) +
 _I bought some beans, cheese, and a nice bottle of Chianti_: comma as listing stop (it is separating noun phrases,
 which can include articles, adjectives, and quantifiers)
 ====
@@ -1301,7 +1301,7 @@ It is a punctuation counterpart to "and".
 ===== Range of semantic functions
 * In formal usage, ampersand is restricted to citations of multiple authors,
 and to disambiguate scope of conjunction
-(items in a list joined by "and", some of which are themselves joined by "and")/
+(items in a list joined by "and", some of which are themselves joined by "and").
 +
 ====
 Jones & Jones (2005) +
@@ -1349,7 +1349,7 @@ _Shanghai/Nanjing/Wuhan/Chongqing_ or _Shanghai–Nanjing–Wuhan–Chongqing_
 phrase being joined contains a space:
 +
 ====
-and/or
+and/or +
 New Zealand / Western Australia
 ====
 
@@ -1488,7 +1488,7 @@ or with word divider (hyphen, used in personal names).
 e.g. _Jean-Jacques_, _Zeta-Jones_ 
 * CJK: Various forms of interpunct: MIDDLE DOT `<·>` (U+OOB7) in China, HYPHENATION POINT `<‧>` (U+2027) in Taiwan,
 KATAKANA MIDDLE DOT `<・>` (U+30FB) to separate Katakana words in Japanese.
-** Japanese also uses WAVE DASH `<〜>` (U+301C), to separating title from subtitle
+** Japanese also uses WAVE DASH `<〜>` (U+301C), to separate title from subtitle
 ** Japanese also uses the KATAKANA-HIRAGANA DOUBLE HYPHEN `<゠>` (U+U+30A0) and the FULLWIDTH EQUALS SIGN
 `<＝>` <U+FF1D>. This double hyphen is used to render Latin hyphen in transliteration of foreign names, i.e.
 in the function of separating single components of a Western name. That function occasionally uses the interpunct instead.
@@ -1497,7 +1497,7 @@ e.g. サー゠アーサー゠コナン゠ドイル "Sir=Arthur=Conan=Doyle"
 ** Japanese occasionally uses the interpunct for Japanese names, particularly when there would otherwise be 
 confusion as to where one name ends and another begins.
 ** Japanese can use ideographic space to delimit components of an organisation name: 
-大和銀行　大阪支店 (Yamato Bank, Osaka Branch)
+大和銀行　大阪支店 "Yamato Bank, Osaka Branch".
 
 ===== Special handling
 * The interpunct is half-width in Chinese in print, but full-width in online material.
@@ -1521,7 +1521,8 @@ The attribution mark is used  to delimit a quotation from its source.
 ====
 
 ===== Range of semantic functions
-* The attribution mark is comparable to the <<caption-separator>> and the <<breaking-phrase-separator>>.
+* The attribution mark is comparable to the caption separator (<<caption-separator>>)
+and the breaking phrase separator (<<breaking-phrase-separator>>).
 It accordingly shares punctuation with them.
 
 ===== Punctuation mark in scripts, languages, and locales
@@ -1553,7 +1554,7 @@ CJK therefore has _scriptio continua_.
 * There are circumstances in which a word separator is necessary in careful text in CJK.
 Japanese specifically uses the interpunct to separate ordinary Japanese words, outside of the special cases of 
 name separators (<<name-separator>>), where the intended meaning would be unclear if the characters were written side-by-side.
-It is more commonly used to separate foreign words and names when written in kana: パーソナル・コンピューター (personal computer). 
+It is more commonly used to separate foreign words and names when written in kana: パーソナル・コンピューター (_pāsonaru·konpyūtā_ "personal computer").
 
 
 
@@ -1644,7 +1645,7 @@ grammatical word divider.
   * Wikipedia lists instances in Danish, Estonian, Finnish, Polish, Turkish, and Welsh.
 In the first four it is restricted to foreign words, where the inflection would be hard to parse as
 distinct from the unfamiliar word; in Turkish it is restricted to proper nouns, for similar reasons;
-and in Welsh it is used to disambiguate infixed pronouns. None of them use it regularly for any instances
+and in Welsh it is used to disambiguate infixed pronouns. None of them use it regularly for every instance
 of the grammatical function, the way English does for possessive _-’s_.
 ** English attaches possessive _-s_ to nouns using a grammatical word divider. No other Germanic
 language does.
@@ -1997,7 +1998,9 @@ for ambiguity drives many style guides to require that the nested annotation be 
 of parentheses, and that any third level of nesting be in curly brackets.
 +
 ====
-From Wikipedia: Parentheses may be nested (generally with one set (such as this) inside another set). 
+From Wikipedia: 
+
+> Parentheses may be nested (generally with one set (such as this) inside another set). 
 This is not commonly used in formal writing (though sometimes other brackets [especially square brackets] 
 will be used for one or more inner set of parentheses [in other words, secondary {or even tertiary} 
 phrases can be found within the main parenthetical sentence]).
@@ -2297,15 +2300,15 @@ or more standard version of the language, through the deletion of letters in the
 * Letters may be deleted from the beginning, the middle, or the end of the base form.
 +
 ====
-’tis < it is
-shootin’ < shooting
-’n’ < and
+’tis < it is +
+shootin’ < shooting +
+’n’ < and +
 bo'sun < boatswain
 ====
 * Letters may be deleted from a single word derived from a phrase; the resulting word is called a contraction.
 +
 ====
-isn't < is not
+isn't < is not +
 won't < woll not (Middle English variant of will not)
 ====
 * Elision marks often differentiate colloquial forms from formal forms, and therefore words using elision marks
@@ -2852,7 +2855,7 @@ these can take the form of straight quotes, right smart quotes, or apostrophe.
 +
 ====
 ....
-Black pens, box of twenty ... $2.10
+Black pens, box of twenty ... $2.10 +
 Blue  "     "   "  "      ... $2.35
 ....
 ====
