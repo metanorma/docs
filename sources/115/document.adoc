@@ -11,6 +11,7 @@
 :mn-output-extensions: xml,html,pdf,rxl
 :local-cache-only:
 :toclevels: 3
+:fonts: Noto Sans Hebrew
 
 .Foreword
 This document is part of the Metanorma specifications series that defines
@@ -157,7 +158,7 @@ Period: `<.>` (Latin) vs `<。>` (CJK)
 ====
 ////
 
- ////
+
 === full-width character
 
 character that occupies the width of an ideographic character, commonly used in
