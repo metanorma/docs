@@ -2998,7 +2998,7 @@ and are no longer in common use.
 ところ _tokoro_ "place" +
 ところ〲; _tokorodokoro_ "in places"
 ====
-* Hiragana and Katakana have distinct iteration marks. They are no longer in common use, but
+** Hiragana and Katakana have distinct iteration marks. They are no longer in common use, but
 they still appear in names.
 +
 ====
