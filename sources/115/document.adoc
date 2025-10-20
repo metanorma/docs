@@ -3001,7 +3001,7 @@ and are no longer in common use.
 * Hiragana and Katakana have distinct iteration marks. They are no longer in common use, but
 they still appear in names.
 +
-===
+====
 Isuzu in Japanese is いすゞ, using a voiced iteration mark: I-su-{repeat, voiced}
 ====
 +
