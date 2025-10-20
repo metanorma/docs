@@ -2998,8 +2998,20 @@ and are no longer in common use.
 ところ _tokoro_ "place" +
 ところ〲; _tokorodokoro_ "in places"
 ====
-* Hiragana and Katakana have distinct iteration marks: although they are no longer in common use,
-they still appear in names (e.g. Isuzu in Japanese is いすゞ, using a voiced iteration mark: I-su-{repeat, voiced}).
+* Hiragana and Katakana have distinct iteration marks. They are no longer in common use, but
+they still appear in names.
++
+===
+Isuzu in Japanese is いすゞ, using a voiced iteration mark: I-su-{repeat, voiced}
+===
++
+====
+Japanese Wikipedia refers to "heart" in Kanji: https://ja.wikipedia.org/wiki/%E5%BF%83[心].
+Its Hiragana entry https://ja.wikipedia.org/wiki/%E3%81%93%E3%81%93%E3%82%8D[こころ] includes a dozen
+literary works titled _kokoro_ "heart". There is a distinct reference 
+https://ja.wikipedia.org/wiki/%E3%81%93%E3%82%9D%E3%82%8D[こゝろ] to the 1914 novel by Soseki;
+being a much older work than the others, it has retained the Hiragana repetition mark, "ko-{repeat}-ro".
+====
 
 * Among Latin-script languages, a normal or superscript number `<2>` is used as an iteration mark in
 Filipino, Malay, and Indonesian, although in Indonesian this is no longer official practice.
