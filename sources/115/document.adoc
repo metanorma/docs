@@ -3003,7 +3003,7 @@ they still appear in names.
 +
 ===
 Isuzu in Japanese is いすゞ, using a voiced iteration mark: I-su-{repeat, voiced}
-===
+====
 +
 ====
 Japanese Wikipedia refers to "heart" in Kanji: https://ja.wikipedia.org/wiki/%E5%BF%83[心].
