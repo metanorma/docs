@@ -540,7 +540,7 @@ Traditional Chinese: the ideographic question mark in 這是問題嗎？
  an  interrogative phrase, only the interrogative phrase is so delimited: 
 +
 ====
- _Si no puedes ir con ellos, ¿quieres ir con nosotros?_ "If you cannot go with them, ¿would you like to go with us?"
+_Si no puedes ir con ellos, ¿quieres ir con nosotros?_ "If you cannot go with them, ¿would you like to go with us?"
 ====
 ** There is some variation by locale in usage: short questions can omit the inverted question mark
 in Galician; Catalan in Catalonia does not use inverted question marks; Catalan in Valencia uses them
