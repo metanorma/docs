@@ -3089,7 +3089,7 @@ of Asciidoctor to do smart quotes translation; it instead does so at the end of
 Semantic XML processing, using the https://github.com/pbhogan/sterile[`sterile`] gem. 
 This translation step is applied to all user-provided text in the document.
 
-The main class of punctuation handled in this way is quotation marks; `sterile``
+The main class of punctuation handled in this way is quotation marks; `sterile`
 has contextual mechanisms to differentiate between apostrophe as quotation mark
 and apostrophe as elision mark (left curly vs right curly single quote at the start
 of a word), and Metanorma adds to the configured contexts for translation
