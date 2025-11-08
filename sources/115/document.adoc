@@ -2925,8 +2925,8 @@ both the missing text mark and the hesitancy mark.
 +
 ====
 _The ... fox jumps ... +
-The quick brown fox jumps over the lazy dog. ... And if they have not died, they are still alive today. +
-It is not cold ... it is freezing cold._
+_The quick brown fox jumps over the lazy dog. ... And if they have not died, they are still alive today._ +
+_It is not cold ... it is freezing cold._
 ====
 * But as an illustration of the flux around spacing rules: the _University of Oxford Style Guide_
 (which applies to the university rather than to the commercial printer) requires no space around
@@ -2934,8 +2934,8 @@ the missing text mark, and space after and not before the hesitancy mark:
 +
 ====
 _The...fox jumps... +
-The quick brown fox jumps over the lazy dog...And if they have not died, they are still alive today. +
-It is not cold... it is freezing cold._
+_The quick brown fox jumps over the lazy dog...And if they have not died, they are still alive today._ +
+_It is not cold... it is freezing cold._
 ====
 
 ===== Special handling
@@ -3093,7 +3093,7 @@ The main class of punctuation handled in this way is quotation marks; `sterile`
 has contextual mechanisms to differentiate between apostrophe as quotation mark
 and apostrophe as elision mark (left curly vs right curly single quote at the start
 of a word), and Metanorma adds to the configured contexts for translation
-(e.g. converting `'70s`` to _’70s_)
+(e.g. converting `'70s` to _’70s_)
 
 Metanorma implements the English smart quotes equivalents to the straight quotes `'` and `"`; for
 other languages, users are expected to enter the correct Unicode punctuation marks
