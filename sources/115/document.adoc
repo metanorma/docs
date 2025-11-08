@@ -538,10 +538,10 @@ Traditional Chinese: the ideographic question mark in 這是問題嗎？
 * In Spanish and languages under Spanish cultural influence (e.g. Catalan), INVERTED QUESTION MARK `<¿>` 
  (U+00BF) is used at the start of an interrogative sentence or phrase. If a declarative sentence contains
  an  interrogative phrase, only the interrogative phrase is so delimited: 
- +
- ====
++
+====
  _Si no puedes ir con ellos, ¿quieres ir con nosotros?_ "If you cannot go with them, ¿would you like to go with us?"
- ====
+====
 ** There is some variation by locale in usage: short questions can omit the inverted question mark
 in Galician; Catalan in Catalonia does not use inverted question marks; Catalan in Valencia uses them
 optionally.
@@ -989,7 +989,8 @@ _“If the otter police don’t get here soon, we’re in deep trouble,” he sa
 
 _James nodded. “I’m almost out of kibble. And the bits are running low too.”_
 
-*         *         *
+[align=center]
+`*         *         *`
 
 _In the blimp floating high over Ferretsburg, Captain Crandle looked down at the unfolding battle with growing annoyance…._
 
@@ -1001,14 +1002,14 @@ _In the blimp floating high over Ferretsburg, Captain Crandle looked down at the
 than a paragraph are clauses, and new clauses are explicitly indicated by clause headings. Section separators
 are characteristic of extended literary prose, such as novels; even though novels have chapters, they do not 
 have subchapters, and breaks in a chapter are indicated by a section separator instead.
-  * In literary use, the section separator is intended to convey a logical or emotional break.
+** In literary use, the section separator is intended to convey a logical or emotional break.
 * There is overlap between the section separator and the missing text mark (<<missing-text-mark>>),
 when the scope of the missing text mark is at the paragraph level.
 
 ===== Punctuation mark in scripts, languages, and locales
 * The cover term for the traditional punctuation mark for a section separator, used in literary writing, is 
 the dinkus. The usual contemporary form of the dinkus is three asterisks or three bullets in a row, with space between them.
-  * Older practice used other decorative symbols, including ASTERISM `<⁂>` (U+2042) and various fleurons—such as
+** Older practice used other decorative symbols, including ASTERISM `<⁂>` (U+2042) and various fleurons—such as
 ROTATED FLORAL HEART BULLET `<❧>` (U+2767) and NORTH WEST POINTING LEAF `<🙐>` (U+1F650).
 * In word processing and HTML documents, this function is conveyed by the horizontal rule (`<hr/>`),
 which is not regarded as punctuation.
@@ -1311,7 +1312,7 @@ A single initial marker used to represent one turn in an alternation of direct s
 
 * Latin, Cyrillic: Properly HORIZONTAL BAR `<―>` (U+2015) is used; in practice EM DASH `<—>` (U+2014)
 is usually used.
-  * The quotation dash is almost unknown in English, but is commonplace in other European languages,
+** The quotation dash is almost unknown in English, but is commonplace in other European languages,
   such as French.
 * The Japanese PART ALTERNATION MARK `<〽>` (U+303D) has narrower application, being used in Noh drama
 to indicate the start of a speaker's or the chorus' part. The opening square quotation mark `<「>` may also be used.
@@ -1429,7 +1430,7 @@ _New Zealand / Western Australia_
 
 ===== Primary function and purpose
 
-A marker between two items, used to convey a range between the two. The items can be verbal values (_Paris–New York), 
+A marker between two items, used to convey a range between the two. The items can be verbal values (_Paris–New York_), 
 numerals (_3_–_5_), dates (_Jan–Oct_), quantities, etc.
 This function is represented in Metanorma i18n files as `punct.en-dash`.
 
@@ -1445,7 +1446,7 @@ _Mother–daughter relationship_,
 * Latin, Cyrillic: In good typography, EN DASH `<–>` (U+2013) is used. Informal use typically uses the hyphen,
 and some style guides prescribing formal use prefer the hyphen when conveying a relationship, 
 in its role as a word divider (<<word-divider>>).
-  * In French, TILDE `<~>` (U+007E) is used: _3~5 m_.
+** In French, TILDE `<~>` (U+007E) is used: _3~5 m_.
 * Traditional Chinese, Simplified Chinese, Japanese, Korean: EN DASH `<–>` (U+2013), WAVE DASH `<〜>` (U+301C),
 FULLWIDTH TILDE `<～>` (U+FF5E).
 
@@ -1588,7 +1589,7 @@ The attribution mark is used  to delimit a quotation from its source.
 ====
 
 ====
-_"To be or not to be, that is the question" — William Shakespeare
+To be or not to be, that is the question" — William Shakespeare
 ====
 
 ===== Range of semantic functions
@@ -1618,7 +1619,7 @@ The word separator is used to separate words from each other.
 
 * In Latin and Cyrillic, this function is fulfilled by the space, which is not regarded as punctuation at all. The space is
 applied universally as a word separator. 
-  * This was not the case in antiquity. Roman inscriptions used an interpunct (<<interpunct>>) as a word separator; Greek and Roman manuscripts
+** This was not the case in antiquity. Roman inscriptions used an interpunct (<<interpunct>>) as a word separator; Greek and Roman manuscripts
   did not use word separators. (The latter practice is known as _scriptio continua_, "continuous writing")
 * CJK by contrast defaults to not using word separators, outside of special contexts (here considered as name separators).
 CJK therefore has _scriptio continua_.
@@ -2079,7 +2080,7 @@ resumption. This is associated with less formal style.
 
 ===== Special handling
 * Languages differ as to whether parentheses enclosing italicised text should themselves be
-in italics. In German, they is expected to; in English, they are expected not to.
+in italics. In German, they are expected to; in English, they are expected not to.
 * Parenthetical annotations can be nested within other parenthetical annotations. In informal
 writing, parentheses are used for both nesting and nested annotations. In formal writing, concern
 for ambiguity drives many style guides to require that the nested annotation be in brackets instead
@@ -2421,12 +2422,12 @@ the older use of the elision mark is dismissed as the "apologetic apostrophe".
 ====
 +
 A similar backlash has occured in the
-Anglosphere to other such transcription of non-standard English ("eye dialect").
+Anglosphere against other such transcription of non-standard English ("eye dialect").
 
 ===== Punctuation mark in scripts, languages, and locales
 * Latin, Cyrillic: in fine typography, RIGHT SINGLE QUOTATION MARK `<’>` (U+2019) is used as the elision mark.
 In typewriter usage, which is inherited in online usage,  APOSTROPHE `<'>` (+0027) is used.
-  * Both forms of the punctuation mark are called apostrophe.
+** Both forms of the punctuation mark are called apostrophe.
 
 ===== Spacing rules
 * There is variation as to whether an abbreviation of a multi-word phrase retains the spaces of its source phrase
@@ -2517,11 +2518,11 @@ This function is represented in Metanorma i18n files as `punct.open-title` and `
 used instead, although in more formal referencing, quotation marks are used as secondary title marks instead.
 * Traditional Chinese: WAVY LOW LINE (U+FE4F) is used as official title markup, particularly in texts that also use the
 proper name mark.
-  * Square brackets 【】and double quotation marks『』are also used. 
+** Square brackets 【】and double quotation marks『』are also used. 
 * Simplified Chinese: uses《...》for titles. 
-  * Square brackets【】and double quotation marks『』are also used for song titles.
+** Square brackets【】and double quotation marks『』are also used for song titles.
 * Japanese: 『...』(double quotes) are used for book titles.
-  * Western quotes are unofficially used in press for titles in Traditional Chinese, Japanese, and Korean.
+** Western quotes are unofficially used in press for titles in Traditional Chinese, Japanese, and Korean.
 
 
 ===== Special handling
@@ -2840,7 +2841,7 @@ normal text.
 
 ===== Punctuation mark in scripts, languages, and locales
 * Fine typography prefers to use the distinct MINUS SIGN `<−>` (U+2212) in mathematical use. Informal use uses
-HYPHEN-MINUS `<->` (U+002D).
+HYPHEN-MINUS `<-&#x200c;>` (U+002D).
 
 ==== Ratio sign
 
@@ -2871,7 +2872,7 @@ Indicates that a numeric value is approximate.
 
 ===== Punctuation mark in scripts, languages, and locales
 * TILDE `<~>` (U+007E) is used by default
-  * Some languages such as French also use ALMOST EQUAL TO `<≈>` (U+2248).
+** Some languages such as French also use ALMOST EQUAL TO `<≈>` (U+2248).
 
 === Miscellaneous
 
@@ -2888,7 +2889,7 @@ but the two interact differently with other punctuation.
 
 ===== Punctuation mark in scripts, languages, and locales
 * The same mark, the elllipse, is used as for the hesitancy phrase separator.
-  * Occasionally triple asterisks, `<* * *&#x200c;>` or `<&#x200c;***>`, are used as an explicit missing text mark.
+** Occasionally triple asterisks, `<* * *&#x200c;>` or `<&#x200c;***>`, are used as an explicit missing text mark.
   This is done in some legal writing in English. In this regard, the missing text mark usually has scope
   at paragraph-level rather than sentence-level, and it is a variant of the section separator (<<section-separator>>).
 * When the omitted material is part of a word, e.g. out of religious or social taboo, or anonymisation,
@@ -2917,8 +2918,8 @@ _F*@# you!_
 rather than as punctuation.
 Therefore unlike the hesitancy phrase separator, the missing text mark is preceded by space as a word separator, 
 just as a word would. This extends to treating the missing text mark as a distinct sentence.
-
-So British practice, as reflcted in the _Oxford Style Guide_, has the hesitancy mark replace
++
+So British practice, as reflected in the _Oxford Style Guide_, has the hesitancy mark replace
 the sentence stop, but the missing text mark appear after a sentence stop. It also has space before
 both the missing text mark and the hesitancy mark.
 +
@@ -2972,6 +2973,8 @@ Blue  "     "   "  "      ... $2.35
 the English use of apostrophes is an approximation of this. In yet others (e.g. Swedish), the double prime ditto mark
 is set on the baseline, and surrounded by em-dashes.
 ** In CJK, DITTO MARK `<〃>` (U+3003) is  used.
+** These are clearly visual variants of each other, that have been conflated historically with other punctuation in the same
+local writing systems.
 * In some citation conventions, if two consecutive reference entries in a bibliography have the same
 author(s), a repetition mark is used instead of repeating the author, consisting of two or three  em-dashes.
 +
@@ -3002,7 +3005,7 @@ and are no longer in common use.
 they still appear in names.
 +
 ====
-Isuzu in Japanese is いすゞ, using a voiced iteration mark: I-su-{repeat, voiced}
+_Isuzu_ in Japanese is いすゞ, using a voiced iteration mark: I-su-{repeat, voiced}
 ====
 +
 ====
@@ -3295,8 +3298,22 @@ The `relaton-render` gem is passed full details of the bibliographic entry to be
 secondary title are, and therefore it is the right place for title marks to be rendered, whether as punctuation or as
 italics.
 
-NOTE: The handling of punctuation will be overhauled in `relaton-render``. In particular, the use of punctuation to separate
-bibliographic fields will cease being treated as sentence and phrase stops, since they are handled in CJK as tabs instead.
+The handling of punctuation has been overhauled in `relaton-render``. In particular, the use of punctuation to separate
+bibliographic fields has ceased being treated as sentence and phrase stops, since they are handled in CJK as tabs instead,
+and needs to avoid conflation with the abbreviation usage of period. Bibliographic rendering thus adds two new values
+to i18n configuration:
+
+* `biblio-field-delimiter` is the main delimiter between (groupings of) bibliographic fields in a citation;
+e.g. in "Smith, J. (ed.) $$$ 1980 $$$ The smell of success $$$ New York: Doubleday", it is indicated by `$$$`. Note that
+some fields are grouped together with different publication, to indicate more tight coupling; e.g. "Smith, J" and "(ed.)",
+and "New York" and "Doubleday", are distinct bibliographic fields, but they are grouped together more tightly.
+In Western practice, the bibliographic field delimiter is usually period, though in some styles it is comma. In CJK
+practice, it is traditionally horizontal spacing.
+* `biblio-terminator` is the final punctuation of a bibliographic entry. In some styles, it is supplied in a bibliography (e.g. NIST);
+in some, it is absent (e.g. ISO); in some, its use depends on the content of the entry (e.g. for BIPM, home standards vs.
+other standards). The bibliographic terminator is typically identified with the declarative stop (period in Western use),
+since a bibliographic entry is treated as a sentence. The bibliographic terminator is not used in in-document citations
+(citations given in running text), since they appear there as part of a sentence of running text.
 
 === Writing mode parameterization
 
