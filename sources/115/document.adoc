@@ -780,7 +780,7 @@ In Metanorma Presentation XML, this is notated as `<span class="fmt-dt-delim">`.
 ====
 _Framework_:: _basic structure underlying a system, concept, or text_
 
-_Framework:&zwnj;_:: _basic structure underlying a system, concept, or text
+_Framework:&zwnj;_:: _basic structure underlying a system, concept, or text_
 ====
 
 ===== Punctuation mark in scripts, languages, and locales
@@ -2296,7 +2296,7 @@ _I appreciate it [the honor], but I must refuse_
 
 .Use of brackets to interpolate the original language word in a translation
 ====
-_He is trained in the way of the open hand [_karate_]._
+_He is trained in the way of the open hand_ [karate].
 ====
 
 ===== Punctuation mark in scripts, languages, and locales
@@ -2841,7 +2841,7 @@ normal text.
 
 ===== Punctuation mark in scripts, languages, and locales
 * Fine typography prefers to use the distinct MINUS SIGN `<−>` (U+2212) in mathematical use. Informal use uses
-HYPHEN-MINUS `<-&#x200c;>` (U+002D).
+HYPHEN-MINUS `<``-`>` (U+002D).
 
 ==== Ratio sign
 
@@ -2889,7 +2889,7 @@ but the two interact differently with other punctuation.
 
 ===== Punctuation mark in scripts, languages, and locales
 * The same mark, the elllipse, is used as for the hesitancy phrase separator.
-** Occasionally triple asterisks, `<* * *&#x200c;>` or `<&#x200c;***>`, are used as an explicit missing text mark.
+** Occasionally triple asterisks, `<* * *``>` or `<``***>`, are used as an explicit missing text mark.
   This is done in some legal writing in English. In this regard, the missing text mark usually has scope
   at paragraph-level rather than sentence-level, and it is a variant of the section separator (<<section-separator>>).
 * When the omitted material is part of a word, e.g. out of religious or social taboo, or anonymisation,
