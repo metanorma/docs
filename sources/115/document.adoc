@@ -1743,16 +1743,16 @@ separated by a grammatical word divider; increasingly, that is not used at all.
 +
 .Older practice using grammatical word dividers
 ====
-_bastinado'd +
-KO'd +
-B's and C's_
+_bastinado'd_ +
+_KO'd_ +
+_B's and C's_
 ====
 +
 .Newer practice avoiding grammatical word dividers
 ====
-_bastinadoed +
-KOed +
-Bs and Cs_
+_bastinadoed_ +
+_KOed_ +
+_Bs and Cs_
 ====
 ** Grammatical word dividers are also increasingly avoided in formal labels, such as geographical
 place names
