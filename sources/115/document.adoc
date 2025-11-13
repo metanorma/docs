@@ -1810,7 +1810,7 @@ The identifier divider is used to break up a token that is not a linguistic expr
 ====
 Phone number: _555-8787_ +
 Date: _2000-01-01_ +
-Document identifier: __ISO 639-2__
+Document identifier: __ISO 639-2__ +
 Document entity identifier: __Table 3.1__, _Clause 4.1.4_
 ====
 
@@ -3100,7 +3100,7 @@ other languages, users are expected to enter the correct Unicode punctuation mar
 directly in the document, rather than expect Metanorma to translate the straight quotes
 correctly.
 
-==== Auto-text punctuation via l10n()
+==== Auto-text punctuation via `l10n()`
 
 Metanorma implements a generic mechanism for translating text with English
 punctuation and spacing into other languages and scripts; as of this writing,
