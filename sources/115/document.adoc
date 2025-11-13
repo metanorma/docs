@@ -1780,8 +1780,8 @@ The hyphen is a special case of word divider (<<word-divider>>). It is used to d
 so that the amount of empty space in a line is reduced.
 
 ====
-We, therefore, the represen-
-tatives of the United States
+We, therefore, the represen- +
+tatives of the United States +
 of America ...
 ====
 
