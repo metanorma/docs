@@ -27,8 +27,10 @@ jobs:
       - name: Cache Metanorma assets
         uses: actions-mn/cache@v1
 
-      - uses: actions-mn/setup-flavors@main
+      - name: Setup Metanorma with Ribose flavor
+        uses: actions-mn/setup@v3
         with:
+          installation-method: gem
           extra-flavors: ribose
 
       - name: Metanorma generate site
