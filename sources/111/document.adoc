@@ -259,7 +259,7 @@ The following symbols are used in the default AsciiDoc syntax:
 |`//` |U+002F |Comment
 |`'` |U+0027 |Inline literal
 |`"` |U+0022 |Quotation
-|`(( ))` |U+0028, U+0029 |Index term
+|`\(( ))` |U+0028, U+0029 |Index term
 
 |===
 
@@ -361,13 +361,13 @@ TODO
 [options="header"]
 |===
 |Delimiter |Usage |Example
-|`(( ))` |Book titles |((論語))
-|`(# #)` |Annotations |(#note:commentary#)
-|`(| |)` |Marginal notes |(|margin:text|)
-|`(< >)` |Range markers |(<start>)text(<end>)
-|`(+ +)` |Insertions |(+inserted text+)
-|`(- -)` |Deletions |(-removed text-)
-|`(~ ~)` |Variants |(~variant~)
+|`\(( ))` |Book titles |`\((論語))`
+|`(# #)` |Annotations |`(\#note:commentary#)`
+|`\(\| \|)` |Marginal notes |`(\|margin:text\|)`
+|`(< >)` |Range markers |`(<start>)text(<end>)`
+|`(+ +)` |Insertions |`(+inserted text+)`
+|`(- -)` |Deletions |`(-removed text-)`
+|`(~ ~)` |Variants |`(\~variant~)`
 |===
 
 ==== Native CJK symbols
