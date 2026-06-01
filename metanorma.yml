@@ -7,6 +7,7 @@ metanorma:
       - sources/111/document.adoc
       - sources/112/document.adoc
       - sources/113/document.adoc
+      - sources/115/document.adoc
 
   collection:
     organization: "Metanorma"
