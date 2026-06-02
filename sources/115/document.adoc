@@ -6,7 +6,7 @@
 :language: en
 :title-main-en: Internationalized semantic punctuation framework
 :doctype: standard
-:status: published
+:status: draft
 :mn-document-class: ribose
 :mn-output-extensions: xml,html,pdf,rxl
 :local-cache-only:
