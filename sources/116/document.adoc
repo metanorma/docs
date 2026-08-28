@@ -110,14 +110,15 @@ iso-17301-1-2016.mko/
   document.json        # document identity, status, structure tree
   units.jsonl          # typed units, one JSON object per line
   edges.jsonl          # edges, one JSON object per line
-  bibdata.json         # Relaton bibliographic record
-  identifiers.json     # parsed publication identifiers
-  glossary.json        # per-document term glossary
+  bibdata.json         # Relaton bibliographic record (native)
+  bibliography.jsonl   # cited documents (native Relaton + pubid), one per line
+  identifiers.json     # parsed publication identifiers (native pubid)
+  glossary.json        # term glossary (native Glossarist concepts)
 ....
 
 `manifest.json`, `document.json`, `bibdata.json`, `identifiers.json`, and
-`glossary.json` are JSON objects. `units.jsonl` and `edges.jsonl` are
-line-oriented JSON: each line is exactly one JSON object, keys sorted
+`glossary.json` are JSON objects. `units.jsonl`, `edges.jsonl`, and
+`bibliography.jsonl` are line-oriented JSON: each line is exactly one JSON object, keys sorted
 canonically, no blank lines. Line-oriented encoding keeps the two unbounded
 components streamable and diff-friendly.
 
@@ -319,14 +320,18 @@ Each line of `edges.jsonl` is one directed edge:
 | Kind | From → To | Meaning
 
 | `part_of` | unit → unit | containment; mirrors `parent` on units
-| `cites` | reference unit → `ext:<citeas>` | citation to another document
+| `cites` | reference or term unit → `ext:<citeas>` | citation to another document (bibliography entries, and the authoritative sources of term entries)
 | `defines` | term unit → `concept:<anchor>` | term defines a concept
 | `class_of` | requirement unit → `class:<klass>` | membership in a requirements class
+| *Relaton relation types* | `doc:<short>` → `ext:<identifier>` | cross-document relations from the bibliographic record (`obsoletes`, `hasSuccessor`, `hasPart`, `updates`, `amends`, …) with the Relaton type verbatim
 |===
 
 `to` values that are not unit ids are prefixed external keys (`ext:`,
-`concept:`, `class:`). Consumers resolve them against `bibdata.json`,
-`glossary.json`, or their own concept registries.
+`concept:`, `class:`). Consumers resolve `ext:` keys against
+`bibliography.jsonl`: each line carries the native Relaton item, the
+native pubid parse, and the pubid rendering for the cited document, so
+citation targets are addressable documents, not strings. The document
+itself participates in edges as `doc:<short>`.
 
 [[section:auxiliary]]
 == Auxiliary components
@@ -348,6 +353,19 @@ schema:
       "parsed": { "_type": "pubid:iso:international-standard",
                   "number": "17301", "part": "1", "year": "2016" } }
 ] }
+----
+
+* `bibliography.jsonl` carries every cited document as native objects,
+  keyed to its reference unit — the resolvable targets of `cites` and
+  document-relation edges:
+
+[source,json]
+----
+{ "unit": "u:ISO712", "citeas": "ISO 712",
+  "pubid": { "_type": "pubid:iso:international-standard", "number": "712" },
+  "pubid_render": "ISO 712",
+  "bibitem": { /* native Relaton item: title, docidentifier, date,
+                  contributor, relation, status, ... */ } }
 ----
 
 * `glossary.json` is the per-document glossary as native Glossarist
