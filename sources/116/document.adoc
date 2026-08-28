@@ -249,15 +249,22 @@ Each line of `units.jsonl` is one unit. Common fields:
   "caption": "Maximum permissible errors",
   "columns": [{ "label": "Load m", "unit": "e" }],
   "rows": ["0 ≤ m ≤ 5·10³ | 0.5e"],
+  "mirror": { "type": "table", "attrs": { "id": "…" },
+              "content": [ { "type": "table_head", "content": ["…"] } ] },
   "embed_text": "Table: Maximum permissible errors; columns: …; row: …"
 }
 ----
 
 Tables are emitted as structure, never only as linearized text: `columns`
 carries labels and units when the model declares them, `rows` carries one
-entry per table row with cell values joined by ` | `. `embed_text` is a
-deterministic convenience serialization for embedding; consumers may ignore
-it and serialize their own.
+entry per table row with cell values joined by ` | `, and `mirror`
+carries the block's native JSON object — the Mirror node tree (the
+lossless serialization the JS renderer consumes, produced through the
+same handlers as the to-mirror CLI). `mirror` is fidelity/provenance,
+never an embedding form: the retrieval contract is the typed text
+fields. `embed_text` is a deterministic convenience serialization for
+embedding; consumers may ignore it and serialize their own. Figures
+carry the same `mirror` field alongside `alt`, `uri`, and `caption`.
 
 .FormulaPayload
 [source,json]
