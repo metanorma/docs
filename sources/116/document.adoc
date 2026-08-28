@@ -262,11 +262,18 @@ it and serialize their own.
 .FormulaPayload
 [source,json]
 ----
-{ "asciimath": "n_LC <= 10^4", "mathml": "…", "description": "…" }
+{ "asciimath": "n_LC <= 10^4", "mathml": "…",
+  "latex": "n_{LC} \leq 10^4", "omml": "<m:oMathPara>…</m:oMathPara>",
+  "description": "…" }
 ----
 
-At least two of `asciimath`, `mathml`, `description` SHOULD be present, so
-that retrieval can index a textual form while renderers retain the
+Formulas are carried through the native math ecosystem: the producer
+parses the stem into a *Plurimath* formula and emits Plurimath's own
+serializations (`latex`, `omml`; `asciimath` and `mathml` round-trip the
+stem's originals). Plurimath 0.11 has no data-producing `to_json`; its
+`to_*` forms are the native serializations and the contract will adopt
+`to_json` when the gem gains one. At least two representations SHOULD be
+present so retrieval can index a textual form while renderers retain the
 mathematical form.
 
 .TermPayload
