@@ -289,10 +289,17 @@ mathematical form.
 {
   "concept": "paddy",
   "designations": ["paddy"],
+  "admitted": ["paddy rice", "rough rice"],
+  "deprecated": [],
   "definition": "rice retaining its husk after threshing",
   "sources": [{ "citeas": "ISO 7301:2011" }]
 }
 ----
+
+`designations` carries the preferred terms; `admitted` and `deprecated`
+carry synonyms with their normative status (omitted when empty), which
+the native Glossarist concepts reflect as `normative_status` on each
+designation.
 
 .RequirementPayload
 [source,json]
