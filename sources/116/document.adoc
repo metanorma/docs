@@ -331,27 +331,39 @@ Each line of `edges.jsonl` is one directed edge:
 [[section:auxiliary]]
 == Auxiliary components
 
-`bibdata.json` is the document's Relaton bibliographic record as emitted by
-the model.
+The auxiliary components carry the *native object-model serializations* of
+the Metanorma ecosystem, decomposed at the document-model layer
+(`Metanorma::Document::NativeModels`) — never re-flattened into a parallel
+schema:
 
-`identifiers.json` carries the parsed form of each document identifier:
+* `bibdata.json` is the bibliographic record as native Relaton JSON (the
+  relaton monogem's own wire shape, including its `schema_version`).
+* `identifiers.json` carries each document identifier with the pubid
+  monogem's native parse when a pubid flavor covers it:
 
 [source,json]
 ----
 { "identifiers": [
-    { "original": "ISO 17301-1:2016", "type": "pubid", "primary": true,
-      "parsed": "ISO 17301-1:2016" }
+    { "original": "ISO 17301-1:2016", "type": "ISO", "primary": true,
+      "parsed": { "_type": "pubid:iso:international-standard",
+                  "number": "17301", "part": "1", "year": "2016" } }
 ] }
 ----
 
-`glossary.json` is the per-document glossary projected from term units:
+* `glossary.json` is the per-document glossary as native Glossarist
+  concepts — `Glossarist::Concept` objects serialized by the glossarist
+  gem's own framework:
 
 [source,json]
 ----
-{ "terms": [
-    { "unit": "u:…", "concept": "paddy", "designations": ["paddy"],
-      "definition": "rice retaining its husk after threshing",
-      "sources": ["ISO 7301:2011"] }
+{ "concepts": [
+    { "data": { "id": "term-paddy-eng", "language_code": "eng",
+        "terms": [{ "type": "expression", "normative_status": "preferred",
+                    "designation": "paddy" }],
+        "definition": [{ "content": "rice retaining its husk after threshing" }],
+        "sources": [{ "type": "authoritative",
+                      "origin": { "ref": { "source": "ISO 7301:2011" } } }],
+        "entry_status": "valid" } }
 ] }
 ----
 
