@@ -336,6 +336,26 @@ delivery per consumer.
 { "key": "ISO7301", "cited": "ISO 7301:2011" }
 ----
 
+[[section:collections]]
+== Collections
+
+A metanorma collection (collection.yml) declares a document family —
+OIML R 60 with its parts and amendment, R 129/138/144. Collection
+export produces one bundle per member document (the document bundle is
+the unit of truth; nothing is nested) plus one small *collection
+bundle*:
+
+....
+<short>.mko/
+  collection.json    # canonical id, short, title, edition, members[]
+  edges.jsonl        # doc:<member> part_of doc:<family> membership
+  manifest.json
+....
+
+Member identity comes from each member's exported `document.json` — the
+collection manifest's identifiers are reference labels only. Members
+without compiled semantic XML are recorded as skipped, never fatal.
+
 [[section:consumer-refs]]
 == Consumer references and excerpts
 
