@@ -197,7 +197,7 @@ Each line of `units.jsonl` is one unit. Common fields:
 [source,json]
 ----
 {
-  "id": "u:97f3c1d2ab04e5f6",
+  "id": "u:table1",
   "type": "table",
   "anchor": "table-3",
   "number": "3",
@@ -212,8 +212,10 @@ Each line of `units.jsonl` is one unit. Common fields:
 }
 ----
 
-* `id` — the stable unit identifier: `u:` + 16 hex characters derived from
-  the content hash (see <<section:stability>>).
+* `id` — the stable unit identifier: `u:` + the element's semantic
+  anchor (`u:term-paddy`) when the model carries one, else `u:` + a
+  content-hash fallback (`u:h-…`); stable across regenerations for
+  unchanged content (see <<section:stability>>).
 * `type` — one of the unit types in <<table:unit-types>>.
 * `parent` — the `id` of the containing unit, absent for top-level units.
 * `text` — plain display text extracted from the model (never scraped from
@@ -343,7 +345,9 @@ A consumer text refers to a unit by its stable id in double brackets:
 [[u:<unit id>]]
 ----
 
-Example: "The limits are given in [[u:97f3c1d2ab04e5f6]] (Table 3)."
+Example: "The limits are given in [[u:table-3]] (Table 3)." — the
+reference carries the unit's stable id (semantic anchor form, or the
+content-hash fallback for anchorless elements).
 References are symbolic: the consumer resolves them against the units it
 actually used, exactly as citation references resolve against a
 bibliography. A reference that does not resolve to a used unit MUST be
@@ -359,9 +363,11 @@ the resolved, producer-validated payloads:
 {
   "text": "…prose with [[u:…]] references and inline citations…",
   "blocks": [
-    { "unit_id": "u:97f3c1d2ab04e5f6", "type": "table",
+    { "unit_id": "u:table-3", "type": "table",
       "docidentifier": "OIML R 76-1", "edition": "2021",
-      "payload": { "caption": "…", "columns": ["…"], "rows": ["…"] } }
+      "payload": { "caption": "…",
+                   "columns": [{ "label": "Load m", "unit": "e" }],
+                   "rows": ["0 ≤ m ≤ 5·10³ | 0.5e"] } }
   ]
 }
 ----
