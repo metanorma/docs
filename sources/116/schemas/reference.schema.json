@@ -1,0 +1,12 @@
+{
+  "$id": "https://metanorma.org/schemas/mko/reference.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MN 116 ReferencePayload",
+  "type": "object",
+  "required": ["cited"],
+  "properties": {
+    "key": { "type": "string" },
+    "cited": { "type": "string" }
+  },
+  "additionalProperties": true
+}

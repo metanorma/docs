@@ -1,0 +1,28 @@
+{
+  "$id": "https://metanorma.org/schemas/mko/table.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MN 116 TablePayload",
+  "type": "object",
+  "required": ["rows"],
+  "properties": {
+    "caption": { "type": "string" },
+    "columns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": { "type": "string" },
+          "unit": { "type": "string" }
+        },
+        "required": ["label"]
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": { "type": "string", "description": "cell values joined by ' | '" }
+    },
+    "mirror": { "type": "object", "description": "native Mirror node tree (fidelity/provenance; may be omitted in serving forms)" },
+    "embed_text": { "type": "string" }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,16 @@
+{
+  "$id": "https://metanorma.org/schemas/mko/requirement.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MN 116 RequirementPayload",
+  "type": "object",
+  "required": ["identifier", "obligation"],
+  "properties": {
+    "identifier": { "type": "string" },
+    "class": { "type": "string" },
+    "obligation": { "enum": ["requirement", "permission", "recommendation"] },
+    "subject": { "type": "string" },
+    "statement": { "type": "string" },
+    "inherits": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

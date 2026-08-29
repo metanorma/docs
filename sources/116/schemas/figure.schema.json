@@ -1,0 +1,14 @@
+{
+  "$id": "https://metanorma.org/schemas/mko/figure.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MN 116 FigurePayload",
+  "type": "object",
+  "properties": {
+    "alt": { "type": "string" },
+    "uri": { "type": "string" },
+    "caption": { "type": "string" },
+    "description": { "type": "string" },
+    "mirror": { "type": "object" }
+  },
+  "additionalProperties": true
+}

@@ -1,208 +1,28 @@
 {
+  "$id": "https://metanorma.org/schemas/mko/excerpt.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Excerpt",
+  "title": "MN 116 consumer excerpt (answer contract)",
   "type": "object",
+  "required": ["text"],
   "properties": {
     "text": {
-      "type": "string"
+      "type": "string",
+      "description": "consumer-authored prose; may contain [[u:<id>]] unit references; unit DATA never passes through a generator into text"
     },
     "blocks": {
       "type": "array",
       "items": {
         "type": "object",
+        "required": ["unit_id", "type", "payload"],
         "properties": {
-          "unit_id": {
-            "type": "string",
-            "pattern": "\\Au:"
-          },
-          "type": {
-            "type": "string"
-          },
-          "docidentifier": {
-            "type": "string"
-          },
-          "edition": {
-            "type": "string"
-          },
-          "payload": {
-            "oneOf": [
-              {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "TablePayload",
-                "type": "object",
-                "properties": {
-                  "caption": {
-                    "type": "string"
-                  },
-                  "columns": {
-                    "type": "array",
-                    "items": {
-                      "$schema": "https://json-schema.org/draft/2020-12/schema",
-                      "title": "TableColumn",
-                      "type": "object",
-                      "properties": {
-                        "label": {
-                          "type": "string"
-                        },
-                        "unit": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  },
-                  "rows": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "mirror": {
-                    "type": "object"
-                  }
-                }
-              },
-              {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "FormulaPayload",
-                "type": "object",
-                "properties": {
-                  "asciimath": {
-                    "type": "string"
-                  },
-                  "mathml": {
-                    "type": "string"
-                  },
-                  "latex": {
-                    "type": "string"
-                  },
-                  "omml": {
-                    "type": "string"
-                  },
-                  "description": {
-                    "type": "string"
-                  }
-                }
-              },
-              {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "FigurePayload",
-                "type": "object",
-                "properties": {
-                  "alt": {
-                    "type": "string"
-                  },
-                  "uri": {
-                    "type": "string"
-                  },
-                  "asset": {
-                    "type": "string"
-                  },
-                  "caption": {
-                    "type": "string"
-                  },
-                  "mirror": {
-                    "type": "object"
-                  }
-                }
-              },
-              {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "TermPayload",
-                "type": "object",
-                "properties": {
-                  "concept": {
-                    "type": "string"
-                  },
-                  "designations": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "admitted": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "deprecated": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  },
-                  "definition": {
-                    "type": "string"
-                  },
-                  "sources": {
-                    "type": "array",
-                    "items": {
-                      "$schema": "https://json-schema.org/draft/2020-12/schema",
-                      "title": "TermSourceEntry",
-                      "type": "object",
-                      "properties": {
-                        "citeas": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "RequirementPayload",
-                "type": "object",
-                "properties": {
-                  "identifier": {
-                    "type": "string"
-                  },
-                  "class": {
-                    "type": "string"
-                  },
-                  "obligation": {
-                    "type": "string"
-                  },
-                  "subject": {
-                    "type": "string"
-                  },
-                  "statement": {
-                    "type": "string"
-                  },
-                  "inherits": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
-                  }
-                }
-              },
-              {
-                "$schema": "https://json-schema.org/draft/2020-12/schema",
-                "title": "ReferencePayload",
-                "type": "object",
-                "properties": {
-                  "key": {
-                    "type": "string"
-                  },
-                  "cited": {
-                    "type": "string"
-                  }
-                }
-              }
-            ]
-          }
-        },
-        "required": [
-          "unit_id",
-          "type",
-          "payload"
-        ]
+          "unit_id": { "type": "string", "pattern": "^u:[A-Za-z0-9_.:-]+$" },
+          "type": { "enum": ["table", "formula", "figure", "term", "requirement", "reference"] },
+          "docidentifier": { "type": "string" },
+          "edition": { "type": "string" },
+          "payload": { "type": "object" }
+        }
       }
     }
   },
-  "required": [
-    "text",
-    "blocks"
-  ]
+  "additionalProperties": true
 }

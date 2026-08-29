@@ -1,0 +1,15 @@
+{
+  "$id": "https://metanorma.org/schemas/mko/formula.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MN 116 FormulaPayload",
+  "type": "object",
+  "description": "At least two representations SHOULD be present (retrieval indexes a textual form; renderers keep the mathematical form).",
+  "properties": {
+    "asciimath": { "type": "string" },
+    "mathml": { "type": "string" },
+    "latex": { "type": "string" },
+    "omml": { "type": "string" },
+    "description": { "type": "string" }
+  },
+  "additionalProperties": true
+}
