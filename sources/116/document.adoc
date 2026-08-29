@@ -326,6 +326,61 @@ designation.
 { "key": "ISO7301", "cited": "ISO 7301:2011" }
 ----
 
+[[section:consumer-refs]]
+== Consumer references and excerpts
+
+MKO specifies the producer side completely; consumers need a shared way
+to REFER to units from their own artifacts (answers, excerpts, reports).
+This clause defines the reference syntax and the excerpt schema so any
+consumer — RAG servers, review tools, report generators — resolves unit
+references identically.
+
+=== Unit reference syntax
+
+A consumer text refers to a unit by its stable id in double brackets:
+
+----
+[[u:<unit id>]]
+----
+
+Example: "The limits are given in [[u:97f3c1d2ab04e5f6]] (Table 3)."
+References are symbolic: the consumer resolves them against the units it
+actually used, exactly as citation references resolve against a
+bibliography. A reference that does not resolve to a used unit MUST be
+dropped by the consumer, never rendered as data.
+
+=== Excerpt schema
+
+An excerpt interleaves consumer-authored text with unit references and
+the resolved, producer-validated payloads:
+
+[source,json]
+----
+{
+  "text": "…prose with [[u:…]] references and inline citations…",
+  "blocks": [
+    { "unit_id": "u:97f3c1d2ab04e5f6", "type": "table",
+      "docidentifier": "OIML R 76-1", "edition": "2021",
+      "payload": { "caption": "…", "columns": ["…"], "rows": ["…"] } }
+  ]
+}
+----
+
+* `text` — consumer-authored; unit data never passes through a generator
+  into `text`: blocks carry the payload, verbatim quotes are validated
+  against the unit's `text`.
+* `blocks` — resolved from the bundle payloads (this spec's Clause 7);
+  `mirror` MAY be omitted from serving forms.
+* Consumers MUST validate every reference against the units they
+  actually used before rendering (the production reference
+  implementation: OIML SMART AI, 2026-08).
+
+=== JSON Schema
+
+The schemas for the typed payloads (Clause 7) and the excerpt above are
+published alongside this document as JSON Schema, so TypeScript, Python,
+and other consumers validate against one contract.
+
 [[section:edges]]
 == Edges
 
