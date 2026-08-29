@@ -319,8 +319,16 @@ designation.
 .FigurePayload
 [source,json]
 ----
-{ "alt": "…", "uri": "…", "caption": "…" }
+{ "alt": "…", "uri": "…", "asset": "assets/<sha256>", "caption": "…" }
 ----
+
+Figures whose bytes are available at export — data URIs carried in the
+model, or relative paths resolved against the exporter's source
+directory (`assets_from`) — are emitted as hash-addressed bundle assets:
+the bytes land in `assets/<sha256>`, listed in the manifest with their
+media type and verified like every other component; `asset` carries the
+reference. Consumers render from the verified bytes instead of solving
+delivery per consumer.
 
 .ReferencePayload
 [source,json]

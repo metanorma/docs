@@ -9,6 +9,9 @@
     "uri": {
       "type": "string"
     },
+    "asset": {
+      "type": "string"
+    },
     "caption": {
       "type": "string"
     },
