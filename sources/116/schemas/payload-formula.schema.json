@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "FormulaPayload",
+  "type": "object",
+  "properties": {
+    "asciimath": {
+      "type": "string"
+    },
+    "mathml": {
+      "type": "string"
+    },
+    "latex": {
+      "type": "string"
+    },
+    "omml": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    }
+  }
+}

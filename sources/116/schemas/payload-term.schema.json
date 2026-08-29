@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TermPayload",
+  "type": "object",
+  "properties": {
+    "concept": {
+      "type": "string"
+    },
+    "designations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "admitted": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "deprecated": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "definition": {
+      "type": "string"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "TermSourceEntry",
+        "type": "object",
+        "properties": {
+          "citeas": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

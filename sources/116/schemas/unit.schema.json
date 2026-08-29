@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Unit",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "anchor": {
+      "type": "string"
+    },
+    "number": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "parent": {
+      "type": "string"
+    },
+    "breadcrumb": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "obligation": {
+      "type": "string"
+    },
+    "lang": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    },
+    "payload": {
+      "type": "object"
+    },
+    "hash": {
+      "type": "string"
+    }
+  }
+}

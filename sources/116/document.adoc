@@ -384,8 +384,13 @@ the resolved, producer-validated payloads:
 === JSON Schema
 
 The schemas for the typed payloads (Clause 7) and the excerpt above are
-published alongside this document as JSON Schema, so TypeScript, Python,
-and other consumers validate against one contract.
+published alongside this document as JSON Schema (draft 2020-12) in
+`schemas/` — `unit`, `edge`, `manifest`, `document`, `identifiers`, one
+per typed payload, and `excerpt`. They are *generated from the
+producer's schema classes* (the single source of truth: types from the
+attribute declarations, wire names from the JSON mappings), so the
+specification and the implementation cannot drift. Consumers validate
+against these — never against hand-written copies.
 
 [[section:edges]]
 == Edges

@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Document",
+  "type": "object",
+  "properties": {
+    "ids": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "title": "Ids",
+      "type": "object",
+      "properties": {
+        "canonical": {
+          "type": "string"
+        },
+        "short": {
+          "type": "string"
+        },
+        "docid": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "urn": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "flavor": {
+      "type": "string"
+    },
+    "doctype": {
+      "type": "string"
+    },
+    "titles": {
+      "type": "array",
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "TitleEntry",
+        "type": "object",
+        "properties": {
+          "lang": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "edition": {
+      "type": "string"
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "title": "StatusInfo",
+      "type": "object",
+      "properties": {
+        "stage": {
+          "type": "string"
+        },
+        "substage": {
+          "type": "string"
+        },
+        "abbreviation": {
+          "type": "string"
+        }
+      }
+    },
+    "dates": {
+      "type": "array",
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "DateEntry",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "on": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "RelationEntry",
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "structure": {
+      "type": "array",
+      "items": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "title": "StructureNode",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "number": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#"
+            }
+          }
+        }
+      }
+    }
+  }
+}

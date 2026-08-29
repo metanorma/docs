@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RequirementPayload",
+  "type": "object",
+  "properties": {
+    "identifier": {
+      "type": "string"
+    },
+    "class": {
+      "type": "string"
+    },
+    "obligation": {
+      "type": "string"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "statement": {
+      "type": "string"
+    },
+    "inherits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}
