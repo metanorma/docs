@@ -379,14 +379,16 @@ content hashes decide whether anything changed.
 can classify changes (editorial vs technical) without re-reading
 either edition.
 
-=== Reference MCP server (contract sketch)
+=== Reference MCP server
 
-An agent-consumable corpus needs no bespoke RAG first. The reference
-contract over any MKO corpus: tools `search_units` (text/metadata
-query over units), `get_unit` (payload + text by unit id),
-`walk_edges` (parthood, citations, family), and `edition_diff` (the
-change set above). Implementations may be thin: every tool is a read
-over bundle files.
+An agent-consumable corpus needs no bespoke RAG first. The contract
+over any MKO corpus: tools `search_units` (text/metadata query over
+units), `get_unit` (payload + text by unit id), `walk_edges`
+(parthood, citations, family), and `edition_diff` (the change set
+above). The reference implementation ships in metanorma-document
+(`Metanorma::Mko::Mcp::Server`, JSON-RPC 2.0 over stdio) — every tool
+is a read over bundle files, so any conforming bundle is
+agent-consumable as-is.
 
 [[section:consumer-refs]]
 == Consumer references and excerpts
@@ -562,6 +564,10 @@ against the manifest before relying on bundle contents.
 
 Consumers split MN 116 components by access pattern; this profile is
 the blessed split, so every consumer stops rediscovering it:
+
+Units also carry an optional `ai_note`: an authoring-time situating
+note (AI-assisted, editor-approved, versioned with the document) that
+replaces consumer-side enrichment with source-of-truth context.
 
 * *Hot path* (vector-store metadata; scalar-only, byte-budgeted — keep
   the whole unit row under ~2 KB): `id`, `type`, `anchor`, `number`,
