@@ -525,13 +525,35 @@ An MKO consumer SHOULD treat unit types it does not recognize as opaque
 text nodes (forward compatibility), and SHOULD verify component hashes
 against the manifest before relying on bundle contents.
 
+[[section:serving]]
+== Serving profile
+
+Consumers split MN 116 components by access pattern; this profile is
+the blessed split, so every consumer stops rediscovering it:
+
+* *Hot path* (vector-store metadata; scalar-only, byte-budgeted — keep
+  the whole unit row under ~2 KB): `id`, `type`, `anchor`, `number`,
+  `title`, `parent`, `breadcrumb`, `obligation`, `lang`, `hash`, plus
+  document scalars (`docidentifier`, `edition`, `status`,
+  `derived_status`, `doctype`, `language`, `tier`).
+* *Cold storage* (KV/D1/R2, fetched on demand by unit id): typed
+  payloads (`table`, `formula`, `mirror`, …), `bibitem` records,
+  assets.
+
+Retrievability is an export invariant: every unit carries retrievable
+text — body, caption, alt text, or title — and every unit carries its
+`lang` (the document language unless the source marks otherwise).
+
 [[section:stability]]
 == Stability and versioning
 
-Unit `id`s are `u:` followed by the first 16 hex characters of the SHA-256
-content hash of the unit's stable fields. Unchanged content therefore
-re-derives the same `id`, enabling incremental re-indexing across document
-revisions; any content change yields a new `id` for the affected unit only.
+Unit `id`s are stable across regenerations for unchanged content; this
+is a consumer-facing guarantee, versioned with the schema (`schema_version`):
+anchor-first ids (`u:<anchor>`) with content-hash fallback (`u:h-…`).
+A change to the id-derivation policy is a major version. Unchanged
+content therefore re-derives the same `id`, enabling incremental
+re-indexing across document revisions; any content change yields a new
+`id` for the affected unit only.
 
 The schema version follows semver. Additive changes (new unit types, new
 payload fields, new edge kinds) increment the minor version; changes that
