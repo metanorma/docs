@@ -356,6 +356,38 @@ Member identity comes from each member's exported `document.json` — the
 collection manifest's identifiers are reference labels only. Members
 without compiled semantic XML are recorded as skipped, never fatal.
 
+[[section:diffs]]
+== Edition diffs
+
+`Mko::Diff` compares two bundles of the same document and emits a
+structured change set — the machine answer to "what changed between
+editions". Built on the stable-id contract: units pair by anchor,
+content hashes decide whether anything changed.
+
+[source,json]
+----
+{ "from": "OIML R 60-1:2017", "to": "OIML R 60-1:2026",
+  "added": [ { "anchor": "…", "type": "clause", "number": "9" } ],
+  "removed": [ … ],
+  "changed": [ { "anchor": "req-sensor-accuracy", "type": "requirement",
+                 "fields": ["text", "statement"] } ] }
+----
+
+`fields` carries field-level detail — top-level fields (`text`,
+`title`, `number`, `obligation`) and typed payload fields
+(`designations`, `definition`, `rows`, `statement`, …) — so consumers
+can classify changes (editorial vs technical) without re-reading
+either edition.
+
+=== Reference MCP server (contract sketch)
+
+An agent-consumable corpus needs no bespoke RAG first. The reference
+contract over any MKO corpus: tools `search_units` (text/metadata
+query over units), `get_unit` (payload + text by unit id),
+`walk_edges` (parthood, citations, family), and `edition_diff` (the
+change set above). Implementations may be thin: every tool is a read
+over bundle files.
+
 [[section:consumer-refs]]
 == Consumer references and excerpts
 
