@@ -272,18 +272,47 @@ carry the same `mirror` field alongside `alt`, `uri`, and `caption`.
 [source,json]
 ----
 { "asciimath": "n_LC <= 10^4", "mathml": "…",
-  "latex": "n_{LC} \leq 10^4", "omml": "<m:oMathPara>…</m:oMathPara>",
+  "units": ["U_nLC"],
+  "semantics": null,
+  "derived": {
+    "latex": { "form": "n_{LC} \\leq 10^4", "converter": "plurimath" },
+    "omml":  { "form": "<m:oMathPara>…", "converter": "plurimath" } },
   "description": "…" }
 ----
 
-Formulas are carried through the native math ecosystem: the producer
-parses the stem into a *Plurimath* formula and emits Plurimath's own
-serializations (`latex`, `omml`; `asciimath` and `mathml` round-trip the
-stem's originals). Plurimath 0.11 has no data-producing `to_json`; its
-`to_*` forms are the native serializations and the contract will adopt
-`to_json` when the gem gains one. At least two representations SHOULD be
-present so retrieval can index a textual form while renderers retain the
+The **canonical pair** is guaranteed per formula: `asciimath` (the
+authored, condensed form) and `mathml` (the interchange form,
+hash-verified by the manifest). Any other encoding — LaTeX, OMML,
+UnicodeMath — is **derived**: it lives under a `derived` sub-object
+with its converter named, and is never canonical. Re-encoding at the
+producer is a provenance break; derived forms are a consumer
+convenience. At least two representations SHOULD be present so
+retrieval can index a textual form while renderers retain the
 mathematical form.
+
+`units` references the bundle's units register by unit id. The
+optional `semantics` slot is reserved for evaluation forms (typed
+`params[]` + an expression in a declared language) — absent unless
+authored.
+
+=== Units register
+
+Every bundle carries `units.jsonl` — the units register — parsed from
+the source's UnitsML container (the unitsml gem provides typed
+lutaml-model classes):
+
+[source,json]
+----
+{ "id": "U_degC", "symbol": "°C", "name": "degree Celsius",
+  "quantity_kind": "thermodynamic temperature",
+  "dimension": "Θ",
+  "si_conversion": { "to": "K", "expression": "x + 273.15" } }
+----
+
+Formula payloads and table columns reference register entries by id;
+columns are typed `{ "label": "Load m", "type": "quantity",
+"units": "U_e" }`. Consumers compare on quantity kinds — never on
+unit strings.
 
 .TermPayload
 [source,json]
