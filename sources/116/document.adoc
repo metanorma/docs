@@ -110,6 +110,7 @@ iso-17301-1-2016.mko/
   document.json        # document identity, status, structure tree
   units.jsonl          # typed units, one JSON object per line
   edges.jsonl          # edges, one JSON object per line
+  unitsml.jsonl        # units register (UnitsML), one entry per line
   bibdata.json         # Relaton bibliographic record (native)
   bibliography.jsonl   # cited documents (native Relaton + pubid), one per line
   identifiers.json     # parsed publication identifiers (native pubid)
@@ -201,6 +202,7 @@ Each line of `units.jsonl` is one unit. Common fields:
   "type": "table",
   "anchor": "table-3",
   "number": "3",
+  "ordinal": 12,
   "title": "Maximum permissible errors",
   "parent": "u:1a2b3c4d5e6f7a8b",
   "breadcrumb": ["4 Metrological requirements", "4.1 Classification"],
@@ -217,6 +219,9 @@ Each line of `units.jsonl` is one unit. Common fields:
   content-hash fallback (`u:h-…`); stable across regenerations for
   unchanged content (see <<section:stability>>).
 * `type` — one of the unit types in <<table:unit-types>>.
+* `ordinal` — the unit's document order as an integer. Position, not
+  content: reading order is a sort, never a parse of dotted anchor
+  strings, and ordinals are excluded from `hash`.
 * `parent` — the `id` of the containing unit, absent for top-level units.
 * `text` — plain display text extracted from the model (never scraped from
   rendered HTML).
@@ -228,8 +233,8 @@ Each line of `units.jsonl` is one unit. Common fields:
 |===
 | Type | Source | Payload
 
-| `clause` | a section (including preface sections and annexes, which carry their own type) | —
-| `annex` | an annex section | —
+| `clause` | a section (including preface sections) | SectionPayload
+| `annex` | an annex section | SectionPayload
 | `term` | a term entry | TermPayload
 | `table` | a table | TablePayload
 | `figure` | a figure | FigurePayload
@@ -240,6 +245,46 @@ Each line of `units.jsonl` is one unit. Common fields:
 | `requirement` | a requirement, permission, or recommendation (obligation distinguishes them) | RequirementPayload
 | `reference` | a bibliographic entry | ReferencePayload
 |===
+
+[[section:hierarchy]]
+== First-class hierarchy
+
+The bundle ships the document tree natively — hierarchy is a consumer
+*configuration choice*, never an index-time reconstruction project.
+No consumer parses dotted anchors to recover order, depth, or
+parentage, and no consumer needs an LLM to build section-grain
+evidence.
+
+.SectionPayload (on every `clause` and `annex` unit)
+[source,json]
+----
+{ "summary": "4 Metrological requirements. Covers: 4.1 Classification;
+              4.2 Maximum permissible errors.",
+  "children": ["u:sec-4.1", "u:sec-4.2", "u:table-3"] }
+----
+
+* `children` — the `id`s of the section's direct child units in
+  *document order* (subsections, blocks, and term entries interleaved
+  as the author wrote them). The same relation the `part_of` edges
+  carry bottom-up, given top-down: tree navigation without edge
+  reconstruction. Empty or absent for leaf sections.
+* `summary` — a deterministic composition: the section's number and
+  title plus the covered sub-clauses (`number` + `title` of each
+  child). Never model-inferred: consumers may build their own LLM
+  summaries, but the shipped default requires none.
+* A section with no direct prose carries its summary as `text` — the
+  retrievability invariant: a container section is a retrievable
+  object, not an empty heading.
+
+Every unit carries `ordinal` — document order as an integer, assigned
+in emission order and matching `units.jsonl` line order. Ordinals are
+position, not content: they are excluded from `hash`, and inserting a
+clause shifts the ordinals after it without changing their content
+hashes. Position-preserving evidence ordering is a sort on an integer.
+
+`document.json`'s `structure` tree remains the compact table of
+contents; `units.jsonl` section payloads are the authoritative,
+unit-grain hierarchy (the TOC excludes blocks; the payloads do not).
 
 [[section:payloads]]
 == Typed payloads
@@ -274,9 +319,8 @@ carry the same `mirror` field alongside `alt`, `uri`, and `caption`.
 { "asciimath": "n_LC <= 10^4", "mathml": "…",
   "units": ["U_nLC"],
   "semantics": null,
-  "derived": {
-    "latex": { "form": "n_{LC} \\leq 10^4", "converter": "plurimath" },
-    "omml":  { "form": "<m:oMathPara>…", "converter": "plurimath" } },
+  "latex": { "form": "n_{LC} \\leq 10^4", "converter": "plurimath" },
+  "omml":  { "form": "<m:oMathPara>…", "converter": "plurimath" },
   "description": "…" }
 ----
 
@@ -297,9 +341,10 @@ authored.
 
 === Units register
 
-Every bundle carries `units.jsonl` — the units register — parsed from
-the source's UnitsML container (the unitsml gem provides typed
-lutaml-model classes):
+Every bundle carries `unitsml.jsonl` — the units register — projected
+from the source's UnitsML container as the document model parses it
+(the unitsml gem provides typed lutaml-model classes; `units.jsonl`
+is the knowledge-object stream and never the register):
 
 [source,json]
 ----
