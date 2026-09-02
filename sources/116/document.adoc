@@ -1,0 +1,699 @@
+= MN 116: Metanorma Knowledge Objects (MKO) — machine serialization format
+:docnumber: 116
+:edition: 1
+:revdate: 2026-08-28
+:copyright-year: 2026
+:language: en
+:title-main-en: Metanorma Knowledge Objects (MKO) — machine serialization format
+:doctype: standard
+:status: draft
+:mn-document-class: ribose
+:mn-output-extensions: xml,html,pdf,rxl
+:local-cache-only:
+
+.Foreword
+This document is part of the Metanorma specifications series. It defines the
+machine serialization format for Metanorma documents, developed in response to
+the need for AI- and retrieval-ready document output
+(https://github.com/metanorma/metanorma/issues/592[mn-for-ai issue #592]).
+
+== Introduction
+
+Metanorma compiles semantic authoring sources into presentation formats
+(HTML, PDF, DOCX) intended for human readers. Machine consumers — retrieval
+pipelines, question answering over standards, conformity-assessment tooling,
+training-corpus curation — currently re-derive document semantics by scraping
+the compiled HTML: clause numbers are recovered from heading text, tables are
+flattened into prose, equations are skipped, and document status is joined
+from external bibliographic databases. Every one of those workarounds exists
+because the renderer holds the semantics in memory while building the output
+but does not emit them.
+
+This specification defines *Metanorma Knowledge Objects (MKO)*: a derived,
+deterministic, machine serialization of a Metanorma document as a bundle of
+typed, addressable knowledge objects. The format is a *projection* over the
+typed document model — exactly like a rendering, it is derived output that is
+lossy by design and never a source format. The semantic model and semantic XML
+remain canonical.
+
+The design goal is *addressability*: stable unit identifiers, declared unit
+types, clean text, typed payloads, and a flat edge list exposing containment
+and semantic relations. Chunking policy, embedding, and all model-layer
+choices remain with consumers; MKO emits semantic units, not chunks.
+
+=== Design principles
+
+* *Derived output.* An MKO bundle is generated from the document model. It is
+  never authoritative; regeneration replaces it wholesale.
+* *Deterministic.* Given the same source model and the same schema version,
+  a producer emits byte-identical components.
+* *Flavor-agnostic.* One format serves every Metanorma flavor. The
+  projection walks typed model classes and declared attributes only; it has
+  no per-flavor code paths.
+* *Encoding-split schema.* The schema is one typed object model with JSON
+  serialization; consumers may treat components as JSON documents.
+* *Self-contained identity.* Document identifiers, status, relations, and
+  parsed publication identifiers travel inside the bundle — no external
+  bibliographic join is required to establish what the document is.
+
+== Scope
+
+This specification defines:
+
+* the MKO bundle structure and its components (<<section:bundle>>);
+* the manifest and integrity model (<<section:manifest>>);
+* the document identity component (<<section:identity>>);
+* the typed unit model and typed payloads
+  (<<section:units>>, <<section:payloads>>);
+* the edge model (<<section:edges>>);
+* the auxiliary components for bibliographic data, identifiers, and
+  glossaries (<<section:auxiliary>>);
+* producer conformance requirements and consumer expectations
+  (<<section:conformance>>);
+* stability and versioning rules (<<section:stability>>).
+
+This specification does not define chunking policy, embeddings, model
+output, or any consumer-side processing of MKO bundles.
+
+== Terminology
+
+bundle:: the directory (or ZIP archive of one) containing all MKO components
+for exactly one document.
+
+unit:: one addressable semantic object extracted from the document model
+(a clause, term, table, formula, figure, note, example, source code block,
+requirement, or reference entry).
+
+anchor:: the identifier the document model carries for an element, when
+present.
+
+breadcrumb:: the ordered sequence of ancestor section titles for a unit.
+
+projection:: the deterministic walk that derives units and edges from the
+document model.
+
+payload:: the typed, unit-specific data structure carried by a unit in
+addition to its common fields.
+
+edge:: a directed relation between two units, or between a unit and an
+external key.
+
+== Bundle structure ==
+
+An MKO bundle for a document with short identifier `iso-17301-1-2016` is a
+directory named `<short>.mko` (or the ZIP archive `<short>.mko.zip` with
+identical contents):
+
+....
+iso-17301-1-2016.mko/
+  manifest.json        # bundle manifest and integrity hashes
+  document.json        # document identity, status, structure tree
+  units.jsonl          # typed units, one JSON object per line
+  edges.jsonl          # edges, one JSON object per line
+  unitsml.jsonl        # units register (UnitsML), one entry per line
+  bibdata.json         # Relaton bibliographic record (native)
+  bibliography.jsonl   # cited documents (native Relaton + pubid), one per line
+  identifiers.json     # parsed publication identifiers (native pubid)
+  glossary.json        # term glossary (native Glossarist concepts)
+....
+
+`manifest.json`, `document.json`, `bibdata.json`, `identifiers.json`, and
+`glossary.json` are JSON objects. `units.jsonl`, `edges.jsonl`, and
+`bibliography.jsonl` are line-oriented JSON: each line is exactly one JSON object, keys sorted
+canonically, no blank lines. Line-oriented encoding keeps the two unbounded
+components streamable and diff-friendly.
+
+[[section:manifest]]
+== Manifest
+
+`manifest.json` is the bundle's entry point.
+
+[source,json]
+----
+{
+  "schema": "metanorma-mko",
+  "schema_version": "1.0.0",
+  "generated": {
+    "tool": "metanorma-document",
+    "schema_version": "1.0.0",
+    "flavor": "iso",
+    "timestamp": "2026-08-28T00:00:00Z"
+  },
+  "source": "document-en.xml",
+  "source-hash": "sha256:…",
+  "components": [
+    { "name": "document", "file": "document.json",
+      "media_type": "application/json", "count": 1, "hash": "sha256:…" },
+    { "name": "units", "file": "units.jsonl",
+      "media_type": "application/jsonl", "count": 142, "hash": "sha256:…" }
+  ],
+  "license": "…",
+  "copyright": "…"
+}
+----
+
+Each `components` entry carries the component name, file name, media type,
+object count (for line-oriented components, the line count; `1` for single
+JSON objects), and the SHA-256 hash of the file's bytes.
+
+[[section:identity]]
+== Document identity
+
+`document.json` carries what the document *is*, without external joins.
+
+[source,json]
+----
+{
+  "ids": {
+    "canonical": "ISO 17301-1:2016",
+    "short": "iso-17301-1-2016",
+    "docid": ["ISO 17301-1:2016", "ISO 17301-1:2016(E)"],
+    "urn": ["urn:iso:std:iso:17301:-1:ed-2:v1:en"]
+  },
+  "flavor": "iso",
+  "doctype": "international-standard",
+  "titles": [{ "lang": "en", "text": "Cereals and pulses …" }],
+  "edition": "2",
+  "languages": ["en"],
+  "status": { "stage": "60", "substage": "60", "abbreviation": "published" },
+  "dates": [{ "type": "published", "on": "2016-05-01" }],
+  "relations": [{ "type": "obsoletes", "to": "ISO 17301-1:2009" }],
+  "structure": [
+    { "id": "u:_1b587120…", "number": "3", "title": "Terms and definitions",
+      "children": [ /* nested StructureNode */ ] }
+  ]
+}
+----
+
+`ids.canonical` is the primary, non-URN document identifier as authored;
+`ids.short` is a slug derived from it and names the bundle. `structure` is
+the section containment tree with numbering as presented; its node `id`s
+reference the corresponding `clause` units.
+
+[[section:units]]
+== Units
+
+Each line of `units.jsonl` is one unit. Common fields:
+
+[source,json]
+----
+{
+  "id": "u:table1",
+  "type": "table",
+  "anchor": "table-3",
+  "number": "3",
+  "ordinal": 12,
+  "title": "Maximum permissible errors",
+  "parent": "u:1a2b3c4d5e6f7a8b",
+  "breadcrumb": ["4 Metrological requirements", "4.1 Classification"],
+  "obligation": "normative",
+  "lang": "en",
+  "text": "… human-readable display text …",
+  "payload": { /* typed, see Clause 7 */ },
+  "hash": "sha256:…"
+}
+----
+
+* `id` — the stable unit identifier: `u:` + the element's semantic
+  anchor (`u:term-paddy`) when the model carries one, else `u:` + a
+  content-hash fallback (`u:h-…`); stable across regenerations for
+  unchanged content (see <<section:stability>>).
+* `type` — one of the unit types in <<table:unit-types>>.
+* `ordinal` — the unit's document order as an integer. Position, not
+  content: reading order is a sort, never a parse of dotted anchor
+  strings, and ordinals are excluded from `hash`.
+* `parent` — the `id` of the containing unit, absent for top-level units.
+* `text` — plain display text extracted from the model (never scraped from
+  rendered HTML).
+* `payload` — the typed payload for the unit's type; present when the type
+  defines one.
+
+[[table:unit-types]]
+.Unit types
+|===
+| Type | Source | Payload
+
+| `clause` | a section (including preface sections) | SectionPayload
+| `annex` | an annex section | SectionPayload
+| `term` | a term entry | TermPayload
+| `table` | a table | TablePayload
+| `figure` | a figure | FigurePayload
+| `formula` | a formula / stem block | FormulaPayload
+| `note` | a note | —
+| `example` | an example | —
+| `sourcecode` | a source code block | —
+| `requirement` | a requirement, permission, or recommendation (obligation distinguishes them) | RequirementPayload
+| `reference` | a bibliographic entry | ReferencePayload
+|===
+
+[[section:hierarchy]]
+== First-class hierarchy
+
+The bundle ships the document tree natively — hierarchy is a consumer
+*configuration choice*, never an index-time reconstruction project.
+No consumer parses dotted anchors to recover order, depth, or
+parentage, and no consumer needs an LLM to build section-grain
+evidence.
+
+.SectionPayload (on every `clause` and `annex` unit)
+[source,json]
+----
+{ "summary": "4 Metrological requirements. Covers: 4.1 Classification;
+              4.2 Maximum permissible errors.",
+  "children": ["u:sec-4.1", "u:sec-4.2", "u:table-3"] }
+----
+
+* `children` — the `id`s of the section's direct child units in
+  *document order* (subsections, blocks, and term entries interleaved
+  as the author wrote them). The same relation the `part_of` edges
+  carry bottom-up, given top-down: tree navigation without edge
+  reconstruction. Empty or absent for leaf sections.
+* `summary` — a deterministic composition: the section's number and
+  title plus the covered sub-clauses (`number` + `title` of each
+  child). Never model-inferred: consumers may build their own LLM
+  summaries, but the shipped default requires none.
+* A section with no direct prose carries its summary as `text` — the
+  retrievability invariant: a container section is a retrievable
+  object, not an empty heading.
+
+Every unit carries `ordinal` — document order as an integer, assigned
+in emission order and matching `units.jsonl` line order. Ordinals are
+position, not content: they are excluded from `hash`, and inserting a
+clause shifts the ordinals after it without changing their content
+hashes. Position-preserving evidence ordering is a sort on an integer.
+
+`document.json`'s `structure` tree remains the compact table of
+contents; `units.jsonl` section payloads are the authoritative,
+unit-grain hierarchy (the TOC excludes blocks; the payloads do not).
+
+[[section:payloads]]
+== Typed payloads
+
+.TablePayload
+[source,json]
+----
+{
+  "caption": "Maximum permissible errors",
+  "columns": [{ "label": "Load m", "unit": "e" }],
+  "rows": ["0 ≤ m ≤ 5·10³ | 0.5e"],
+  "mirror": { "type": "table", "attrs": { "id": "…" },
+              "content": [ { "type": "table_head", "content": ["…"] } ] },
+  "embed_text": "Table: Maximum permissible errors; columns: …; row: …"
+}
+----
+
+Tables are emitted as structure, never only as linearized text: `columns`
+carries labels and units when the model declares them, `rows` carries one
+entry per table row with cell values joined by ` | `, and `mirror`
+carries the block's native JSON object — the Mirror node tree (the
+lossless serialization the JS renderer consumes, produced through the
+same handlers as the to-mirror CLI). `mirror` is fidelity/provenance,
+never an embedding form: the retrieval contract is the typed text
+fields. `embed_text` is a deterministic convenience serialization for
+embedding; consumers may ignore it and serialize their own. Figures
+carry the same `mirror` field alongside `alt`, `uri`, and `caption`.
+
+.FormulaPayload
+[source,json]
+----
+{ "asciimath": "n_LC <= 10^4", "mathml": "…",
+  "units": ["U_nLC"],
+  "semantics": null,
+  "latex": { "form": "n_{LC} \\leq 10^4", "converter": "plurimath" },
+  "omml":  { "form": "<m:oMathPara>…", "converter": "plurimath" },
+  "description": "…" }
+----
+
+The **canonical pair** is guaranteed per formula: `asciimath` (the
+authored, condensed form) and `mathml` (the interchange form,
+hash-verified by the manifest). Any other encoding — LaTeX, OMML,
+UnicodeMath — is **derived**: it lives under a `derived` sub-object
+with its converter named, and is never canonical. Re-encoding at the
+producer is a provenance break; derived forms are a consumer
+convenience. At least two representations SHOULD be present so
+retrieval can index a textual form while renderers retain the
+mathematical form.
+
+`units` references the bundle's units register by unit id. The
+optional `semantics` slot is reserved for evaluation forms (typed
+`params[]` + an expression in a declared language) — absent unless
+authored.
+
+=== Units register
+
+Every bundle carries `unitsml.jsonl` — the units register — projected
+from the source's UnitsML container as the document model parses it
+(the unitsml gem provides typed lutaml-model classes; `units.jsonl`
+is the knowledge-object stream and never the register):
+
+[source,json]
+----
+{ "id": "U_degC", "symbol": "°C", "name": "degree Celsius",
+  "quantity_kind": "thermodynamic temperature",
+  "dimension": "Θ",
+  "si_conversion": { "to": "K", "expression": "x + 273.15" } }
+----
+
+Formula payloads and table columns reference register entries by id;
+columns are typed `{ "label": "Load m", "type": "quantity",
+"units": "U_e" }`. Consumers compare on quantity kinds — never on
+unit strings.
+
+.TermPayload
+[source,json]
+----
+{
+  "concept": "paddy",
+  "designations": ["paddy"],
+  "admitted": ["paddy rice", "rough rice"],
+  "deprecated": [],
+  "definition": "rice retaining its husk after threshing",
+  "sources": [{ "citeas": "ISO 7301:2011" }]
+}
+----
+
+`designations` carries the preferred terms; `admitted` and `deprecated`
+carry synonyms with their normative status (omitted when empty), which
+the native Glossarist concepts reflect as `normative_status` on each
+designation.
+
+.RequirementPayload
+[source,json]
+----
+{
+  "identifier": "/req/iso-17301/classification/nlc-limit",
+  "class": "/req/iso-17301/classification",
+  "obligation": "requirement",
+  "subject": "load cell",
+  "statement": "The number of verification intervals shall …",
+  "inherits": []
+}
+----
+
+.FigurePayload
+[source,json]
+----
+{ "alt": "…", "uri": "…", "asset": "assets/<sha256>", "caption": "…" }
+----
+
+Figures whose bytes are available at export — data URIs carried in the
+model, or relative paths resolved against the exporter's source
+directory (`assets_from`) — are emitted as hash-addressed bundle assets:
+the bytes land in `assets/<sha256>`, listed in the manifest with their
+media type and verified like every other component; `asset` carries the
+reference. Consumers render from the verified bytes instead of solving
+delivery per consumer.
+
+.ReferencePayload
+[source,json]
+----
+{ "key": "ISO7301", "cited": "ISO 7301:2011" }
+----
+
+[[section:collections]]
+== Collections
+
+A metanorma collection (collection.yml) declares a document family —
+OIML R 60 with its parts and amendment, R 129/138/144. Collection
+export produces one bundle per member document (the document bundle is
+the unit of truth; nothing is nested) plus one small *collection
+bundle*:
+
+....
+<short>.mko/
+  collection.json    # canonical id, short, title, edition, members[]
+  edges.jsonl        # doc:<member> part_of doc:<family> membership
+  manifest.json
+....
+
+Member identity comes from each member's exported `document.json` — the
+collection manifest's identifiers are reference labels only. Members
+without compiled semantic XML are recorded as skipped, never fatal.
+
+[[section:diffs]]
+== Edition diffs
+
+`Mko::Diff` compares two bundles of the same document and emits a
+structured change set — the machine answer to "what changed between
+editions". Built on the stable-id contract: units pair by anchor,
+content hashes decide whether anything changed.
+
+[source,json]
+----
+{ "from": "OIML R 60-1:2017", "to": "OIML R 60-1:2026",
+  "added": [ { "anchor": "…", "type": "clause", "number": "9" } ],
+  "removed": [ … ],
+  "changed": [ { "anchor": "req-sensor-accuracy", "type": "requirement",
+                 "fields": ["text", "statement"] } ] }
+----
+
+`fields` carries field-level detail — top-level fields (`text`,
+`title`, `number`, `obligation`) and typed payload fields
+(`designations`, `definition`, `rows`, `statement`, …) — so consumers
+can classify changes (editorial vs technical) without re-reading
+either edition.
+
+=== Reference MCP server
+
+An agent-consumable corpus needs no bespoke RAG first. The contract
+over any MKO corpus: tools `search_units` (text/metadata query over
+units), `get_unit` (payload + text by unit id), `walk_edges`
+(parthood, citations, family), and `edition_diff` (the change set
+above). The reference implementation ships in metanorma-document
+(`Metanorma::Mko::Mcp::Server`, JSON-RPC 2.0 over stdio) — every tool
+is a read over bundle files, so any conforming bundle is
+agent-consumable as-is.
+
+[[section:consumer-refs]]
+== Consumer references and excerpts
+
+MKO specifies the producer side completely; consumers need a shared way
+to REFER to units from their own artifacts (answers, excerpts, reports).
+This clause defines the reference syntax and the excerpt schema so any
+consumer — RAG servers, review tools, report generators — resolves unit
+references identically.
+
+=== Unit reference syntax
+
+A consumer text refers to a unit by its stable id in double brackets:
+
+----
+[[u:<unit id>]]
+----
+
+Example: "The limits are given in [[u:table-3]] (Table 3)." — the
+reference carries the unit's stable id (semantic anchor form, or the
+content-hash fallback for anchorless elements).
+References are symbolic: the consumer resolves them against the units it
+actually used, exactly as citation references resolve against a
+bibliography. A reference that does not resolve to a used unit MUST be
+dropped by the consumer, never rendered as data.
+
+=== Excerpt schema
+
+An excerpt interleaves consumer-authored text with unit references and
+the resolved, producer-validated payloads:
+
+[source,json]
+----
+{
+  "text": "…prose with [[u:…]] references and inline citations…",
+  "blocks": [
+    { "unit_id": "u:table-3", "type": "table",
+      "docidentifier": "OIML R 76-1", "edition": "2021",
+      "payload": { "caption": "…",
+                   "columns": [{ "label": "Load m", "unit": "e" }],
+                   "rows": ["0 ≤ m ≤ 5·10³ | 0.5e"] } }
+  ]
+}
+----
+
+* `text` — consumer-authored; unit data never passes through a generator
+  into `text`: blocks carry the payload, verbatim quotes are validated
+  against the unit's `text`.
+* `blocks` — resolved from the bundle payloads (this spec's Clause 7);
+  `mirror` MAY be omitted from serving forms.
+* Consumers MUST validate every reference against the units they
+  actually used before rendering (the production reference
+  implementation: OIML SMART AI, 2026-08).
+
+=== JSON Schema
+
+The schemas for the typed payloads (Clause 7) and the excerpt above are
+published alongside this document as JSON Schema (draft 2020-12) in
+`schemas/` — `unit`, `edge`, `manifest`, `document`, `identifiers`, one
+per typed payload, and `excerpt`. They are *generated from the
+producer's schema classes* (the single source of truth: types from the
+attribute declarations, wire names from the JSON mappings), so the
+specification and the implementation cannot drift. Consumers validate
+against these — never against hand-written copies.
+
+[[section:edges]]
+== Edges
+
+Each line of `edges.jsonl` is one directed edge:
+
+[source,json]
+----
+{ "from": "u:…", "to": "u:…", "kind": "part_of" }
+----
+
+.Edge kinds
+|===
+| Kind | From → To | Meaning
+
+| `part_of` | unit → unit | containment; mirrors `parent` on units
+| `cites` | reference or term unit → `ext:<citeas>` | citation to another document (bibliography entries, and the authoritative sources of term entries)
+| `defines` | term unit → `concept:<anchor>` | term defines a concept
+| `class_of` | requirement unit → `class:<klass>` | membership in a requirements class
+| *Relaton relation types* | `doc:<short>` → `ext:<identifier>` | cross-document relations from the bibliographic record (`obsoletes`, `hasSuccessor`, `hasPart`, `updates`, `amends`, …) with the Relaton type verbatim
+|===
+
+`to` values that are not unit ids are prefixed external keys (`ext:`,
+`concept:`, `class:`). Consumers resolve `ext:` keys against
+`bibliography.jsonl`: each line carries the native Relaton item, the
+native pubid parse, and the pubid rendering for the cited document, so
+citation targets are addressable documents, not strings. The document
+itself participates in edges as `doc:<short>`.
+
+[[section:auxiliary]]
+== Auxiliary components
+
+The auxiliary components carry the *native object-model serializations* of
+the Metanorma ecosystem, decomposed at the document-model layer
+(`Metanorma::Document::NativeModels`) — never re-flattened into a parallel
+schema:
+
+* `bibdata.json` is the bibliographic record as native Relaton JSON (the
+  relaton monogem's own wire shape, including its `schema_version`).
+* `identifiers.json` carries each document identifier with the pubid
+  monogem's native parse when a pubid flavor covers it:
+
+[source,json]
+----
+{ "identifiers": [
+    { "original": "ISO 17301-1:2016", "type": "ISO", "primary": true,
+      "parsed": { "_type": "pubid:iso:international-standard",
+                  "number": "17301", "part": "1", "year": "2016" } }
+] }
+----
+
+* `bibliography.jsonl` carries every cited document as native objects,
+  keyed to its reference unit — the resolvable targets of `cites` and
+  document-relation edges:
+
+[source,json]
+----
+{ "unit": "u:ISO712", "citeas": "ISO 712",
+  "pubid": { "_type": "pubid:iso:international-standard", "number": "712" },
+  "pubid_render": "ISO 712",
+  "bibitem": { /* native Relaton item: title, docidentifier, date,
+                  contributor, relation, status, ... */ } }
+----
+
+* `glossary.json` is the per-document glossary as native Glossarist
+  concepts — `Glossarist::Concept` objects serialized by the glossarist
+  gem's own framework:
+
+[source,json]
+----
+{ "concepts": [
+    { "data": { "id": "term-paddy-eng", "language_code": "eng",
+        "terms": [{ "type": "expression", "normative_status": "preferred",
+                    "designation": "paddy" }],
+        "definition": [{ "content": "rice retaining its husk after threshing" }],
+        "sources": [{ "type": "authoritative",
+                      "origin": { "ref": { "source": "ISO 7301:2011" } } }],
+        "entry_status": "valid" } }
+] }
+----
+
+[[section:conformance]]
+== Conformance
+
+=== Producers
+
+An MKO producer SHALL:
+
+. emit `manifest.json` with `schema: "metanorma-mko"`, the schema version,
+  and per-component byte hashes that verify;
+. emit the document identity component with `ids.canonical` populated from
+  the authored document identifier (never slug-derived);
+. assign every unit an `id` and a `type` from <<table:unit-types>>;
+. keep unit `id`s stable across regenerations for unchanged content
+  (content-hash basis);
+. emit tables as columns and rows, never as linearized strings only;
+. emit edges only referencing present unit ids or declared external keys;
+. carry `license` and `copyright` in the manifest when the source declares
+  them.
+
+=== Consumers
+
+An MKO consumer SHOULD treat unit types it does not recognize as opaque
+text nodes (forward compatibility), and SHOULD verify component hashes
+against the manifest before relying on bundle contents.
+
+[[section:serving]]
+== Serving profile
+
+Consumers split MN 116 components by access pattern; this profile is
+the blessed split, so every consumer stops rediscovering it:
+
+Units also carry an optional `ai_note`: an authoring-time situating
+note (AI-assisted, editor-approved, versioned with the document) that
+replaces consumer-side enrichment with source-of-truth context.
+
+* *Hot path* (vector-store metadata; scalar-only, byte-budgeted — keep
+  the whole unit row under ~2 KB): `id`, `type`, `anchor`, `number`,
+  `title`, `parent`, `breadcrumb`, `obligation`, `lang`, `hash`, plus
+  document scalars (`docidentifier`, `edition`, `status`,
+  `derived_status`, `doctype`, `language`, `tier`).
+* *Cold storage* (KV/D1/R2, fetched on demand by unit id): typed
+  payloads (`table`, `formula`, `mirror`, …), `bibitem` records,
+  assets.
+
+Retrievability is an export invariant: every unit carries retrievable
+text — body, caption, alt text, or title — and every unit carries its
+`lang` (the document language unless the source marks otherwise).
+
+[[section:stability]]
+== Stability and versioning
+
+Unit `id`s are stable across regenerations for unchanged content; this
+is a consumer-facing guarantee, versioned with the schema (`schema_version`):
+anchor-first ids (`u:<anchor>`) with content-hash fallback (`u:h-…`).
+A change to the id-derivation policy is a major version. Unchanged
+content therefore re-derives the same `id`, enabling incremental
+re-indexing across document revisions; any content change yields a new
+`id` for the affected unit only.
+
+The schema version follows semver. Additive changes (new unit types, new
+payload fields, new edge kinds) increment the minor version; changes that
+alter the meaning of existing fields increment the major version. The
+`schema` identifier `metanorma-mko` is constant.
+
+Determinism is normative: given the same source model and schema version,
+repeated exports are byte-identical (timestamps in `manifest.json` excepted).
+
+== Relationship to other Metanorma outputs
+
+MKO is a sibling of the HTML/PDF/DOCX renderings, produced from the same
+typed document model through the same format registry. It is derived and
+lossy: the semantic XML remains the canonical interchange between Metanorma
+toolchain stages, and an MKO bundle is never a compilation source. Where the
+presentation model provides numbering, MKO carries the presented numbers;
+MKO does not recompute presentation.
+
+== API and CLI
+
+The reference implementation lives in the `metanorma-document` gem:
+
+[source,ruby]
+----
+Metanorma::Mko.export(xml_or_model, to: dir, presentation_xml: nil, zip: false)
+Metanorma::Mko.generate(document, **options) # registry path (compile pipeline)
+----
+
+The CLI format name is `mko`:
+`metanorma compile document.adoc -x mko` writes `<short>.mko/` (or
+`<short>.mko.zip` with the archive option) next to the other outputs.
