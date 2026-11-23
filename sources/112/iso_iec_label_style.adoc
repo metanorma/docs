@@ -20,6 +20,25 @@ This document defines the ISO/IEC label style using the Label Auto-assignment De
 
 This style defines the labeling scheme used by ISO/IEC deliverables.
 
+== Realizations
+
+The style is provided in two equally valid realizations:
+
+* `iso_iec_label_style.lml`, the LML realization
+* `iso_iec_label_style.yaml`, the YAML realization
+
+Both realizations declare the same 66 instances in the same order: one
+LabelStyle, 6 LabelContexts, 39 LabelTemplates and 20 Labellers. The mapping
+between them is specified in the "Label style realizations" clause of MN 112.
+Each clause below shows the relevant declarations in both forms, included
+directly from these files.
+
+The style selects `DecimalNumericSequence` wherever a label uses the digits
+1, 2, 3. An earlier draft of this style named `ArabicNumericSequence` for these
+labels, but that sequence produces Arabic-script digits (١, ٢, ٣) and does not
+yield the labels in the labeling specification. Both sequences keep their
+definitions from MN 112, and neither is an alias of the other.
+
 == Specification
 
 The element labeling scheme for ISO/IEC is specified as follows.
@@ -89,300 +108,196 @@ Fourth level: a), b), c)...
 
 |===
 
+== Label style declaration
+
+The LabelStyle instance binds the labellers, sequences, templates and contexts of this style.
+
+.Label style in LML
+[source,lml]
+----
+include::iso_iec_label_style.lml[lines=4..99]
+----
+
+.Label style in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=7..89]
+----
+
+== Label contexts
+
+The style uses six label contexts.
+
+.Label contexts in LML
+[source,lml]
+----
+include::iso_iec_label_style.lml[lines="101..119;164..175;444..448"]
+----
+
+.Label contexts in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines="91..112;163..176;486..491"]
+----
 
 == Clause labeling
 
-The clause labeling scheme for ISO/IEC documents follows a hierarchical structure with Arabic numerals.
+The clause labeling scheme for ISO/IEC documents follows a hierarchical structure with decimal numbers.
 
+.Clause labeling in LML
 [source,lml]
 ----
-// Clause templates
-instance ClauseLabelTemplate < LabelTemplate {
-  pattern = "Clause %n"
-  definition "Template for local clause references"
-}
+include::iso_iec_label_style.lml[lines=120..139]
+----
 
-instance ClauseGlobalLabelTemplate < LabelTemplate {
-  pattern = "Clause %n"
-  definition "Template for global clause references"
-}
-
-instance ClauseLabeller < Labeller {
-  id = "clause_labeller"
-  sequence = ArabicNumericSequence
-  context = DocumentContext
-  type = "clause"
-  template = ClauseLabelTemplate
-  global_template = ClauseGlobalLabelTemplate
-  definition "Labeller for clauses in the main document"
-}
+.Clause labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=113..135]
 ----
 
 == Subclause labeling
 
 Subclauses are labeled hierarchically, inheriting the parent clause number.
 
+.Subclause labeling in LML
 [source,lml]
 ----
-// Subclause templates
-instance SubclauseLabelTemplate < LabelTemplate {
-  pattern = "%pn.%n"
-  definition "Template for local subclause references"
-}
+include::iso_iec_label_style.lml[lines=141..161]
+----
 
-instance SubclauseGlobalLabelTemplate < LabelTemplate {
-  pattern = "%pn.%n"
-  definition "Template for global subclause references"
-}
-
-instance SubclauseLabeller < Labeller {
-  id = "subclause_labeller"
-  sequence = ArabicNumericSequence
-  context = ClauseContext
-  parent = ClauseLabeller
-  type = "subclause"
-  template = SubclauseLabelTemplate
-  global_template = SubclauseGlobalLabelTemplate
-  definition "Labeller for subclauses within clauses"
-}
+.Subclause labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=137..160]
 ----
 
 == Annex labeling
 
 Annexes use uppercase alphabetic labeling.
 
+.Annex labeling in LML
 [source,lml]
 ----
-instance AnnexLabelTemplate < LabelTemplate {
-  pattern = "Annex %n"
-  definition "Template for local annex references"
-}
+include::iso_iec_label_style.lml[lines=176..194]
+----
 
-instance AnnexGlobalLabelTemplate < LabelTemplate {
-  pattern = "Annex %n"
-  definition "Template for global annex references"
-}
-
-instance AnnexLabeller < Labeller {
-  id = "annex_labeller"
-  sequence = AlphaUpperNumericSequence
-  context = DocumentContext
-  type = "annex"
-  template = AnnexLabelTemplate
-  global_template = AnnexGlobalLabelTemplate
-  definition "Labeller for annexes in the document"
-}
+.Annex labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=177..198]
 ----
 
 == Annex clause labeling
 
-Clauses within annexes combine the annex letter with an Arabic numeral.
+Clauses within annexes combine the annex letter with a decimal number.
 
+.Annex clause labeling in LML
 [source,lml]
 ----
-instance AnnexClauseLabelTemplate < LabelTemplate {
-  pattern = "%pn.%n"
-  definition "Template for local annex clause references"
-}
+include::iso_iec_label_style.lml[lines=196..215]
+----
 
-instance AnnexClauseGlobalLabelTemplate < LabelTemplate {
-  pattern = "%pn.%n"
-  definition "Template for global annex clause references"
-}
-
-instance AnnexClauseLabeller < Labeller {
-  id = "annex_clause_labeller"
-  sequence = ArabicNumericSequence
-  context = AnnexContext
-  parent = AnnexLabeller
-  type = "clause"
-  template = AnnexClauseLabelTemplate
-  global_template = AnnexClauseGlobalLabelTemplate
-  definition "Labeller for clauses within annexes"
-}
+.Annex clause labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=200..222]
 ----
 
 == Figure labeling
 
 Figures are labeled with "Figure" followed by a sequential number.
 
+.Figure labeling in LML
 [source,lml]
 ----
-instance FigureLabelTemplate < LabelTemplate {
-  pattern = "Figure %n"
-  definition "Template for local figure references in the main document"
-}
+include::iso_iec_label_style.lml[lines=217..236]
+----
 
-instance FigureGlobalLabelTemplate < LabelTemplate {
-  pattern = "Figure %n"
-  definition "Template for global figure references in the main document"
-}
-
-instance FigureLabeller < Labeller {
-  id = "figure_labeller"
-  sequence = ArabicNumericSequence
-  context = DocumentContext
-  type = "figure"
-  template = FigureLabelTemplate
-  global_template = FigureGlobalLabelTemplate
-  definition "Labeller for figures in the main document"
-}
+.Figure labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=224..246]
 ----
 
 == Annex figure labeling
 
 Figures in annexes combine the annex letter with a figure number.
 
+.Annex figure labeling in LML
 [source,lml]
 ----
-instance AnnexFigureLabelTemplate < LabelTemplate {
-  pattern = "Figure %pn.%n"
-  definition "Template for local figure references in annexes"
-}
+include::iso_iec_label_style.lml[lines=238..257]
+----
 
-instance AnnexFigureGlobalLabelTemplate < LabelTemplate {
-  pattern = "Figure %pn.%n"
-  definition "Template for global figure references in annexes"
-}
-
-instance AnnexFigureLabeller < Labeller {
-  id = "annex_figure_labeller"
-  sequence = ArabicNumericSequence
-  context = AnnexContext
-  parent = AnnexLabeller
-  type = "figure"
-  template = AnnexFigureLabelTemplate
-  global_template = AnnexFigureGlobalLabelTemplate
-  definition "Labeller for figures in annexes"
-}
+.Annex figure labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=248..270]
 ----
 
 == Subfigure labeling
 
 Subfigures use lowercase alphabetic labels.
 
+.Subfigure labeling in LML
 [source,lml]
 ----
-instance SubfigureLabelTemplate < LabelTemplate {
-  pattern = "Figure %pn %n)"
-  definition "Template for local subfigure references"
-}
+include::iso_iec_label_style.lml[lines=259..279]
+----
 
-instance SubfigureGlobalLabelTemplate < LabelTemplate {
-  pattern = "Figure %pn %n)"
-  definition "Template for global subfigure references"
-}
-
-instance SubfigureLabeller < Labeller {
-  id = "subfigure_labeller"
-  sequence = AlphaLowerNumericSequence
-  context = DocumentContext
-  parent = FigureLabeller
-  type = "subfigure"
-  template = SubfigureLabelTemplate
-  global_template = SubfigureGlobalLabelTemplate
-  definition "Labeller for subfigures in the document"
-}
+.Subfigure labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=272..295]
 ----
 
 == Table labeling
 
 Tables are labeled with "Table" followed by a sequential number.
 
+.Table labeling in LML
 [source,lml]
 ----
-instance TableLabelTemplate < LabelTemplate {
-  pattern = "Table %n"
-  definition "Template for local table references in the main document"
-}
+include::iso_iec_label_style.lml[lines=281..300]
+----
 
-instance TableGlobalLabelTemplate < LabelTemplate {
-  pattern = "Table %n"
-  definition "Template for global table references in the main document"
-}
-
-instance TableLabeller < Labeller {
-  id = "table_labeller"
-  sequence = ArabicNumericSequence
-  context = DocumentContext
-  type = "table"
-  template = TableLabelTemplate
-  global_template = TableGlobalLabelTemplate
-  definition "Labeller for tables in the main document"
-}
+.Table labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=297..319]
 ----
 
 == Annex table labeling
 
 Tables in annexes combine the annex letter with a table number.
 
+.Annex table labeling in LML
 [source,lml]
 ----
-instance AnnexTableLabelTemplate < LabelTemplate {
-  pattern = "Table %pn.%n"
-  definition "Template for local table references in annexes"
-}
+include::iso_iec_label_style.lml[lines=302..321]
+----
 
-instance AnnexTableGlobalLabelTemplate < LabelTemplate {
-  pattern = "Table %pn.%n"
-  definition "Template for global table references in annexes"
-}
-
-instance AnnexTableLabeller < Labeller {
-  id = "annex_table_labeller"
-  sequence = ArabicNumericSequence
-  context = AnnexContext
-  parent = AnnexLabeller
-  type = "table"
-  template = AnnexTableLabelTemplate
-  global_template = AnnexTableGlobalLabelTemplate
-  definition "Labeller for tables in annexes"
-}
+.Annex table labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=321..343]
 ----
 
 == Note labeling
 
 Notes use conditional labeling based on the number of notes in a context. A single note is labeled simply as "NOTE" without a number, while multiple notes in the same context are labeled as "NOTE 1", "NOTE 2", etc.
 
+.Note labeling in LML
 [source,lml]
 ----
-instance NoteSingleLabelTemplate < LabelTemplate {
-  pattern = "NOTE"
-  definition "Template for single note references"
-}
+include::iso_iec_label_style.lml[lines=323..360]
+----
 
-instance NoteMultipleLabelTemplate < LabelTemplate {
-  pattern = "NOTE %n"
-  definition "Template for multiple note references"
-  condition = {
-    type = "element_count_gt"
-    threshold = 1
-  }
-}
-
-instance NoteSingleGlobalLabelTemplate < LabelTemplate {
-  pattern = "%parent, NOTE"
-  definition "Template for global single note references"
-}
-
-instance NoteMultipleGlobalLabelTemplate < LabelTemplate {
-  pattern = "%parent, NOTE %n"
-  definition "Template for global multiple note references"
-  condition = {
-    type = "element_count_gt"
-    threshold = 1
-  }
-}
-
-instance NoteLabeller < Labeller {
-  id = "note_labeller"
-  sequence = ArabicNumericSequence
-  context = ClauseContext
-  type = "note"
-  template = [NoteSingleLabelTemplate, NoteMultipleLabelTemplate]
-  global_template = [NoteSingleGlobalLabelTemplate, NoteMultipleGlobalLabelTemplate]
-  definition "Labeller for notes in clauses with conditional templates based on note count"
-}
+.Note labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=345..389]
 ----
 
 The `condition` property uses a LabelContextCondition object to determine which template to use based on element count. The condition `element_count_gt` with threshold 1 means "use this template when there are more than 1 notes in the context."
@@ -391,45 +306,16 @@ The `condition` property uses a LabelContextCondition object to determine which 
 
 Examples use conditional labeling similar to notes. A single example is labeled simply as "EXAMPLE" without a number, while multiple examples in the same context are labeled as "EXAMPLE 1", "EXAMPLE 2", etc.
 
+.Example labeling in LML
 [source,lml]
 ----
-instance ExampleSingleLabelTemplate < LabelTemplate {
-  pattern = "EXAMPLE"
-  definition "Template for single example references"
-}
+include::iso_iec_label_style.lml[lines=362..399]
+----
 
-instance ExampleMultipleLabelTemplate < LabelTemplate {
-  pattern = "EXAMPLE %n"
-  definition "Template for multiple example references"
-  condition = {
-    type = "element_count_gt"
-    threshold = 1
-  }
-}
-
-instance ExampleSingleGlobalLabelTemplate < LabelTemplate {
-  pattern = "%parent, EXAMPLE"
-  definition "Template for global single example references"
-}
-
-instance ExampleMultipleGlobalLabelTemplate < LabelTemplate {
-  pattern = "%parent, EXAMPLE %n"
-  definition "Template for global multiple example references"
-  condition = {
-    type = "element_count_gt"
-    threshold = 1
-  }
-}
-
-instance ExampleLabeller < Labeller {
-  id = "example_labeller"
-  sequence = ArabicNumericSequence
-  context = ClauseContext
-  type = "example"
-  template = [ExampleSingleLabelTemplate, ExampleMultipleLabelTemplate]
-  global_template = [ExampleSingleGlobalLabelTemplate, ExampleMultipleGlobalLabelTemplate]
-  definition "Labeller for examples in clauses with conditional templates based on example count"
-}
+.Example labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=391..435]
 ----
 
 Just like with notes, the LabelContextCondition determines which template to use based on the count of examples within the context.
@@ -438,199 +324,94 @@ Just like with notes, the LabelContextCondition determines which template to use
 
 Formulas are labeled with parenthesized numbers.
 
+.Formula labeling in LML
 [source,lml]
 ----
-instance FormulaLabelTemplate < LabelTemplate {
-  pattern = "(%n)"
-  definition "Template for local formula references in the main document"
-}
+include::iso_iec_label_style.lml[lines=401..420]
+----
 
-instance FormulaGlobalLabelTemplate < LabelTemplate {
-  pattern = "Formula (%n)"
-  definition "Template for global formula references in the main document"
-}
-
-instance FormulaLabeller < Labeller {
-  id = "formula_labeller"
-  sequence = ArabicNumericSequence
-  context = DocumentContext
-  type = "formula"
-  template = FormulaLabelTemplate
-  global_template = FormulaGlobalLabelTemplate
-  definition "Labeller for formulas in the main document"
-}
+.Formula labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=437..459]
 ----
 
 == Annex formula labeling
 
 Formulas in annexes combine the annex letter with a formula number.
 
+.Annex formula labeling in LML
 [source,lml]
 ----
-instance AnnexFormulaLabelTemplate < LabelTemplate {
-  pattern = "(%pn.%n)"
-  definition "Template for local formula references in annexes"
-}
+include::iso_iec_label_style.lml[lines=422..441]
+----
 
-instance AnnexFormulaGlobalLabelTemplate < LabelTemplate {
-  pattern = "Formula (%pn.%n)"
-  definition "Template for global formula references in annexes"
-}
-
-instance AnnexFormulaLabeller < Labeller {
-  id = "annex_formula_labeller"
-  sequence = ArabicNumericSequence
-  context = AnnexContext
-  parent = AnnexLabeller
-  type = "formula"
-  template = AnnexFormulaLabelTemplate
-  global_template = AnnexFormulaGlobalLabelTemplate
-  definition "Labeller for formulas in annexes"
-}
+.Annex formula labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=461..483]
 ----
 
 == List labeling
 
 Lists are labeled with "List" followed by a sequential number.
 
+.List labeling in LML
 [source,lml]
 ----
-instance ListLabelTemplate < LabelTemplate {
-  pattern = "List %n"
-  definition "Template for local list references in the main document"
-}
+include::iso_iec_label_style.lml[lines=450..468]
+----
 
-instance ListGlobalLabelTemplate < LabelTemplate {
-  pattern = "List %n"
-  definition "Template for global list references in the main document"
-}
-
-instance ListLabeller < Labeller {
-  id = "list_labeller"
-  sequence = ArabicNumericSequence
-  context = ClauseContext
-  type = "list"
-  template = ListLabelTemplate
-  global_template = ListGlobalLabelTemplate
-  definition "Labeller for lists in the main document"
-}
+.List labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=493..514]
 ----
 
 == Annex list labeling
 
 Lists in annexes combine the annex letter with a list number.
 
+.Annex list labeling in LML
 [source,lml]
 ----
-instance AnnexListLabelTemplate < LabelTemplate {
-  pattern = "List %pn.%n"
-  definition "Template for local list references in annexes"
-}
+include::iso_iec_label_style.lml[lines=470..489]
+----
 
-instance AnnexListGlobalLabelTemplate < LabelTemplate {
-  pattern = "List %pn.%n"
-  definition "Template for global list references in annexes"
-}
-
-instance AnnexListLabeller < Labeller {
-  id = "annex_list_labeller"
-  sequence = ArabicNumericSequence
-  context = AnnexContext
-  parent = AnnexLabeller
-  type = "list"
-  template = AnnexListLabelTemplate
-  global_template = AnnexListGlobalLabelTemplate
-  definition "Labeller for lists in annexes"
-}
+.Annex list labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=516..538]
 ----
 
 == Unordered list item labeling
 
 Unordered list items use a dash character at all levels.
 
+.Unordered list item labeling in LML
 [source,lml]
 ----
-instance UnorderedListItemLabelTemplate < LabelTemplate {
-  pattern = "—"
-  definition "Template for unordered list items at all levels"
-}
+include::iso_iec_label_style.lml[lines=491..504]
+----
 
-instance UnorderedListItemLabeller < Labeller {
-  id = "unordered_list_item_labeller"
-  sequence = ArabicNumericSequence  // Not used but required
-  context = ListContext
-  type = "list_item_unordered"
-  template = UnorderedListItemLabelTemplate
-  definition "Labeller for unordered list items"
-}
+.Unordered list item labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=540..555]
 ----
 
 == Ordered list item labeling
 
 Ordered list items use different sequences at different levels.
 
+.Ordered list item labeling in LML
 [source,lml]
 ----
-// Level 1: a), b), c)...
-instance OrderedListItemLevel1LabelTemplate < LabelTemplate {
-  pattern = "%n)"
-  definition "Template for first level ordered list items"
-}
+include::iso_iec_label_style.lml[lines=506..567]
+----
 
-instance OrderedListItemLevel1Labeller < Labeller {
-  id = "ordered_list_item_level1_labeller"
-  sequence = AlphaLowerNumericSequence
-  context = ListContext
-  type = "list_item_ordered_level1"
-  template = OrderedListItemLevel1LabelTemplate
-  definition "Labeller for first level ordered list items"
-}
-
-// Level 2: 1), 2), 3)...
-instance OrderedListItemLevel2LabelTemplate < LabelTemplate {
-  pattern = "%n)"
-  definition "Template for second level ordered list items"
-}
-
-instance OrderedListItemLevel2Labeller < Labeller {
-  id = "ordered_list_item_level2_labeller"
-  sequence = ArabicNumericSequence
-  context = ListContext
-  parent = OrderedListItemLevel1Labeller
-  type = "list_item_ordered_level2"
-  template = OrderedListItemLevel2LabelTemplate
-  definition "Labeller for second level ordered list items"
-}
-
-// Level 3: i), ii), iii)...
-instance OrderedListItemLevel3LabelTemplate < LabelTemplate {
-  pattern = "%n)"
-  definition "Template for third level ordered list items"
-}
-
-instance OrderedListItemLevel3Labeller < Labeller {
-  id = "ordered_list_item_level3_labeller"
-  sequence = RomanLowerNumericSequence
-  context = ListContext
-  parent = OrderedListItemLevel2Labeller
-  type = "list_item_ordered_level3"
-  template = OrderedListItemLevel3LabelTemplate
-  definition "Labeller for third level ordered list items"
-}
-
-// Level 4: a), b), c)... (repeats first level)
-instance OrderedListItemLevel4LabelTemplate < LabelTemplate {
-  pattern = "%n)"
-  definition "Template for fourth level ordered list items"
-}
-
-instance OrderedListItemLevel4Labeller < Labeller {
-  id = "ordered_list_item_level4_labeller"
-  sequence = AlphaLowerNumericSequence
-  context = ListContext
-  parent = OrderedListItemLevel3Labeller
-  type = "list_item_ordered_level4"
-  template = OrderedListItemLevel4LabelTemplate
-  definition "Labeller for fourth level ordered list items"
-}
+.Ordered list item labeling in YAML
+[source,yaml]
+----
+include::iso_iec_label_style.yaml[lines=557..626]
 ----
