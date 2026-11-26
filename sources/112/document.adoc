@@ -529,7 +529,7 @@ instance ThreeIncrementArabicNumericSequence < NumericSequence {
 }
 ----
 
-Produces a sequence of "1, 4, 7, 10, ...".
+Produces a sequence of "١, ٤, ٧, ١٠, ...".
 ====
 
 .A Chinese numeric sequence that only gives even numbers
@@ -1214,7 +1214,7 @@ instance ClauseContext {
 
 instance NotesLabeller {
   id = "notes_labeller"
-  sequence = ArabicNumericSequence
+  sequence = DecimalNumericSequence
   context = ClauseContext
   parent = null // Does not rely on a parent Labeller
   template = NoteLabelTemplate
@@ -1296,7 +1296,7 @@ instance ClauseContext < LabelContext {
 
 instance NotesLabeller < Labeller {
   id = "notes_labeller"
-  sequence = ArabicNumericSequence
+  sequence = DecimalNumericSequence
   context = ClauseContext
   parent = null // Does not rely on a parent Labeller
   template = [NoteSingleLabelTemplate, NoteMultipleLabelTemplate]
@@ -1402,7 +1402,171 @@ class LabelStyle {
 }
 ----
 
+[[label-style-realizations]]
+=== Label style realizations
 
+==== General
+
+A label style instance profile shall be realized in LML, in YAML, or in both.
+The two realizations are equally valid. Neither is the source of the other, and
+a conforming processor shall derive the same instance data from equivalent
+realizations.
+
+A realization records a sequence of typed, named instances. Each instance has:
+
+* a name, which identifies the instance within the profile;
+* a type, which is the LADL model that the instance realizes;
+* a set of properties, as defined by that model.
+
+NOTE: The fragments in other clauses of this document use the shorthand
+`instance Name < Type`, and may use bare names as references, to illustrate the
+models. This shorthand is not a realization. An instance profile uses the forms
+specified in this clause.
+
+==== LML realization
+
+An instance is declared as `Type "Name" { ... }`. A reference is written as the
+literal `ref:(Name)`.
+
+[source,lml]
+----
+LabelTemplate "ClauseLabelTemplate" {
+  pattern = "Clause %n"
+  definition "Template for local clause references"
+}
+
+Labeller "ClauseLabeller" {
+  id = "clause_labeller"
+  sequence = ref:(DecimalNumericSequence)
+  context = ref:(DocumentContext)
+  type = "clause"
+  template = ref:(ClauseLabelTemplate)
+  definition "Labeller for clauses in the main document"
+}
+----
+
+==== YAML realization
+
+A YAML realization is a single document whose root mapping has exactly these
+keys:
+
+`schema`:: The string `mn112/1`.
+`instances`:: A sequence of instance mappings.
+
+Each instance mapping has exactly the keys `name`, `type` and `properties`. A
+reference is a mapping with the single key `ref`.
+
+[source,yaml]
+----
+schema: mn112/1
+instances:
+- name: ClauseLabelTemplate
+  type: LabelTemplate
+  properties:
+    pattern: "Clause %n"
+    definition: "Template for local clause references"
+- name: ClauseLabeller
+  type: Labeller
+  properties:
+    id: "clause_labeller"
+    sequence: {ref: DecimalNumericSequence}
+    context: {ref: DocumentContext}
+    type: "clause"
+    template: {ref: ClauseLabelTemplate}
+    definition: "Labeller for clauses in the main document"
+----
+
+==== Mapping
+
+The realizations correspond as specified in <<table-realization-mapping>>.
+
+[[table-realization-mapping]]
+.Mapping between LML and YAML realizations
+[%header,cols="1,2,2"]
+|===
+|Construct |LML |YAML
+
+|Instance
+|`Type "Name" { ... }`
+|Instance mapping with `name: Name`, `type: Type` and `properties`
+
+|String
+|`key = "value"`
+|`key: "value"`, as a YAML string
+
+|Empty string
+|`key = ""`
+|`key: ""`. An empty string is a value and is distinct from an absent property.
+
+|Integer
+|`threshold = 1`
+|`threshold: 1`, as a YAML integer and not a string
+
+|Reference
+|`key = ref:(Name)`
+|`key: {ref: Name}`
+
+|Identifier string
+|`"id:clause_labeller"`
+|`"id:clause_labeller"`. This value is a string in both forms and is not converted to a `ref` mapping.
+
+|List
+|`key = [a, b]`
+|YAML sequence with the same items in the same order
+
+|Nested object
+|`condition = { type = "element_count_gt" threshold = 1 }`
+|Nested mapping with the same keys and values
+
+|Inline definition
+|`definition "text"`
+|`definition: "text"`
+
+|Block definition
+|`definition { text }`
+|`definition` string containing all characters between the braces, including line breaks and indentation
+
+|Absent property
+|Property not written
+|Key not written
+
+|Comment
+|`// comment`
+|`# comment`. Comments carry no instance data and need not be preserved.
+|===
+
+Instance order and list order shall be preserved. List order is significant
+because a labeller selects among its templates by position. Property order
+within an instance carries no meaning, but a converter should preserve it.
+
+==== Identity and equivalence
+
+An instance is identified by its name, which shall be unique within a profile.
+A `ref` value identifies an instance by that name, or a built-in sequence by its
+sequence name. An `id:` string identifies a Labeller by its `id` property.
+
+Two realizations are equivalent when they declare the same instances in the same
+order, and each pair of instances has the same name, type and property values
+after applying <<table-realization-mapping>>. Source spelling, whitespace outside
+values, quoting style and comments do not affect equivalence.
+
+==== Validation
+
+A processor shall reject a realization when:
+
+* the syntax is not valid for its form;
+* a YAML document uses a custom tag or an alias, or repeats a mapping key;
+* the `schema` value is not `mn112/1`, or a required key is missing;
+* two instances have the same name;
+* a `ref` mapping has any key other than `ref`, or its value is not a string;
+* a reference does not resolve to a declared instance or a built-in sequence.
+
+A processor shall not rewrite unsupported syntax into a supported form, and
+shall not treat one named sequence as an alias of another. In particular,
+`ArabicNumericSequence` and `DecimalNumericSequence` remain distinct.
+
+The ISO/IEC label style in <<annex-iso-iec-label-style>> is a worked example of
+both realizations.
 
 
 == Usage
@@ -1456,14 +1620,14 @@ The first ordered list item may be labelled locally as "a)", but globally as
 [example]
 ====
 A clause labeled as "Clause 1" is specified as a LabelTemplate with the pattern
-"Clause %n", where the sequence used is ArabicNumericSequence.
+"Clause %n", where the sequence used is DecimalNumericSequence.
 ====
 
 .. Specify the Sequence for generating numbering formats if a custom implementation is required.
 +
 [example]
 ====
-An Annex labeled as "Annex A" requires the sequence RomanUpperNumericSequence,
+An Annex labeled as "Annex A" requires the sequence AlphaUpperNumericSequence,
 which is available by default.
 ====
 
@@ -1552,7 +1716,7 @@ Document
 instance SimpleLabelStyle {
   name = "Simple Label Style"
   labellers = ["id:figure_labeller", "id:clause_labeller", "id:subclause_labeller"]
-  sequences = [ArabicNumericSequence]
+  sequences = [DecimalNumericSequence]
   templates = [FigureLabelTemplate, ClauseLabelTemplate, SubClauseLabelTemplate]
   contexts = [DocumentContext, ClauseContext, SubClauseContext]
 }
@@ -1575,7 +1739,7 @@ instance SubClauseContext < LabelContext {
 
 instance ClauseLabeller < Labeller {
   id = "clause_labeller"
-  sequence = ArabicNumericSequence
+  sequence = DecimalNumericSequence
   context = DocumentContext
   parent = null // Does not rely on a parent Labeller
   template = ClauseLabelTemplate
@@ -1587,7 +1751,7 @@ instance ClauseLabelTemplate < LabelTemplate {
 
 instance SubClauseLabeller < Labeller {
   id = "subclause_labeller"
-  sequence = ArabicNumericSequence
+  sequence = DecimalNumericSequence
   context = ClauseContext
   parent = ClauseLabeller // Rely on ClauseLabeller for parent label
   template = SubClauseLabelTemplate
@@ -1599,7 +1763,7 @@ instance SubClauseLabelTemplate < LabelTemplate {
 
 instance FigureLabeller < Labeller {
   id = "figure_labeller"
-  sequence = ArabicNumericSequence
+  sequence = DecimalNumericSequence
   context = DocumentContext
   parent = null // Does not rely on a parent Labeller
   template = FigureLabelTemplate
@@ -1830,5 +1994,6 @@ in the diagram.
 
 EDITOR: Add instance model definitions
 
+[[annex-iso-iec-label-style]]
 [appendix]
 include::iso_iec_label_style.adoc[leveloffset=1]
