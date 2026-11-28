@@ -663,14 +663,6 @@ class LabelTemplate {
     }
     cardinality 0..1
   }
-  attribute variants, LabelTemplateVariant {
-    definition {
-      Language-specific pattern variants. When the labeling engine renders
-      for a language, a variant declared for that language replaces the
-      base pattern; see <<label-template-language-variant>>.
-    }
-    cardinality 0..*
-  }
 }
 ----
 
@@ -834,65 +826,70 @@ The values would be:
 ----
 ====
 
-==== label template language variant
-[[label-template-language-variant]]
+==== Label catalog messages
+[[label-catalog-messages]]
 
-Designations can differ in structure between language versions: the English
-notes to terminological entries read "Note 1 to entry", while the French read
-"Note 1 à l'article", replacing the fixed phrase with a structure that
-references the parent article. Language versions of a document are structurally
-identical — the numbering scheme, the restart scopes and the counter behavior
-are language-invariant; only the designation patterns are language data.
+Designations are language data: the English notes to terminological entries
+read "Note 1 to entry", the French read "Note 1 à l'article" — the
+designation *structure* differs, not merely a word. The numbering scheme
+itself is language-invariant, so the label style profile stays unchanged for
+every language; the designation patterns live in the label catalog.
 
-A label template therefore carries language variants rather than a document
-maintaining one label style profile per language. The LabelTemplateVariant
-class associates a language tag with a replacement pattern:
+The label catalog uses the Fluent message format as realized by the
+fluent-min engine (https://github.com/metanorma/fluent-min): a catalog value
+is a Fluent pattern, and a pattern may carry placeables that the labeling
+engine binds at render time.
 
-[source,lml]
-----
-class LabelTemplateVariant {
-  attribute lang, String {
-    definition "BCP-47 language tag the variant applies to, e.g. \"fr\""
-  }
-  attribute pattern, String {
-    definition "Pattern that replaces the base pattern when the engine renders for this language"
-  }
-  attribute definition, String {
-    definition "Description of the variant"
-  }
-}
-----
+[cols="1,1"]
+|===
+| Placeable | Bound to
 
-Variants are declared as instances and referenced from the `variants`
-attribute of the label template:
+| `{ $n }`
+| the labeller value at this position
 
-.Label template with a French variant
+| `{ $pn }`
+| the parent labeller value
+
+| `{ $parent }`
+| the rendered reference label of the parent context element
+
+| `{ $self }`
+| the rendered label of the element itself
+|===
+
+A pattern may also reference other catalog messages (`{ message-id }`), so
+term words are shared across designations. Resolution depth is bounded and
+cycles are errors. A missing variable renders as its own literal
+`{ name }` (Fluent's soft fallback).
+
+The English default catalog carries the designation patterns as spec data;
+a host supplies the catalog for its language. Language selection is
+catalog selection:
+
+.Template referencing a catalog message
 ====
 [source,lml]
 ----
 instance NoteToEntryLabelTemplate < LabelTemplate {
-  pattern = "{note_to_entry} %n to entry"
-  variants = [NoteToEntryLabelTemplateFr]
-}
-
-instance NoteToEntryLabelTemplateFr < LabelTemplateVariant {
-  lang = "fr"
-  pattern = "{note_to_entry} %n à l'article"
+  pattern = "{note_to_entry}"
 }
 ----
-
-The rendering engine carries the language of the host document. The
-selection rules are:
-
-* when the engine language matches a variant language, the variant pattern
-  replaces the base pattern;
-* otherwise the base pattern renders unchanged;
-* the `%n`, `%pn`, `%parent` and `%self` placeholders and the `{key}`
-  vocabulary tokens resolve identically in variant patterns.
-
-For a French host document, the first note of the terminological entry "3.1"
-is designated "Note 1 à l'article" and referenced through its parent; for
-every other language it is designated "Note 1 to entry".
+English default catalog:
+[source,text]
+----
+note_to_entry = Note { $n } to entry
+note_to_entry_xref = { $parent }, Note { $n } to entry
+----
+French catalog:
+[source,text]
+----
+note_to_entry = Note { $n } à l'article
+note_to_entry_xref = Note { $n } à l'article { $parent }
+----
+For a French document the first note of terminological entry "3.1" is
+designated "Note 1 à l'article" and referenced as "Note 1 à l'article
+3.1"; for English it is designated "Note 1 to entry" and referenced as
+"3.1, Note 1 to entry".
 ====
 
 
