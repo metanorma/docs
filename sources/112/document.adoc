@@ -663,6 +663,14 @@ class LabelTemplate {
     }
     cardinality 0..1
   }
+  attribute variants, LabelTemplateVariant {
+    definition {
+      Language-specific pattern variants. When the labeling engine renders
+      for a language, a variant declared for that language replaces the
+      base pattern; see <<label-template-language-variant>>.
+    }
+    cardinality 0..*
+  }
 }
 ----
 
@@ -824,6 +832,67 @@ The values would be:
 > ArabicClauseLabeller.value_for_position(2) => "٢ قسم"
 > ArabicClauseLabeller.value_for_position(3) => "٣ قسم"
 ----
+====
+
+==== label template language variant
+[[label-template-language-variant]]
+
+Designations can differ in structure between language versions: the English
+notes to terminological entries read "Note 1 to entry", while the French read
+"Note 1 à l'article", replacing the fixed phrase with a structure that
+references the parent article. Language versions of a document are structurally
+identical — the numbering scheme, the restart scopes and the counter behavior
+are language-invariant; only the designation patterns are language data.
+
+A label template therefore carries language variants rather than a document
+maintaining one label style profile per language. The LabelTemplateVariant
+class associates a language tag with a replacement pattern:
+
+[source,lml]
+----
+class LabelTemplateVariant {
+  attribute lang, String {
+    definition "BCP-47 language tag the variant applies to, e.g. \"fr\""
+  }
+  attribute pattern, String {
+    definition "Pattern that replaces the base pattern when the engine renders for this language"
+  }
+  attribute definition, String {
+    definition "Description of the variant"
+  }
+}
+----
+
+Variants are declared as instances and referenced from the `variants`
+attribute of the label template:
+
+.Label template with a French variant
+====
+[source,lml]
+----
+instance NoteToEntryLabelTemplate < LabelTemplate {
+  pattern = "{note_to_entry} %n to entry"
+  variants = [NoteToEntryLabelTemplateFr]
+}
+
+instance NoteToEntryLabelTemplateFr < LabelTemplateVariant {
+  lang = "fr"
+  pattern = "{note_to_entry} %n à l'article"
+}
+----
+
+The rendering engine carries the language of the host document. The
+selection rules are:
+
+* when the engine language matches a variant language, the variant pattern
+  replaces the base pattern;
+* otherwise the base pattern renders unchanged;
+* the `%n`, `%pn`, `%parent` and `%self` placeholders and the `{key}`
+  vocabulary tokens resolve identically in variant patterns.
+
+For a French host document, the first note of the terminological entry "3.1"
+is designated "Note 1 à l'article" and referenced through its parent; for
+every other language it is designated "Note 1 to entry".
 ====
 
 
