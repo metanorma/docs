@@ -826,6 +826,72 @@ The values would be:
 ----
 ====
 
+==== Label catalog messages
+[[label-catalog-messages]]
+
+Designations are language data: the English notes to terminological entries
+read "Note 1 to entry", the French read "Note 1 à l'article" — the
+designation *structure* differs, not merely a word. The numbering scheme
+itself is language-invariant, so the label style profile stays unchanged for
+every language; the designation patterns live in the label catalog.
+
+The label catalog uses the Fluent message format as realized by the
+fluent-min engine (https://github.com/metanorma/fluent-min): a catalog value
+is a Fluent pattern, and a pattern may carry placeables that the labeling
+engine binds at render time.
+
+[cols="1,1"]
+|===
+| Placeable | Bound to
+
+| `{ $n }`
+| the labeller value at this position
+
+| `{ $pn }`
+| the parent labeller value
+
+| `{ $parent }`
+| the rendered reference label of the parent context element
+
+| `{ $self }`
+| the rendered label of the element itself
+|===
+
+A pattern may also reference other catalog messages (`{ message-id }`), so
+term words are shared across designations. Resolution depth is bounded and
+cycles are errors. A missing variable renders as its own literal
+`{ name }` (Fluent's soft fallback).
+
+The English default catalog carries the designation patterns as spec data;
+a host supplies the catalog for its language. Language selection is
+catalog selection:
+
+.Template referencing a catalog message
+====
+[source,lml]
+----
+instance NoteToEntryLabelTemplate < LabelTemplate {
+  pattern = "{note_to_entry}"
+}
+----
+English default catalog:
+[source,text]
+----
+note_to_entry = Note { $n } to entry
+note_to_entry_xref = { $parent }, Note { $n } to entry
+----
+French catalog:
+[source,text]
+----
+note_to_entry = Note { $n } à l'article
+note_to_entry_xref = Note { $n } à l'article { $parent }
+----
+For a French document the first note of terminological entry "3.1" is
+designated "Note 1 à l'article" and referenced as "Note 1 à l'article
+3.1"; for English it is designated "Note 1 to entry" and referenced as
+"3.1, Note 1 to entry".
+====
+
 
 The `condition` attribute is a LabelContextCondition object that defines the
 condition for selecting the pattern.
